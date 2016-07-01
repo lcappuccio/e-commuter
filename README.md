@@ -11,3 +11,12 @@ WIP
 
 [![Build Status](https://travis-ci.org/lcappuccio/e-commuter.svg?branch=develop)](https://travis-ci.org/lcappuccio/e-commuter)
 [![codecov.io](https://codecov.io/github/lcappuccio/e-commuter/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/e-commuter?branch=develop)
+
+## Usage
+
+Set `API_KEY` environment variable with your Google Maps API Key.
+
+## Logging
+
+Logging in tes `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`
+to hide the api key in Travis logs, re-enable in local environment for debugging or analysis.

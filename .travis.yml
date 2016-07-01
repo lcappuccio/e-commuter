@@ -4,6 +4,11 @@ language: java
 jdk:
   - oraclejdk8
 
+env:
+  global:
+  - secure: DhKb17n7Wc8TXI9/7pPHKn+IGsb2sWjDuTMqgDU9SXki378zZmtTLoyQL6WwJ/ZrGIgS/0ioc3YxZ5KwlUBwywad+1EkxngIpABTNZJN7ARBnR1J+aIgjv8ceytj8/JJCf8vy625OP9lQB9QdhgLLhGWIQ69ySMnETf6OfHshluz1sqJraSofJ4RW9yAQAX8F8RhIWKsj/WZu46t3SQe8SY9OUuLCe5ja/2qvMVIDnTsnRoPnrS8xD7Txk2S+7eSKJ8cIFnFRPzWuoRt+NNxrhJPUTygjRh6ad1S5yXy81C77/k5GnAJ5L7xVNnDy5iQ9qZNTp9GYvijrzwglgdwZLx/M8rTwitYub2ogIcDC9dyL/pdx6eMz7axLL/mIRRb1irdxVThKG/wS37K68ezX/DqQTni6Dmul7ipd/RV29L4eWX3QeAW7Xn5JSwQYml1JzERStIN9uZQv8MZh9tPt12EkZU/4kIqVr6Co4ba9i3SdRkqOM6qx/DBADPKQBwIRl0inkZ4vHUaQxfyZ87sbMVWq7PAjTs2Z8Kj40m0dc2+AZ07IaMf7lMaS41OsBvmhnFt8KjqIwsgxpZ3kALQuoGTiseUIBdZetg41KXqcLf6g9deHpax6htPPrn6sK53X3sYqxrHZqW7emnmkHmdof5M3gGcizH/hqdLzX4MVc8=
+
+
 before_script:
   - pip install --user codecov
 

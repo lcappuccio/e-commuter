@@ -1,6 +1,5 @@
 package org.systemexception.ecommuter;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,9 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class Application {
-
-	@Value("${google.maps.api.key}")
-	private String googleMapsApiKey;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

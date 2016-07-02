@@ -16,9 +16,10 @@ import org.systemexception.ecommuter.model.Address;
  */
 public class LocationApiImpl implements LocationApi {
 
+	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
+
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws Exception {
-		GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 		GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
 				longitude)).await();
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -28,7 +29,6 @@ public class LocationApiImpl implements LocationApi {
 
 	@Override
 	public Address addressToGeo(String stringAddress) throws Exception {
-		GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 		GeocodingResult[] geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		GeocodingResult geocodingResult = geocodingResults[0];
 

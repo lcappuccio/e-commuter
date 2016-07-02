@@ -16,20 +16,37 @@ public class LocationApiImplTest {
 
 	@Test
 	public void address_to_geo() throws Exception {
-		String address = "Piazza del Duomo Milano";
-		Address geoCodingResult = sut.addressToGeo(address);
+		String stringAddress = "Piazza del Duomo Milano";
+		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
-		assertNotNull(geoCodingResult);
-		assertNotEquals(geoCodingResult, address);
-		assertEquals("Piazza del Duomo, Milano, Italy", geoCodingResult.getFormattedAddress());
-		assertEquals(45.4641776, geoCodingResult.getLatitude(), 0);
-		assertEquals(9.1899885, geoCodingResult.getLongitude(), 0);
-		assertEquals("Italy", geoCodingResult.getCountry());
-		assertEquals("Lombardia", geoCodingResult.getAdministrativeAreaLevel1());
-		assertEquals("Città Metropolitana di Milano", geoCodingResult.getAdministrativeAreaLevel2());
-		assertEquals("Milano", geoCodingResult.getLocality());
-		assertEquals("Italy", geoCodingResult.getCountry());
-		assertEquals("Piazza del Duomo", geoCodingResult.getRoute());
+		assertNotNull(geoFromAddress);
+		assertNotEquals(geoFromAddress, stringAddress);
+		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals(45.4641776, geoFromAddress.getLatitude(), 0);
+		assertEquals(9.1899885, geoFromAddress.getLongitude(), 0);
+		assertEquals("Italy", geoFromAddress.getCountry());
+		assertEquals("Lombardia", geoFromAddress.getAdministrativeAreaLevel1());
+		assertEquals("Città Metropolitana di Milano", geoFromAddress.getAdministrativeAreaLevel2());
+		assertEquals("Milano", geoFromAddress.getLocality());
+		assertEquals("Italy", geoFromAddress.getCountry());
+		assertEquals("Piazza del Duomo", geoFromAddress.getRoute());
+	}
+
+	@Test
+	public void geo_to_address() throws Exception {
+		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
+
+		assertNotNull(addressFromGeo);
+		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
+		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
+		assertEquals("Italy", addressFromGeo.getCountry());
+		assertEquals("Lombardia", addressFromGeo.getAdministrativeAreaLevel1());
+		assertEquals("Città Metropolitana di Milano", addressFromGeo.getAdministrativeAreaLevel2());
+		assertEquals("Milano", addressFromGeo.getLocality());
+		assertEquals("Italy", addressFromGeo.getCountry());
+		assertEquals("Piazza del Duomo", addressFromGeo.getRoute());
+		assertEquals("20122", addressFromGeo.getPostalCode());
 	}
 
 }

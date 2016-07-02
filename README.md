@@ -18,5 +18,5 @@ Set `API_KEY` environment variable with your Google Maps API Key.
 
 ## Logging
 
-Logging in tes `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`
+Logging in test `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`
 to hide the api key in Travis logs, re-enable in local environment for debugging or analysis.

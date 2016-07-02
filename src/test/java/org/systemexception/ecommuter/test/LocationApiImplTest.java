@@ -1,6 +1,7 @@
 package org.systemexception.ecommuter.test;
 
 import org.junit.Test;
+import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.services.LocationApiImpl;
 
@@ -12,7 +13,7 @@ import static org.junit.Assert.*;
  */
 public class LocationApiImplTest {
 
-	private final LocationApiImpl sut = new LocationApiImpl();
+	private final LocationApi sut = new LocationApiImpl();
 
 	@Test
 	public void address_to_geo() throws Exception {

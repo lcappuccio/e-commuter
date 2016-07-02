@@ -9,6 +9,8 @@ public class Person {
 	private String name, surname;
 	private Address address;
 
+	public Person() {}
+
 	public Person (final String name, final String surname, final Address address) {
 		this.name = name;
 		this.surname = surname;
@@ -37,5 +39,18 @@ public class Person {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Person person = (Person) o;
+
+		if (name != null ? !name.equals(person.name) : person.name != null) return false;
+		if (surname != null ? !surname.equals(person.surname) : person.surname != null) return false;
+		return address != null ? address.equals(person.address) : person.address == null;
+
 	}
 }

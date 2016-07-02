@@ -2,6 +2,7 @@ package org.systemexception.ecommuter.test;
 
 import org.junit.Test;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.services.LocationApiImpl;
 
@@ -15,8 +16,9 @@ public class LocationApiImplTest {
 
 	private final LocationApi sut = new LocationApiImpl();
 
+
 	@Test
-	public void address_to_geo() throws Exception {
+	public void address_to_geo() throws LocationException {
 		String stringAddress = "Piazza del Duomo Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -34,7 +36,7 @@ public class LocationApiImplTest {
 	}
 
 	@Test
-	public void geo_to_address() throws Exception {
+	public void geo_to_address() throws LocationException {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
@@ -48,6 +50,24 @@ public class LocationApiImplTest {
 		assertEquals("Italy", addressFromGeo.getCountry());
 		assertEquals("Piazza del Duomo", addressFromGeo.getRoute());
 		assertEquals("20122", addressFromGeo.getPostalCode());
+	}
+
+	@Test
+	public void calculate_distance_for_addresses() throws LocationException {
+		Address addressLuino = sut.addressToGeo("Piazza Garibaldi, Luino, VA");
+		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
+		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
+
+		assertEquals(19.7, distanceBetween, 0);
+	}
+
+	@Test
+	public void calculate_distance_for_coordinates() throws LocationException {
+		Address addressLuino = sut.geoToAddress(46.0021, 8.7507);
+		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
+		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
+
+		assertEquals(737.9, distanceBetween, 0);
 	}
 
 }

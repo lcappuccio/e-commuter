@@ -1,5 +1,6 @@
 package org.systemexception.ecommuter.api;
 
+import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 
@@ -7,6 +8,7 @@ import org.systemexception.ecommuter.model.Address;
  * @author leo
  * @date 02/07/16 10:45
  */
+@Service
 public interface LocationApi {
 
 	/**

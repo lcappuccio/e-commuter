@@ -43,8 +43,6 @@ public class PersonJsonParserTest {
 		Person personFromJson = PersonJsonParser.fromJson(getPersonJsonObject());
 
 		assertEquals(person, personFromJson);
-
-
 	}
 
 	private String getPersonJson() {

@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.security.InvalidParameterException;
+
 /**
  * @author leo
  * @date 01/07/16 23:18
@@ -19,7 +21,9 @@ public class Application {
 			logger.info("Starting with API_KEY:" + apiKey);
 			SpringApplication.run(Application.class, args);
 		} else {
-			System.out.println("API key is not set");
+			String errorMessage = "API key is not set";
+			logger.error(errorMessage);
+			throw new InvalidParameterException(errorMessage);
 		}
 	}
 }

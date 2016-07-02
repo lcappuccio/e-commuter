@@ -1,5 +1,5 @@
 # e-commuter
-WIP
+Use Google Maps Geocoding API to calculate distances between two addresses or geographic coordinates.
 
 **Master**
 
@@ -20,3 +20,7 @@ Set `API_KEY` environment variable with your Google Maps API Key.
 
 Logging in test `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`
 to hide the api key in Travis logs, re-enable in local environment for debugging or analysis.
+
+## ToDo
+
+Bind Person domain object to Address

@@ -24,6 +24,12 @@ public class LocationApiImplTest {
 		assertEquals("Piazza del Duomo, Milano, Italy", geoCodingResult.getFormattedAddress());
 		assertEquals(45.4641776, geoCodingResult.getLatitude(), 0);
 		assertEquals(9.1899885, geoCodingResult.getLongitude(), 0);
+		assertEquals("Italy", geoCodingResult.getCountry());
+		assertEquals("Lombardia", geoCodingResult.getAdministrativeAreaLevel1());
+		assertEquals("Città Metropolitana di Milano", geoCodingResult.getAdministrativeAreaLevel2());
+		assertEquals("Milano", geoCodingResult.getLocality());
+		assertEquals("Italy", geoCodingResult.getCountry());
+		assertEquals("Piazza del Duomo", geoCodingResult.getRoute());
 	}
 
 }

@@ -19,7 +19,6 @@ public class LocationApiImpl implements LocationApi {
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws Exception {
 		GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
-		LatLng location = new LatLng(latitude, longitude);
 		GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
 				longitude)).await();
 		GeocodingResult geocodingResult = geocodingResults[0];

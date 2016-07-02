@@ -11,11 +11,9 @@ import org.systemexception.ecommuter.Application;
  */
 public class GeoApi {
 
-	public String getAddress() throws Exception {
-		// Replace the API key below with a valid API key.
-		GeoApiContext context = new GeoApiContext().setApiKey(Application.apiKey);
-		GeocodingResult[] results =  GeocodingApi.geocode(context, "Piazza del Duomo, Milano, 20100")
-				.await();
-		return results[0].formattedAddress;
+	public String getAddress(String address) throws Exception {
+		GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
+		GeocodingResult[] geocodingResults =  GeocodingApi.geocode(geoApiContext, address).await();
+		return geocodingResults[0].formattedAddress;
 	}
 }

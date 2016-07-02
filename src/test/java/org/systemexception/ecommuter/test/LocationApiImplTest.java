@@ -57,4 +57,22 @@ public class LocationApiImplTest {
 		assertEquals("20122", addressFromGeo.getPostalCode());
 	}
 
+	@Test
+	public void calculate_distance_for_addresses() throws LocationException {
+		Address addressLuino = sut.addressToGeo("Piazza Garibaldi, Luino, VA");
+		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
+		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
+
+		assertEquals(19.7, distanceBetween, 0);
+	}
+
+	@Test
+	public void calculate_distance_for_coordinates() throws LocationException {
+		Address addressLuino = sut.geoToAddress(46.0021, 8.7507);
+		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
+		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
+
+		assertEquals(737.9, distanceBetween, 0);
+	}
+
 }

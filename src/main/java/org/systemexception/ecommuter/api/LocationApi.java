@@ -25,4 +25,13 @@ public interface LocationApi {
 	 * @return
 	 */
 	Address addressToGeo(String address) throws LocationException;
+
+	/**
+	 * Calculates distance between two addresses
+	 *
+	 * @param addressA
+	 * @param addressB
+	 * @return
+	 */
+	double distanceBetween(Address addressA, Address addressB);
 }

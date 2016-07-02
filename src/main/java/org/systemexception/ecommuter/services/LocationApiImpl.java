@@ -18,6 +18,7 @@ import org.systemexception.ecommuter.model.Address;
 public class LocationApiImpl implements LocationApi {
 
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
+	private final HaversineService haversineService = new HaversineService();
 
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws LocationException {
@@ -50,6 +51,12 @@ public class LocationApiImpl implements LocationApi {
 		GeocodingResult geocodingResult = geocodingResults[0];
 
 		return geoCodingResultToAddress(geocodingResult);
+	}
+
+	@Override
+	public double distanceBetween(Address addressA, Address addressB) {
+		return haversineService.haversine(addressA.getLatitude(), addressA.getLongitude(),
+				addressB.getLatitude(), addressB.getLongitude());
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {

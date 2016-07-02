@@ -6,6 +6,11 @@ package org.systemexception.ecommuter.exceptions;
  */
 public class LocationException extends Exception {
 
+	/**
+	 * Constructs an instance of <code>LocationException</code> with the specified detail message.
+	 *
+	 * @param msg the detail message.
+	 */
 	public LocationException(String msg) {
 		super(msg);
 	}

@@ -29,4 +29,5 @@ to hide the api key in Travis logs, re-enable in local environment for debugging
 ## ToDo
 
 - Bind Person domain object to Address
+- Store data in something (MapDB?, Neo4J?, Cassandra?)
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)

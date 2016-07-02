@@ -53,12 +53,4 @@ public class Person {
 		return address != null ? address.equals(person.address) : person.address == null;
 
 	}
-
-	@Override
-	public int hashCode() {
-		int result = name != null ? name.hashCode() : 0;
-		result = 31 * result + (surname != null ? surname.hashCode() : 0);
-		result = 31 * result + (address != null ? address.hashCode() : 0);
-		return result;
-	}
 }

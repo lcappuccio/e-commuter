@@ -1,8 +1,6 @@
 package org.systemexception.ecommuter.services;
 
 import static java.lang.Math.*;
-import static java.lang.Math.PI;
-import static java.lang.Math.sin;
 
 /**
  * @author leo
@@ -10,7 +8,7 @@ import static java.lang.Math.sin;
  */
 public class HaversineService {
 
-	private final double earthRadius = 6378;
+	private final static double earthRadius = 6378;
 
 	public double haversine(final double latitude1, final double longitude1, final double latitude2,
 	                                final double longitude2) {
@@ -36,7 +34,7 @@ public class HaversineService {
 
 	private double roundDoubleToOneDecimal(double value) {
 		int precision = 1;
-		int scale = (int) Math.pow(10, precision);
-		return (double) Math.round(value * scale) / scale;
+		int scale = (int) pow(10, precision);
+		return (double) round(value * scale) / scale;
 	}
 }

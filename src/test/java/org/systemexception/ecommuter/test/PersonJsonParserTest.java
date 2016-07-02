@@ -9,7 +9,7 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.services.LocationApiImpl;
+import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import static junit.framework.TestCase.assertEquals;
@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class PersonJsonParserTest {
 
-	private final LocationApi locationService = new LocationApiImpl();
+	private final LocationApi locationService = new LocationImpl();
 	private Person person;
 
 	@Before

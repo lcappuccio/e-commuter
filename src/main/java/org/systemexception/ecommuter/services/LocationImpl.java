@@ -18,7 +18,7 @@ import org.systemexception.ecommuter.pojo.HaversineUtil;
  * @author leo
  * @date 02/07/16 01:23
  */
-public class LocationApiImpl implements LocationApi {
+public class LocationImpl implements LocationApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);

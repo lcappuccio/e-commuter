@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
-import org.systemexception.ecommuter.services.LocationApiImpl;
+import org.systemexception.ecommuter.services.LocationImpl;
 
 import static org.junit.Assert.*;
 
@@ -12,9 +12,9 @@ import static org.junit.Assert.*;
  * @author leo
  * @date 02/07/16 01:24
  */
-public class LocationApiImplTest {
+public class LocationImplTest {
 
-	private final LocationApi sut = new LocationApiImpl();
+	private final LocationApi sut = new LocationImpl();
 
 
 	@Test

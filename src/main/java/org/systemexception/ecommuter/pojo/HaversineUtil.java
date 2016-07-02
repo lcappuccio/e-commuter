@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.services;
+package org.systemexception.ecommuter.pojo;
 
 import static java.lang.Math.*;
 
@@ -6,7 +6,7 @@ import static java.lang.Math.*;
  * @author leo
  * @date 02/07/16 13:29
  */
-public class HaversineService {
+public class HaversineUtil {
 
 	private final static double earthRadius = 6378;
 

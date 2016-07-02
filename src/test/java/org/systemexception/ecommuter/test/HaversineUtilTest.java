@@ -1,7 +1,7 @@
 package org.systemexception.ecommuter.test;
 
 import org.junit.Test;
-import org.systemexception.ecommuter.services.HaversineService;
+import org.systemexception.ecommuter.pojo.HaversineUtil;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,9 +9,9 @@ import static org.junit.Assert.assertEquals;
  * @author leo
  * @date 02/07/16 13:34
  */
-public class HaversineServiceTest {
+public class HaversineUtilTest {
 
-	private final HaversineService sut = new HaversineService();
+	private final HaversineUtil sut = new HaversineUtil();
 
 	@Test
 	public void calculate_distance_luino_barcelona() {

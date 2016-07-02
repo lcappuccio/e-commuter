@@ -10,7 +10,7 @@ import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.services.LocationApiImpl;
-import org.systemexception.ecommuter.services.PersonJsonParser;
+import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import static junit.framework.TestCase.assertEquals;
 

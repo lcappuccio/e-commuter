@@ -12,6 +12,7 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.pojo.HaversineUtil;
 
 /**
  * @author leo
@@ -21,7 +22,7 @@ public class LocationApiImpl implements LocationApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
-	private final HaversineService haversineService = new HaversineService();
+	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws LocationException {
@@ -68,7 +69,7 @@ public class LocationApiImpl implements LocationApi {
 	public double distanceBetween(Address addressA, Address addressB) {
 		logger.info("Calculate distance from (" + addressA.getLatitude() + "," + addressA.getLongitude() + ") to (" +
 				addressB.getLatitude() + "," + addressB.getLongitude() + ")");
-		return haversineService.haversine(addressA.getLatitude(), addressA.getLongitude(),
+		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
 	}
 

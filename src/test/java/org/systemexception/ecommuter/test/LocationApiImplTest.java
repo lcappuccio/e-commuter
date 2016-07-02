@@ -1,7 +1,9 @@
 package org.systemexception.ecommuter.test;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.services.LocationApiImpl;
 
@@ -13,10 +15,15 @@ import static org.junit.Assert.*;
  */
 public class LocationApiImplTest {
 
-	private final LocationApi sut = new LocationApiImpl();
+	private LocationApi sut;
+
+	@Before
+	public void setUp() {
+		sut = new LocationApiImpl();
+	}
 
 	@Test
-	public void address_to_geo() throws Exception {
+	public void address_to_geo() throws LocationException {
 		String stringAddress = "Piazza del Duomo Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -34,7 +41,7 @@ public class LocationApiImplTest {
 	}
 
 	@Test
-	public void geo_to_address() throws Exception {
+	public void geo_to_address() throws LocationException {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);

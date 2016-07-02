@@ -8,6 +8,7 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 
 /**
@@ -19,17 +20,33 @@ public class LocationApiImpl implements LocationApi {
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 
 	@Override
-	public Address geoToAddress(double latitude, double longitude) throws Exception {
-		GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
-				longitude)).await();
+	public Address geoToAddress(double latitude, double longitude) throws LocationException {
+		GeocodingResult[] geocodingResults;
+		try {
+			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
+					longitude)).await();
+		} catch (Exception e) {
+			throw new LocationException(e.getMessage());
+		}
+		if (geocodingResults.length < 1) {
+			return new Address();
+		}
 		GeocodingResult geocodingResult = geocodingResults[0];
 
 		return geoCodingResultToAddress(geocodingResult);
 	}
 
 	@Override
-	public Address addressToGeo(String stringAddress) throws Exception {
-		GeocodingResult[] geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
+	public Address addressToGeo(String stringAddress) throws LocationException {
+		GeocodingResult[] geocodingResults;
+		try {
+			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
+		} catch (Exception e) {
+			throw new LocationException(e.getMessage());
+		}
+		if (geocodingResults.length < 1) {
+			return new Address();
+		}
 		GeocodingResult geocodingResult = geocodingResults[0];
 
 		return geoCodingResultToAddress(geocodingResult);

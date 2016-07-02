@@ -1,5 +1,6 @@
 package org.systemexception.ecommuter.api;
 
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 
 /**
@@ -15,7 +16,7 @@ public interface LocationApi {
 	 * @param longitude
 	 * @return
 	 */
-	Address geoToAddress(double latitude, double longitude) throws Exception;
+	Address geoToAddress(double latitude, double longitude) throws LocationException;
 
 	/**
 	 * Return a formatted address from a generic string
@@ -23,5 +24,5 @@ public interface LocationApi {
 	 * @param address the generic string with an address
 	 * @return
 	 */
-	Address addressToGeo(String address) throws Exception;
+	Address addressToGeo(String address) throws LocationException;
 }

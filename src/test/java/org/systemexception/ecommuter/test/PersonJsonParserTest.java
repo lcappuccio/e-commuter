@@ -46,8 +46,9 @@ public class PersonJsonParserTest {
 	}
 
 	private String getPersonJson() {
-		return "{\"name\":\"TEST_NAME\",\"surname\":\"TEST_SURNAME\",\"address\":{\"route\":\"Piazza del Duomo\"," +
-				"\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"Città Metropolitana di Milano\"," +
+		return "{\"name\":\"TEST_NAME\",\"surname\":\"TEST_SURNAME\",\"address\":{\"streetNumber\":\"6\"," +
+				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\"," +
+				"\"administrativeAreaLevel2\":\"Città Metropolitana di Milano\"," +
 				"\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\",\"postalCode\":\"20122\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881}}";

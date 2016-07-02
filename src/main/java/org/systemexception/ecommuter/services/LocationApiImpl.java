@@ -85,6 +85,9 @@ public class LocationApiImpl implements LocationApi {
 				if (addressComponentType.equals(AddressComponentType.ROUTE)) {
 					address.setRoute(addressComponent.longName);
 				}
+				if (addressComponentType.equals(AddressComponentType.STREET_NUMBER)) {
+					address.setStreetNumber(addressComponent.longName);
+				}
 			}
 		}
 

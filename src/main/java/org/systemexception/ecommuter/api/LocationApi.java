@@ -6,7 +6,7 @@ import org.systemexception.ecommuter.model.Address;
  * @author leo
  * @date 02/07/16 10:45
  */
-public interface Location {
+public interface LocationApi {
 
 	/**
 	 * Builds an address using latitude and longitude
@@ -15,7 +15,7 @@ public interface Location {
 	 * @param longitude
 	 * @return
 	 */
-	Address geoToAddress(double latitude, double longitude);
+	Address geoToAddress(double latitude, double longitude) throws Exception;
 
 	/**
 	 * Return a formatted address from a generic string
@@ -23,5 +23,5 @@ public interface Location {
 	 * @param address the generic string with an address
 	 * @return
 	 */
-	Address addressToGeo(String address);
+	Address addressToGeo(String address) throws Exception;
 }

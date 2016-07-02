@@ -11,8 +11,16 @@ public class Address {
 	 * https://developers.google.com/maps/documentation/geocoding/start
 	 */
 	private String streetNumber, route, locality, administrativeAreaLevel2, administrativeAreaLevel1, country,
-			postalCode;
-	private double latitude;
+			postalCode, formattedAddress;
+	private double latitude, longitude;
+
+	public String getFormattedAddress() {
+		return formattedAddress;
+	}
+
+	public void setFormattedAddress(String formattedAddress) {
+		this.formattedAddress = formattedAddress;
+	}
 
 	public double getLongitude() {
 		return longitude;
@@ -29,8 +37,6 @@ public class Address {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-
-	private double longitude;
 
 	public String getStreetNumber() {
 		return streetNumber;

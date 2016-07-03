@@ -1,6 +1,7 @@
 package org.systemexception.ecommuter.api;
 
 import com.tinkerpop.blueprints.Vertex;
+import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 
@@ -10,6 +11,7 @@ import java.io.IOException;
  * @author leo
  * @date 02/07/16 23:07
  */
+@Service
 public interface DatabaseApi {
 
 	/**

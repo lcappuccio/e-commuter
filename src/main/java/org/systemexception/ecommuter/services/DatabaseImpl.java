@@ -14,7 +14,6 @@ import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
@@ -131,7 +130,17 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsLivesIn(final String postalCode) throws PersonsException {
+	public void deletePerson(Person person) {
+		try (Transaction tx = graphDb.beginTx()) {
+			tx.success();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Persons findPersonsLivesIn(final String postalCode) {
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
@@ -154,7 +163,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsWorksIn(final String postalCode) throws PersonsException {
+	public Persons findPersonsWorksIn(final String postalCode) {
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {

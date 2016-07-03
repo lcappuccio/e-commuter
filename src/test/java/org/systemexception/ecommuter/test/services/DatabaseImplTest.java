@@ -1,8 +1,7 @@
 package org.systemexception.ecommuter.test.services;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,12 @@ import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.LocationException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -44,14 +41,6 @@ public class DatabaseImplTest {
 	private LocationApi locationService;
 	private Person person;
 
-	@BeforeClass
-	public static void setSut() throws IOException {
-		File databaseFolder = new File("target/test_database");
-		if (databaseFolder.exists()) {
-			FileUtils.deleteDirectory(databaseFolder);
-		}
-	}
-
 	@Before
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
@@ -61,11 +50,16 @@ public class DatabaseImplTest {
 		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
+		sut.addPerson(person);
+	}
+
+	@After
+	public void tearDown() {
+
 	}
 
 	@Test
-	public void find_person_lives_in() throws PersonsException {
-		sut.addPerson(person);
+	public void find_person_lives_in() {
 		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
@@ -73,8 +67,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_works_in() throws PersonsException {
-		sut.addPerson(person);
+	public void find_person_works_in() {
 		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);

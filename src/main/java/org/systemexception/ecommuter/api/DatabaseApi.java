@@ -2,7 +2,6 @@ package org.systemexception.ecommuter.api;
 
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -29,13 +28,21 @@ public interface DatabaseApi {
 	void addPerson(Person person);
 
 	/**
+	 * Deletes a person from the database
+	 *
+	 * @param person
+	 */
+	void deletePerson(Person person);
+
+
+	/**
 	 * Finds all persons living in your postal code
 	 */
-	Persons findPersonsLivesIn(String postalCode) throws PersonsException;
+	Persons findPersonsLivesIn(String postalCode);
 
 	/**
 	 * Finds all persons working in your postal code
 	 */
-	Persons findPersonsWorksIn(String postalCode) throws PersonsException;
+	Persons findPersonsWorksIn(String postalCode);
 
 }

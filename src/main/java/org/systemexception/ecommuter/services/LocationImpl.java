@@ -12,7 +12,6 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.exceptions.LocationException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -78,8 +77,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius)
-			throws PersonsException {
+	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
 		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
 				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
 				person.getWorkAddress().getPostalCode());

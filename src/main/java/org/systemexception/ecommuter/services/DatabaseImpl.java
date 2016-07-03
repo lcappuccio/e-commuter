@@ -1,5 +1,6 @@
 package org.systemexception.ecommuter.services;
 
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Parameter;
 import com.tinkerpop.blueprints.Vertex;
@@ -15,6 +16,8 @@ import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
+import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Territories;
 import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.CsvParser;
@@ -103,6 +106,36 @@ public class DatabaseImpl implements DatabaseApi {
 			logger.info("GetVertexByPlaceName: " + placeName + " does not exist");
 			return Optional.empty();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addPerson(final Person person) {
+		Address homeAddress = person.getHomeAddress();
+		Address workAddress = person.getWorkAddress();
+		logger.info("AddPerson adding: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
+		"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
+		// Get vertices for addresses
+		 // TODO LC How to handle non existing vertices? Now will throw java.util.NoSuchElementException
+		Vertex homeVertex = getVertexByPostalCode(homeAddress.getPostalCode()).get();
+		Vertex workVertex = getVertexByPostalCode(workAddress.getPostalCode()).get();
+		Vertex personVertex = graph.addVertex(DatabaseConfiguration.VERTEX_PERSON_CLASS.toString());
+		personVertex.setProperty(DatabaseConfiguration.NAME.toString(), person.getName());
+		personVertex.setProperty(DatabaseConfiguration.SURNAME.toString(), person.getSurname());
+		// Add LIVES_IN edge
+		logger.info("AddPerson edge: " + DatabaseConfiguration.LIVES_IN.toString() + logSeparator +
+				homeAddress.getPostalCode());
+		Edge livesInEdge = graph.addEdge(null, personVertex, homeVertex, DatabaseConfiguration.LIVES_IN.toString());
+		livesInEdge.setProperty(DatabaseConfiguration.LIVES_IN.toString(), DatabaseConfiguration.LIVES_IN.toString());
+		// Add WORKS_IN edge
+		logger.info("AddPerson edge: " + DatabaseConfiguration.WORKS_IN.toString() + logSeparator +
+				workAddress.getPostalCode());
+		Edge worksInEdge = graph.addEdge(null, personVertex, workVertex, DatabaseConfiguration.WORKS_IN.toString());
+		worksInEdge.setProperty(DatabaseConfiguration.WORKS_IN.toString(), DatabaseConfiguration.WORKS_IN.toString());
+		logger.info("AddPerson added: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
+				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
 	}
 
 	/**

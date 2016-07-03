@@ -4,6 +4,7 @@ import com.tinkerpop.blueprints.Vertex;
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
+import org.systemexception.ecommuter.model.Person;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -44,6 +45,13 @@ public interface DatabaseApi {
 	 * @return
 	 */
 	Optional<Vertex> getVertexByPlaceName(String placeName);
+
+	/**
+	 * Adds a person to the database
+	 *
+	 * @param person
+	 */
+	void addPerson(Person person);
 
 	/**
 	 * Exports the database

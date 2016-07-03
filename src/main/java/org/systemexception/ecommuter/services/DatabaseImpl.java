@@ -188,13 +188,13 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	// TODO LC This can return more than one vertex
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
-		logger.info("GetVertexByPostalCode: " + postalCode);
+		logger.info("GetNodeByPostalCode: " + postalCode);
 		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(),
 				postalCode).iterator();
 		if (nodeIterator.hasNext()) {
 			return Optional.of(nodeIterator.next());
 		} else {
-			logger.info("GetVertexByPostalCode: " + postalCode + " does not exist");
+			logger.info("GetNodeByPostalCode: " + postalCode + " does not exist");
 			return Optional.empty();
 		}
 	}

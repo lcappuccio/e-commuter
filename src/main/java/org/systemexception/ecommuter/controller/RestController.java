@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -32,21 +32,19 @@ public class RestController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private DatabaseApi databaseApi;
+	private DatabaseApi databaseService;
 	@Autowired
 	private LocationApi locationService;
+	@Autowired
+	private StorageApi storageService;
 
 	@RequestMapping(value = Endpoints.ADD_TERRITORIES, method = RequestMethod.POST,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException, CsvParserException, TerritoriesException {
 
-		File receivedFile = new File(dataFile.getOriginalFilename());
-		receivedFile.createNewFile();
-		FileOutputStream fos = new FileOutputStream(receivedFile);
-		fos.write(dataFile.getBytes());
-		fos.close();
-		databaseApi.addTerritories(receivedFile);
+		File territoriesFile = storageService.saveFile(dataFile);
+		databaseService.addTerritories(territoriesFile);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

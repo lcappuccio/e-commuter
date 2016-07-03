@@ -17,11 +17,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.controller.RestController;
 import org.systemexception.ecommuter.enums.Endpoints;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
@@ -40,6 +40,7 @@ public class RestControllerTest {
 
 	private DatabaseApi databaseApi;
 	private LocationApi locationApi;
+	private StorageApi storageApi;
 	@InjectMocks
 	private RestController restController;
 	private MockMvc sut;
@@ -48,6 +49,7 @@ public class RestControllerTest {
 	public void setSut() {
 		databaseApi = mock(DatabaseApi.class);
 		locationApi = mock(LocationApi.class);
+		storageApi = mock(StorageApi.class);
 		restController = new RestController();
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
@@ -59,11 +61,7 @@ public class RestControllerTest {
 				UUID.randomUUID().toString(), "text/plain", "some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
-		File receivedFile = new File(dataFile.getOriginalFilename());
-		receivedFile.createNewFile();
-		FileOutputStream fos = new FileOutputStream(receivedFile);
-		fos.write(dataFile.getBytes());
-		fos.close();
+		File receivedFile = storageApi.saveFile(dataFile);
 		verify(databaseApi).addTerritories(receivedFile);
 	}
 

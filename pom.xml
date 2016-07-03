@@ -6,7 +6,7 @@
 
 	<groupId>org.systemexception</groupId>
 	<artifactId>e-commuter</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -35,14 +35,9 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.tinkerpop.blueprints</groupId>
-			<artifactId>blueprints-core</artifactId>
-			<version>${tinkerpop.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tinkerpop.blueprints</groupId>
-			<artifactId>blueprints-neo4j-graph</artifactId>
-			<version>${tinkerpop.version}</version>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>3.0.3</version>
 		</dependency>
 		<!-- Spring Dependencies -->
 		<dependency>

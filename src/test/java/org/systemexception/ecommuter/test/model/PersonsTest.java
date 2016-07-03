@@ -2,7 +2,6 @@ package org.systemexception.ecommuter.test.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -19,7 +18,7 @@ public class PersonsTest {
 	private Person personA, personB;
 
 	@Before
-	public void setSut() throws PersonsException {
+	public void setSut() {
 		sut = new Persons();
 		Address homeAddress = new Address();
 		homeAddress.setPostalCode("123");
@@ -34,17 +33,6 @@ public class PersonsTest {
 	@Test
 	public void add_persons() {
 		assertTrue(sut.getPersons().size() == 2);
-	}
-
-	@Test(expected = PersonsException.class)
-	public void add_duplicate_person() throws PersonsException {
-		Address homeAddress = new Address();
-		homeAddress.setPostalCode("123");
-		Address workAddress = new Address();
-		workAddress.setPostalCode("456");
-		personA = new Person("NAME", "SURNAME", homeAddress, workAddress);
-		Person badPerson = new Person("NAME","SURNAME", homeAddress, workAddress);
-		sut.addPerson(badPerson);
 	}
 
 }

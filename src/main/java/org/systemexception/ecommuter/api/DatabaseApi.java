@@ -34,7 +34,6 @@ public interface DatabaseApi {
 	 */
 	void deletePerson(Person person);
 
-
 	/**
 	 * Finds all persons living in your postal code
 	 */

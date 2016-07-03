@@ -55,7 +55,7 @@ public class DatabaseImplTest {
 
 	@After
 	public void tearDown() {
-
+		sut.deletePerson(person);
 	}
 
 	@Test

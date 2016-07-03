@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class DatabaseImplTest {
 
 	private DatabaseApi sut;
-	private final static String dbFileName = "target/database_italy", exportFileName = "target/database_neo_export.csv";
+	private final static String dbFileName = "target/database_italy", exportFileName = "target/database_export.csv";
 	private File exportFile;
 
 	@Before

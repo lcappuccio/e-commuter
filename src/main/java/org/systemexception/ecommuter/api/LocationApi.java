@@ -2,7 +2,6 @@ package org.systemexception.ecommuter.api;
 
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.LocationException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -47,5 +46,5 @@ public interface LocationApi {
 	 * @param persons
 	 * @return
 	 */
-	Persons findNearbyPersons(Person person, Persons persons, double radius) throws PersonsException;
+	Persons findNearbyPersons(Person person, Persons persons, double radius);
 }

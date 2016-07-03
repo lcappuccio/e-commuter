@@ -6,13 +6,11 @@ package org.systemexception.ecommuter.enums;
  */
 public enum DatabaseConfiguration {
 
-	NEO_INDEX_PARAMETER("exact"),
 	// TERRITORIES
-	VERTEX_TERRITORY_CLASS("class:Territory"),
 	POSTAL_CODE("postalCode"),
 	PLACE_NAME("placeName"),
 	// PERSON
-	VERTEX_PERSON_CLASS("class:Person"),
+	PERSON("person"),
 	PERSON_DATA("personData"),
 	// EDGE
 	EDGE_TYPE("edgeType"),

@@ -10,7 +10,6 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.LocationException;
-import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -85,7 +84,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void find_nearby_persons() throws PersonsException, LocationException, CsvParserException,
+	public void find_nearby_persons() throws LocationException, CsvParserException,
 			TerritoriesException {
 		Person personA = new Person();
 		Address addressWorkA = getAddress("21016", 46.003509, 8.742917);

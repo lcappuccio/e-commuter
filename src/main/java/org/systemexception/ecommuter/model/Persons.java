@@ -1,7 +1,5 @@
 package org.systemexception.ecommuter.model;
 
-import org.systemexception.ecommuter.exceptions.PersonsException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +15,7 @@ public class Persons {
 		persons = new ArrayList();
 	}
 
-	public void addPerson(Person person) throws PersonsException {
-		for (Person innerPerson : persons) {
-			if (person.equals(innerPerson)) {
-				throw new PersonsException("Person already exists");
-			}
-		}
+	public void addPerson(Person person) {
 		persons.add(person);
 	}
 

@@ -9,6 +9,7 @@ import org.neo4j.kernel.impl.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.api.DatabaseApi;
+import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
@@ -34,7 +35,6 @@ import java.util.Optional;
 public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String logSeparator = ",";
 	private String dbFolder;
 	private Neo4jGraph graph;
 	private Index<Vertex> indexPostalCode, indexPlaceName;
@@ -67,7 +67,7 @@ public class DatabaseImpl implements DatabaseApi {
 			indexPostalCode.put(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode(),
 					territoryVertex);
 			indexPlaceName.put(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName(), territoryVertex);
-			logger.info("AddTerritories territory: " + territory.getPostalCode() + logSeparator +
+			logger.info("AddTerritories territory: " + territory.getPostalCode() + Constants.LOG_SEPARATOR +
 					territory.getPlaceName());
 		}
 		logger.info("Loaded " + fileName);
@@ -114,8 +114,9 @@ public class DatabaseImpl implements DatabaseApi {
 	public void addPerson(final Person person) {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
-		logger.info("AddPerson adding: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
-				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
+		logger.info("AddPerson adding: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
+				Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
+				"works in " + workAddress.getPostalCode());
 		// Get vertices for addresses
 		// TODO LC Strategy for non existing vertices. Now will throw java.util.NoSuchElementException
 		Vertex homeVertex = getVertexByPostalCode(homeAddress.getPostalCode()).get();
@@ -124,17 +125,18 @@ public class DatabaseImpl implements DatabaseApi {
 		personVertex.setProperty(DatabaseConfiguration.PERSON_DATA.toString(),
 				PersonJsonParser.fromPerson(person).toString());
 		// Add LIVES_IN edge
-		logger.info("AddPerson edge: " + DatabaseConfiguration.LIVES_IN.toString() + logSeparator +
+		logger.info("AddPerson edge: " + DatabaseConfiguration.LIVES_IN.toString() + Constants.LOG_SEPARATOR +
 				homeAddress.getPostalCode());
 		Edge livesInEdge = graph.addEdge(null, personVertex, homeVertex, DatabaseConfiguration.LIVES_IN.toString());
 		livesInEdge.setProperty(DatabaseConfiguration.EDGE_TYPE.toString(), DatabaseConfiguration.LIVES_IN.toString());
 		// Add WORKS_IN edge
-		logger.info("AddPerson edge: " + DatabaseConfiguration.WORKS_IN.toString() + logSeparator +
+		logger.info("AddPerson edge: " + DatabaseConfiguration.WORKS_IN.toString() + Constants.LOG_SEPARATOR +
 				workAddress.getPostalCode());
 		Edge worksInEdge = graph.addEdge(null, personVertex, workVertex, DatabaseConfiguration.WORKS_IN.toString());
 		worksInEdge.setProperty(DatabaseConfiguration.EDGE_TYPE.toString(), DatabaseConfiguration.WORKS_IN.toString());
-		logger.info("AddPerson added: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
-				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
+		logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
+				Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
+				"works in " + workAddress.getPostalCode());
 	}
 
 	/**

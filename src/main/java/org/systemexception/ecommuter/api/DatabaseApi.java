@@ -6,6 +6,7 @@ import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author leo
@@ -34,7 +35,7 @@ public interface DatabaseApi {
 	 * @param postalCode
 	 * @return
 	 */
-	Vertex getVertexByPostalCode(String postalCode);
+	Optional<Vertex> getVertexByPostalCode(String postalCode);
 
 	/**
 	 * Returns the vertex given the placeName
@@ -42,7 +43,7 @@ public interface DatabaseApi {
 	 * @param placeName
 	 * @return
 	 */
-	Vertex getVertexByPlaceName(String placeName);
+	Optional<Vertex> getVertexByPlaceName(String placeName);
 
 	/**
 	 * Exports the database

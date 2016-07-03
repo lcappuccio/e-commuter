@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author leo
@@ -57,7 +58,7 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public void addTerritories(final String fileName) throws CsvParserException, TerritoriesException {
 		readCsvTerritories(fileName);
-		logger.info("Loading " + fileName);
+		logger.info("AddTerritories: " + fileName);
 		// Create all nodes
 		for (Territory territory : territories.getTerritories()) {
 			Vertex territoryVertex = graph.addVertex(DatabaseConfiguration.VERTEX_TERRITORY_CLASS.toString());
@@ -66,7 +67,8 @@ public class DatabaseImpl implements DatabaseApi {
 			indexPostalCode.put(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode(),
 					territoryVertex);
 			indexPlaceName.put(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName(), territoryVertex);
-			logger.info("Adding territory: " + territory.getPostalCode() + logSeparator + territory.getPlaceName());
+			logger.info("AddTerritories territory: " + territory.getPostalCode() + logSeparator +
+					territory.getPlaceName());
 		}
 		logger.info("Loaded " + fileName);
 	}
@@ -75,14 +77,15 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Vertex getVertexByPostalCode(final String postalCode) {
+	public Optional<Vertex> getVertexByPostalCode(final String postalCode) {
+		logger.info("GetVertexByPostalCode: " + postalCode);
 		Iterator<Vertex> vertexIterator = indexPostalCode.get(DatabaseConfiguration.POSTAL_CODE.toString(),
 				postalCode).iterator();
 		if (vertexIterator.hasNext()) {
-			return vertexIterator.next();
+			return Optional.of(vertexIterator.next());
 		} else {
-			logger.info(postalCode + logSeparator + " postal code does not exist");
-			return null;
+			logger.info("GetVertexByPostalCode: " + postalCode + " does not exist");
+			return Optional.empty();
 		}
 	}
 
@@ -90,14 +93,15 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Vertex getVertexByPlaceName(final String placeName) {
+	public Optional<Vertex> getVertexByPlaceName(final String placeName) {
+		logger.info("GetVertexByPlaceName: " + placeName);
 		Iterator<Vertex> vertexIterator = indexPlaceName.get(DatabaseConfiguration.PLACE_NAME.toString(),
 				placeName).iterator();
 		if (vertexIterator.hasNext()) {
-			return vertexIterator.next();
+			return Optional.of(vertexIterator.next());
 		} else {
-			logger.info(placeName + logSeparator + " place name does not exist");
-			return null;
+			logger.info("GetVertexByPlaceName: " + placeName + " does not exist");
+			return Optional.empty();
 		}
 	}
 

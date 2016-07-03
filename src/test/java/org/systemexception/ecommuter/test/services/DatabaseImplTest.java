@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -45,7 +46,7 @@ public class DatabaseImplTest {
 
 	@Test
 	public void get_vertex_by_postal_code() {
-		Vertex vertexByPostalCode = sut.getVertexByPostalCode("21016");
+		Vertex vertexByPostalCode = sut.getVertexByPostalCode("21016").get();
 		String postalCode = vertexByPostalCode.getProperty(DatabaseConfiguration.POSTAL_CODE.toString());
 		String placeName = vertexByPostalCode.getProperty(DatabaseConfiguration.PLACE_NAME.toString());
 
@@ -54,13 +55,27 @@ public class DatabaseImplTest {
 	}
 
 	@Test
+	public void get_vertex_by_postal_code_empty() {
+		Optional<Vertex> vertexByPostalCode = sut.getVertexByPostalCode("NON_EXISTING");
+
+		assertTrue(vertexByPostalCode.equals(Optional.empty()));
+	}
+
+	@Test
 	public void get_vertex_by_place_name() {
-		Vertex vertexByPostalCode = sut.getVertexByPlaceName("Luino");
-		String postalCode = vertexByPostalCode.getProperty(DatabaseConfiguration.POSTAL_CODE.toString());
-		String placeName = vertexByPostalCode.getProperty(DatabaseConfiguration.PLACE_NAME.toString());
+		Vertex vertexByPlaceName = sut.getVertexByPlaceName("Luino").get();
+		String postalCode = vertexByPlaceName.getProperty(DatabaseConfiguration.POSTAL_CODE.toString());
+		String placeName = vertexByPlaceName.getProperty(DatabaseConfiguration.PLACE_NAME.toString());
 
 		assertEquals("21016", postalCode);
 		assertEquals("Luino", placeName);
+	}
+
+	@Test
+	public void get_vertex_by_place_name_empty() {
+		Optional<Vertex> vertexByPlaceName = sut.getVertexByPlaceName("NON_EXISTING");
+
+		assertTrue(vertexByPlaceName.equals(Optional.empty()));
 	}
 
 	@Test

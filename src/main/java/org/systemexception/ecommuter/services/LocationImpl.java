@@ -26,7 +26,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
-		logger.info("GeoToAddress (" + latitude + "," + longitude + ")");
+		logger.info("GeoToAddress: (" + latitude + "," + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
 			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
@@ -37,7 +37,7 @@ public class LocationImpl implements LocationApi {
 			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("Found no Address from (" + latitude + "," + longitude + ")");
+			logger.info("GeoToAddress: no Address from (" + latitude + "," + longitude + ")");
 			return new Address();
 		}
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -47,7 +47,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address addressToGeo(String stringAddress) throws LocationImplException {
-		logger.info("AddressToGeo " + stringAddress);
+		logger.info("AddressToGeo: " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
 			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
@@ -57,7 +57,7 @@ public class LocationImpl implements LocationApi {
 			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("Found no Geo from Address " + stringAddress);
+			logger.info("AddressToGeo: no Geo from Address " + stringAddress);
 			return new Address();
 		}
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -67,7 +67,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public double distanceBetween(Address addressA, Address addressB) {
-		logger.info("Calculate distance from (" + addressA.getLatitude() + "," + addressA.getLongitude() + ") to (" +
+		logger.info("DistanceBetween: (" + addressA.getLatitude() + "," + addressA.getLongitude() + ") to (" +
 				addressB.getLatitude() + "," + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());

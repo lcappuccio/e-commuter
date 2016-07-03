@@ -4,6 +4,7 @@ import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Parameter;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 import org.apache.commons.csv.CSVRecord;
 import org.neo4j.index.impl.lucene.LowerCaseKeywordAnalyzer;
 import org.neo4j.kernel.impl.util.FileUtils;
@@ -19,7 +20,9 @@ import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.CsvParser;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,6 +88,15 @@ public class DatabaseImpl implements DatabaseApi {
 	public void drop() throws IOException {
 		graph.shutdown();
 		FileUtils.deleteRecursively(new File(dbFolder));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void exportDatabase(String exportFileName) throws IOException {
+		OutputStream outStream = new FileOutputStream(exportFileName);
+		GraphSONWriter.outputGraph(graph, outStream);
 	}
 
 	private void readCsvTerritories(final String fileName) throws CsvParserException, TerritoriesException {

@@ -34,7 +34,7 @@ import java.util.Optional;
 public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String logSeparator = ", ";
+	private final String logSeparator = ",";
 	private String dbFolder;
 	private Neo4jGraph graph;
 	private Index<Vertex> indexPostalCode, indexPlaceName;

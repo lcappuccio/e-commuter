@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
 
@@ -18,15 +18,16 @@ import org.systemexception.ecommuter.pojo.HaversineUtil;
  * @author leo
  * @date 02/07/16 01:23
  */
-public class LocationApiImpl implements LocationApi {
+public class LocationImpl implements LocationApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 	private final HaversineUtil haversineUtil = new HaversineUtil();
+	private final String logSeparator = ",";
 
 	@Override
-	public Address geoToAddress(double latitude, double longitude) throws LocationException {
-		logger.info("GeoToAddress (" + latitude + "," + longitude + ")");
+	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
+		logger.info("GeoToAddress: (" + latitude + logSeparator + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
 			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
@@ -34,10 +35,10 @@ public class LocationApiImpl implements LocationApi {
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationException(errorMessage);
+			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("Found no Address from (" + latitude + "," + longitude + ")");
+			logger.info("GeoToAddress: no Address from (" + latitude + logSeparator + longitude + ")");
 			return new Address();
 		}
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -46,18 +47,18 @@ public class LocationApiImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(String stringAddress) throws LocationException {
-		logger.info("AddressToGeo " + stringAddress);
+	public Address addressToGeo(String stringAddress) throws LocationImplException {
+		logger.info("AddressToGeo: " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
 			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationException(errorMessage);
+			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("Found no Geo from Address " + stringAddress);
+			logger.info("AddressToGeo: no Geo from Address " + stringAddress);
 			return new Address();
 		}
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -67,8 +68,8 @@ public class LocationApiImpl implements LocationApi {
 
 	@Override
 	public double distanceBetween(Address addressA, Address addressB) {
-		logger.info("Calculate distance from (" + addressA.getLatitude() + "," + addressA.getLongitude() + ") to (" +
-				addressB.getLatitude() + "," + addressB.getLongitude() + ")");
+		logger.info("DistanceBetween: (" + addressA.getLatitude() + logSeparator + addressA.getLongitude() +
+				") to (" + addressB.getLatitude() + logSeparator + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
 	}

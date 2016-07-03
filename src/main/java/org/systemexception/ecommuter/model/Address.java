@@ -14,8 +14,6 @@ public class Address {
 			postalCode, formattedAddress;
 	private double latitude, longitude;
 
-	public Address() {}
-
 	public String getFormattedAddress() {
 		return formattedAddress;
 	}

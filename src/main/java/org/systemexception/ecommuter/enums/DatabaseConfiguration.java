@@ -8,7 +8,6 @@ public enum DatabaseConfiguration {
 
 	NEO_INDEX_PARAMETER("exact"),
 	VERTEX_TERRITORY_CLASS("class:Territory"),
-	VERTEX_INDEX("vertexIndex"),
 	POSTAL_CODE("postalCode"),
 	PLACE_NAME("placeName");
 

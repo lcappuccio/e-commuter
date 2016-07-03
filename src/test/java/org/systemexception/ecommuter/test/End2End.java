@@ -44,7 +44,7 @@ public class End2End {
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
 		File myFile = new File(myTestURL.toURI());
-		databaseApi.addTerritories(myFile.getAbsolutePath());
+		databaseApi.addTerritories(myFile);
 	}
 
 	@Test

@@ -24,7 +24,7 @@ public class CsvParser {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private List<CSVRecord> records;
 
-	public CsvParser(String fileName) throws CsvParserException {
+	public CsvParser(File csvFile) throws CsvParserException {
 		String[] headerMapping = new String[]{
 				CsvHeaders.COUNTRY.toString(), CsvHeaders.POSTAL_CODE.toString(), CsvHeaders.PLACE_NAME.toString(),
 				CsvHeaders.ADMIN_NAME1.toString(), CsvHeaders.ADMIN_CODE1.toString(),
@@ -33,11 +33,11 @@ public class CsvParser {
 				CsvHeaders.LATITUDE.toString(), CsvHeaders.LONGITUDE.toString(), CsvHeaders.ACCURACY.toString()};
 		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
 		try {
-			URL csvUrl = new File(fileName).toURI().toURL();
+			URL csvUrl = csvFile.toURI().toURL();
 			Reader csvReader = new InputStreamReader(csvUrl.openStream(), "UTF-8");
 			CSVParser csvParser = new CSVParser(csvReader, csvFormat);
 			records = csvParser.getRecords();
-			logger.info("Loaded " + fileName);
+			logger.info("Loaded " + csvFile.getName());
 		} catch (IOException ex) {
 			String errorMessage = ex.getMessage();
 			logger.error(errorMessage);

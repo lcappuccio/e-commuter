@@ -42,7 +42,7 @@ public class RestController {
 
 		File savedDataFile = new File(dataFile.getOriginalFilename());
 		dataFile.transferTo(savedDataFile);
-		databaseApi.addTerritories(savedDataFile.getAbsolutePath());
+		databaseApi.addTerritories(savedDataFile);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

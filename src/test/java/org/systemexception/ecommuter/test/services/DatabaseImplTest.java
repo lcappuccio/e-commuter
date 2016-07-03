@@ -45,7 +45,7 @@ public class DatabaseImplTest {
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
 		File myFile = new File(myTestURL.toURI());
-		sut.addTerritories(myFile.getAbsolutePath());
+		sut.addTerritories(myFile);
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);

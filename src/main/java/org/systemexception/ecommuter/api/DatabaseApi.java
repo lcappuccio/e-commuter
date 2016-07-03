@@ -6,6 +6,8 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 
+import java.io.File;
+
 /**
  * @author leo
  * @date 02/07/16 23:07
@@ -16,9 +18,9 @@ public interface DatabaseApi {
 	/**
 	 * Reads all lines from a csv file and creates all nodes
 	 *
-	 * @param fileName the csv file containing the structure
+	 * @param territoriesFile the csv file containing the structure
 	 */
-	void addTerritories(String fileName) throws CsvParserException, TerritoriesException;
+	void addTerritories(File territoriesFile) throws CsvParserException, TerritoriesException;
 
 	/**
 	 * Adds a person to the database

@@ -37,18 +37,18 @@ public class CsvParserTest {
 
 	@Test(expected = CsvParserException.class)
 	public void throw_exception_for_nonexisting_file() throws CsvParserException {
-		sut = new CsvParser("nonexistingfile.txt");
+		sut = new CsvParser(new File("nonexistingfile.txt"));
 	}
 
 	@Test
 	public void reads_territories_test_file() throws CsvParserException {
-		sut = new CsvParser(resourceFile.getAbsolutePath());
+		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
 		assertTrue(sut.readCsvContents().size() > 0);
 	}
 
 	@Test
 	public void parse_correctly_luino_record() throws CsvParserException {
-		sut = new CsvParser(resourceFile.getAbsolutePath());
+		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
 		List<CSVRecord> records = sut.readCsvContents();
 		for (CSVRecord territory : records) {
 			if (territory.get("PLACE_NAME").toLowerCase(Locale.getDefault()).equals("luino")) {

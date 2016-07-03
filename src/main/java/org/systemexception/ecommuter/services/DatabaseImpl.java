@@ -98,18 +98,18 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			indexPerson.add(personNode, PERSON.toString(), person);
 			// Add LIVES_IN edge
-			logger.info("AddPerson edge: " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
-					homeAddress.getPostalCode());
+			logger.info("AddPerson relation " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
+					homeAddress.getFormattedAddress());
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
 			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
 			// Add WORKS_IN edge
-			logger.info("AddPerson edge: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
-					workAddress.getPostalCode());
+			logger.info("AddPerson relation: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
+					workAddress.getFormattedAddress());
 			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
 			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 			logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
-					"works in " + workAddress.getPostalCode());
+					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getFormattedAddress() + Constants.LOG_SEPARATOR +
+					"works in " + workAddress.getFormattedAddress());
 			tx.success();
 		}
 	}

@@ -44,8 +44,18 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void database_is_loaded() {
+	public void get_vertex_by_postal_code() {
 		Vertex vertexByPostalCode = sut.getVertexByPostalCode("21016");
+		String postalCode = vertexByPostalCode.getProperty(DatabaseConfiguration.POSTAL_CODE.toString());
+		String placeName = vertexByPostalCode.getProperty(DatabaseConfiguration.PLACE_NAME.toString());
+
+		assertEquals("21016", postalCode);
+		assertEquals("Luino", placeName);
+	}
+
+	@Test
+	public void get_vertex_by_place_name() {
+		Vertex vertexByPostalCode = sut.getVertexByPlaceName("Luino");
 		String postalCode = vertexByPostalCode.getProperty(DatabaseConfiguration.POSTAL_CODE.toString());
 		String placeName = vertexByPostalCode.getProperty(DatabaseConfiguration.PLACE_NAME.toString());
 

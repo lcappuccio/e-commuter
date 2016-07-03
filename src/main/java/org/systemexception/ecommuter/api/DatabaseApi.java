@@ -29,12 +29,20 @@ public interface DatabaseApi {
 	void addTerritories(String fileName) throws CsvParserException, TerritoriesException;
 
 	/**
-	 * Returns the vertex given the nodeId
+	 * Returns the vertex given the postalCode
 	 *
-	 * @param postalCode the node id to retrieve
-	 * @return a vertex object
+	 * @param postalCode
+	 * @return
 	 */
 	Vertex getVertexByPostalCode(String postalCode);
+
+	/**
+	 * Returns the vertex given the placeName
+	 *
+	 * @param placeName
+	 * @return
+	 */
+	Vertex getVertexByPlaceName(String placeName);
 
 	/**
 	 * Exports the database

@@ -36,7 +36,7 @@ public class DatabaseImpl implements DatabaseApi {
 	private final String logSeparator = ", ";
 	private String dbFolder;
 	private Neo4jGraph graph;
-	private Index<Vertex> index;
+	private Index<Vertex> indexPostalCode, indexPlaceName;
 	private Territories territories;
 
 	/**
@@ -46,8 +46,12 @@ public class DatabaseImpl implements DatabaseApi {
 	public void initialSetup(final String dbFolder) {
 		this.dbFolder = dbFolder;
 		graph = new Neo4jGraph(dbFolder);
-		index = graph.createIndex(DatabaseConfiguration.VERTEX_INDEX.toString(), Vertex.class, new Parameter
-				(DatabaseConfiguration.NEO_INDEX_PARAMETER.toString(), LowerCaseKeywordAnalyzer.class.getName()));
+		indexPostalCode = graph.createIndex(DatabaseConfiguration.POSTAL_CODE.toString(), Vertex.class,
+				new Parameter(DatabaseConfiguration.NEO_INDEX_PARAMETER.toString(),
+						LowerCaseKeywordAnalyzer.class.getName()));
+		indexPlaceName = graph.createIndex(DatabaseConfiguration.PLACE_NAME.toString(), Vertex.class,
+				new Parameter(DatabaseConfiguration.NEO_INDEX_PARAMETER.toString(),
+						LowerCaseKeywordAnalyzer.class.getName()));
 	}
 
 	@Override
@@ -59,8 +63,9 @@ public class DatabaseImpl implements DatabaseApi {
 			Vertex territoryVertex = graph.addVertex(DatabaseConfiguration.VERTEX_TERRITORY_CLASS.toString());
 			territoryVertex.setProperty(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode());
 			territoryVertex.setProperty(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName());
-			index.put(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode(), territoryVertex);
-			index.put(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName(), territoryVertex);
+			indexPostalCode.put(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode(),
+					territoryVertex);
+			indexPlaceName.put(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName(), territoryVertex);
 			logger.info("Adding territory: " + territory.getPostalCode() + logSeparator + territory.getPlaceName());
 		}
 		logger.info("Loaded " + fileName);
@@ -71,12 +76,27 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Vertex getVertexByPostalCode(final String postalCode) {
-		Iterator<Vertex> vertexIterator = index.get(DatabaseConfiguration.POSTAL_CODE.toString(),
+		Iterator<Vertex> vertexIterator = indexPostalCode.get(DatabaseConfiguration.POSTAL_CODE.toString(),
 				postalCode).iterator();
 		if (vertexIterator.hasNext()) {
 			return vertexIterator.next();
 		} else {
 			logger.info(postalCode + logSeparator + " postal code does not exist");
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Vertex getVertexByPlaceName(final String placeName) {
+		Iterator<Vertex> vertexIterator = indexPlaceName.get(DatabaseConfiguration.PLACE_NAME.toString(),
+				placeName).iterator();
+		if (vertexIterator.hasNext()) {
+			return vertexIterator.next();
+		} else {
+			logger.info(placeName + logSeparator + " place name does not exist");
 			return null;
 		}
 	}

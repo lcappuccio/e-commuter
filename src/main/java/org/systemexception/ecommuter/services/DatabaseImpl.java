@@ -7,6 +7,7 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.NotImplementedException;
 import org.neo4j.index.impl.lucene.LowerCaseKeywordAnalyzer;
 import org.neo4j.kernel.impl.util.FileUtils;
 import org.slf4j.Logger;
@@ -16,10 +17,7 @@ import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
-import org.systemexception.ecommuter.model.Address;
-import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.model.Territories;
-import org.systemexception.ecommuter.model.Territory;
+import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
 
 import java.io.File;
@@ -116,9 +114,9 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("AddPerson adding: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
-		"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
+				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
 		// Get vertices for addresses
-		 // TODO LC How to handle non existing vertices? Now will throw java.util.NoSuchElementException
+		// TODO LC Strategy for non existing vertices. Now will throw java.util.NoSuchElementException
 		Vertex homeVertex = getVertexByPostalCode(homeAddress.getPostalCode()).get();
 		Vertex workVertex = getVertexByPostalCode(workAddress.getPostalCode()).get();
 		Vertex personVertex = graph.addVertex(DatabaseConfiguration.VERTEX_PERSON_CLASS.toString());
@@ -136,6 +134,22 @@ public class DatabaseImpl implements DatabaseApi {
 		worksInEdge.setProperty(DatabaseConfiguration.WORKS_IN.toString(), DatabaseConfiguration.WORKS_IN.toString());
 		logger.info("AddPerson added: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
 				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Persons findPersonsLivesIn(final String postalCode) {
+		throw new NotImplementedException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Persons findPersonsWorksIn(final String postalCode) {
+		throw new NotImplementedException();
 	}
 
 	/**

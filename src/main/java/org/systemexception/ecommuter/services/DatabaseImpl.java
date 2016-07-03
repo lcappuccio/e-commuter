@@ -1,13 +1,9 @@
 package org.systemexception.ecommuter.services;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Index;
-import com.tinkerpop.blueprints.Parameter;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.NotImplementedException;
 import org.neo4j.index.impl.lucene.LowerCaseKeywordAnalyzer;
 import org.neo4j.kernel.impl.util.FileUtils;
 import org.slf4j.Logger;
@@ -16,14 +12,17 @@ import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
+import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +77,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
+	// TODO LC This can return more than one vertex
 	public Optional<Vertex> getVertexByPostalCode(final String postalCode) {
 		logger.info("GetVertexByPostalCode: " + postalCode);
 		Iterator<Vertex> vertexIterator = indexPostalCode.get(DatabaseConfiguration.POSTAL_CODE.toString(),
@@ -94,6 +94,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
+	// TODO LC This can return more than one vertex
 	public Optional<Vertex> getVertexByPlaceName(final String placeName) {
 		logger.info("GetVertexByPlaceName: " + placeName);
 		Iterator<Vertex> vertexIterator = indexPlaceName.get(DatabaseConfiguration.PLACE_NAME.toString(),
@@ -120,18 +121,18 @@ public class DatabaseImpl implements DatabaseApi {
 		Vertex homeVertex = getVertexByPostalCode(homeAddress.getPostalCode()).get();
 		Vertex workVertex = getVertexByPostalCode(workAddress.getPostalCode()).get();
 		Vertex personVertex = graph.addVertex(DatabaseConfiguration.VERTEX_PERSON_CLASS.toString());
-		personVertex.setProperty(DatabaseConfiguration.NAME.toString(), person.getName());
-		personVertex.setProperty(DatabaseConfiguration.SURNAME.toString(), person.getSurname());
+		personVertex.setProperty(DatabaseConfiguration.PERSON_DATA.toString(),
+				PersonJsonParser.fromPerson(person).toString());
 		// Add LIVES_IN edge
 		logger.info("AddPerson edge: " + DatabaseConfiguration.LIVES_IN.toString() + logSeparator +
 				homeAddress.getPostalCode());
 		Edge livesInEdge = graph.addEdge(null, personVertex, homeVertex, DatabaseConfiguration.LIVES_IN.toString());
-		livesInEdge.setProperty(DatabaseConfiguration.LIVES_IN.toString(), DatabaseConfiguration.LIVES_IN.toString());
+		livesInEdge.setProperty(DatabaseConfiguration.EDGE_TYPE.toString(), DatabaseConfiguration.LIVES_IN.toString());
 		// Add WORKS_IN edge
 		logger.info("AddPerson edge: " + DatabaseConfiguration.WORKS_IN.toString() + logSeparator +
 				workAddress.getPostalCode());
 		Edge worksInEdge = graph.addEdge(null, personVertex, workVertex, DatabaseConfiguration.WORKS_IN.toString());
-		worksInEdge.setProperty(DatabaseConfiguration.WORKS_IN.toString(), DatabaseConfiguration.WORKS_IN.toString());
+		worksInEdge.setProperty(DatabaseConfiguration.EDGE_TYPE.toString(), DatabaseConfiguration.WORKS_IN.toString());
 		logger.info("AddPerson added: " + person.getName() + logSeparator + person.getSurname() + logSeparator +
 				"lives in " + homeAddress.getPostalCode() + logSeparator + "works in " + workAddress.getPostalCode());
 	}
@@ -140,16 +141,40 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsLivesIn(final String postalCode) {
-		throw new NotImplementedException();
+	public Persons findPersonsLivesIn(final String postalCode) throws PersonsException {
+		List<Vertex> foundVertex = new ArrayList<>();
+		Vertex vertexByPostalCode = getVertexByPostalCode(postalCode).get();
+		for (Edge edge : vertexByPostalCode.getEdges(Direction.IN, DatabaseConfiguration.LIVES_IN.toString())) {
+			foundVertex.add(edge.getVertex(Direction.OUT));
+		}
+		Persons foundPersons = new Persons();
+		for (Vertex vertex : foundVertex) {
+			String personJson = vertex.getProperty(DatabaseConfiguration.PERSON_DATA.toString());
+			if (!foundPersons.getPersons().contains(personJson)) {
+				foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+			}
+		}
+		return foundPersons;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsWorksIn(final String postalCode) {
-		throw new NotImplementedException();
+	public Persons findPersonsWorksIn(final String postalCode) throws PersonsException {
+		List<Vertex> foundVertex = new ArrayList<>();
+		Vertex vertexByPostalCode = getVertexByPostalCode(postalCode).get();
+		for (Edge edge : vertexByPostalCode.getEdges(Direction.IN, DatabaseConfiguration.WORKS_IN.toString())) {
+			foundVertex.add(edge.getVertex(Direction.OUT));
+		}
+		Persons foundPersons = new Persons();
+		for (Vertex vertex : foundVertex) {
+			String personJson = vertex.getProperty(DatabaseConfiguration.PERSON_DATA.toString());
+			if (!foundPersons.getPersons().contains(personJson)) {
+				foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+			}
+		}
+		return foundPersons;
 	}
 
 	/**

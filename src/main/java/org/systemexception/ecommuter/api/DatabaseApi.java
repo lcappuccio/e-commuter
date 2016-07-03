@@ -3,6 +3,7 @@ package org.systemexception.ecommuter.api;
 import com.tinkerpop.blueprints.Vertex;
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -57,12 +58,12 @@ public interface DatabaseApi {
 	/**
 	 * Finds all persons living in your postal code
 	 */
-	Persons findPersonsLivesIn(String postalCode);
+	Persons findPersonsLivesIn(String postalCode) throws PersonsException;
 
 	/**
 	 * Finds all persons working in your postal code
 	 */
-	Persons findPersonsWorksIn(String postalCode);
+	Persons findPersonsWorksIn(String postalCode) throws PersonsException;
 
 	/**
 	 * Exports the database

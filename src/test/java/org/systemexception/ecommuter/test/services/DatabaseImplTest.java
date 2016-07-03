@@ -15,9 +15,11 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.LocationImplException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.DatabaseImpl;
 import org.systemexception.ecommuter.services.LocationImpl;
 
@@ -100,8 +102,21 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void add_person() {
+	public void find_person_lives_in() throws PersonsException {
 		sut.addPerson(person);
+		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
+
+		assertEquals(personsLivesIn.getPersons().size(), 1);
+		assertEquals(personsLivesIn.getPersons().get(0), person);
+	}
+
+	@Test
+	public void find_person_works_in() throws PersonsException {
+		sut.addPerson(person);
+		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getPostalCode());
+
+		assertEquals(personsLivesIn.getPersons().size(), 1);
+		assertEquals(personsLivesIn.getPersons().get(0), person);
 	}
 
 	@Test

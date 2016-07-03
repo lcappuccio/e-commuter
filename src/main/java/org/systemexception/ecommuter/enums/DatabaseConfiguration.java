@@ -13,9 +13,9 @@ public enum DatabaseConfiguration {
 	PLACE_NAME("placeName"),
 	// PERSON
 	VERTEX_PERSON_CLASS("class:Person"),
-	NAME("name"),
-	SURNAME("surname"),
+	PERSON_DATA("personData"),
 	// EDGE
+	EDGE_TYPE("edgeType"),
 	LIVES_IN("livesIn"),
 	WORKS_IN("worksIn");
 

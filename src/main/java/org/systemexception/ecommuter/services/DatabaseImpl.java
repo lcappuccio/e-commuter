@@ -85,18 +85,18 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void drop() throws IOException {
-		graph.shutdown();
-		FileUtils.deleteRecursively(new File(dbFolder));
+	public void exportDatabase(String exportFileName) throws IOException {
+		OutputStream outStream = new FileOutputStream(exportFileName);
+		GraphSONWriter.outputGraph(graph, outStream);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exportDatabase(String exportFileName) throws IOException {
-		OutputStream outStream = new FileOutputStream(exportFileName);
-		GraphSONWriter.outputGraph(graph, outStream);
+	public void drop() throws IOException {
+		graph.shutdown();
+		FileUtils.deleteRecursively(new File(dbFolder));
 	}
 
 	private void readCsvTerritories(final String fileName) throws CsvParserException, TerritoriesException {

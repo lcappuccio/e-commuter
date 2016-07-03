@@ -35,11 +35,6 @@ public interface DatabaseApi {
 	Vertex getVertexByPostalCode(String postalCode);
 
 	/**
-	 * Drops the database
-	 */
-	void drop() throws IOException;
-
-	/**
 	 * Exports the database
 	 * WARNING: Export doesn't lock your database, but browses it. This means that concurrent operation can be
 	 * executed during the export
@@ -47,4 +42,10 @@ public interface DatabaseApi {
 	 * @param exportFileName the file name of the export
 	 */
 	void exportDatabase(String exportFileName) throws IOException;
+
+	/**
+	 * Drops the database
+	 */
+	void drop() throws IOException;
+
 }

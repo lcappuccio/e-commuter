@@ -45,5 +45,5 @@ public class Application {
 	public LocationApi locationApi() {
 		return new LocationImpl();
 	}
-	
+
 }

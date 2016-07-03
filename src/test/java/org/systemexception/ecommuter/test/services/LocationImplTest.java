@@ -1,6 +1,12 @@
 package org.systemexception.ecommuter.test.services;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
@@ -12,6 +18,10 @@ import static org.junit.Assert.*;
  * @author leo
  * @date 02/07/16 01:24
  */
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
+@TestPropertySource(locations = "classpath:application.properties")
 public class LocationImplTest {
 
 	private final LocationApi sut = new LocationImpl();

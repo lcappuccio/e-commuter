@@ -4,6 +4,12 @@ import com.tinkerpop.blueprints.Vertex;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
@@ -28,6 +34,10 @@ import static org.junit.Assert.assertTrue;
  * @author leo
  * @date 03/07/16 02:12
  */
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
+@TestPropertySource(locations = "classpath:application.properties")
 public class DatabaseImplTest {
 
 	private DatabaseApi sut;

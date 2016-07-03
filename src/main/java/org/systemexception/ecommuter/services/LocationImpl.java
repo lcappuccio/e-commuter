@@ -13,7 +13,10 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author leo
@@ -26,7 +29,7 @@ public class LocationImpl implements LocationApi {
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
-	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
+	public Address geoToAddress(final double latitude, final double longitude) throws LocationImplException {
 		logger.info("GeoToAddress: (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
@@ -47,7 +50,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(String stringAddress) throws LocationImplException {
+	public Address addressToGeo(final String stringAddress) throws LocationImplException {
 		logger.info("AddressToGeo: " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -67,11 +70,16 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public double distanceBetween(Address addressA, Address addressB) {
+	public double distanceBetween(final Address addressA, final Address addressB) {
 		logger.info("DistanceBetween: (" + addressA.getLatitude() + Constants.LOG_SEPARATOR + addressA.getLongitude() +
 				") to (" + addressB.getLatitude() + Constants.LOG_SEPARATOR + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
+	}
+
+	@Override
+	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
+		throw new NotImplementedException();
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {

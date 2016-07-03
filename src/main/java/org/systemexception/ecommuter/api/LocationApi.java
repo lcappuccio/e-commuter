@@ -3,6 +3,8 @@ package org.systemexception.ecommuter.api;
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 
 /**
  * @author leo
@@ -36,4 +38,13 @@ public interface LocationApi {
 	 * @return
 	 */
 	double distanceBetween(Address addressA, Address addressB);
+
+	/**
+	 * Finds persons nearby this area of interest
+	 *
+	 * @param person
+	 * @param persons
+	 * @return
+	 */
+	Persons findNearbyPersons(Person person, Persons persons, double radius);
 }

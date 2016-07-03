@@ -21,6 +21,11 @@ The haversine formula is used to calculate the distance between two addresses in
 
 Set `API_KEY` environment variable with your Google Maps API Key.
 
+*WARNING*
+
+Any class that references `org.systemexception.ecommuter.services.LocationImpl` will produce logs with your google
+api key, remember to use the spring context to disable the logs in testing.
+
 ## Logging
 
 Logging in test `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`

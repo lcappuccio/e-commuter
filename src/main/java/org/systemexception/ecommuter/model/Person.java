@@ -7,14 +7,14 @@ package org.systemexception.ecommuter.model;
 public class Person {
 
 	private String name, surname;
-	private Address address;
+	private Address homeAddress;
 
 	public Person() {}
 
-	public Person (final String name, final String surname, final Address address) {
+	public Person (final String name, final String surname, final Address homeAddress) {
 		this.name = name;
 		this.surname = surname;
-		this.address = address;
+		this.homeAddress = homeAddress;
 	}
 
 	public String getName() {
@@ -33,12 +33,12 @@ public class Person {
 		this.surname = surname;
 	}
 
-	public Address getAddress() {
-		return address;
+	public Address getHomeAddress() {
+		return homeAddress;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setHomeAddress(Address homeAddress) {
+		this.homeAddress = homeAddress;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class Person {
 
 		if (name != null ? !name.equals(person.name) : person.name != null) return false;
 		if (surname != null ? !surname.equals(person.surname) : person.surname != null) return false;
-		return address != null ? address.equals(person.address) : person.address == null;
+		return homeAddress != null ? homeAddress.equals(person.homeAddress) : person.homeAddress == null;
 
 	}
 }

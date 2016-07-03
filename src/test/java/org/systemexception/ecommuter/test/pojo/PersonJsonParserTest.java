@@ -27,7 +27,7 @@ public class PersonJsonParserTest {
 	public void setSut() throws LocationImplException {
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo);
-		person.setAddress(addressFromGeo);
+		person.setHomeAddress(addressFromGeo);
 	}
 
 	@Test

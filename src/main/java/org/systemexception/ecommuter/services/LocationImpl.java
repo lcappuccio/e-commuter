@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
-import org.systemexception.ecommuter.exceptions.LocationImplException;
+import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
 
 /**
@@ -26,7 +29,7 @@ public class LocationImpl implements LocationApi {
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
-	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
+	public Address geoToAddress(final double latitude, final double longitude) throws LocationException {
 		logger.info("GeoToAddress: (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
@@ -35,7 +38,7 @@ public class LocationImpl implements LocationApi {
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationImplException(errorMessage);
+			throw new LocationException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
 			logger.info("GeoToAddress: no Address from (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
@@ -47,7 +50,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(String stringAddress) throws LocationImplException {
+	public Address addressToGeo(final String stringAddress) throws LocationException {
 		logger.info("AddressToGeo: " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -55,7 +58,7 @@ public class LocationImpl implements LocationApi {
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationImplException(errorMessage);
+			throw new LocationException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
 			logger.info("AddressToGeo: no Geo from Address " + stringAddress);
@@ -67,11 +70,40 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public double distanceBetween(Address addressA, Address addressB) {
+	public double distanceBetween(final Address addressA, final Address addressB) {
 		logger.info("DistanceBetween: (" + addressA.getLatitude() + Constants.LOG_SEPARATOR + addressA.getLongitude() +
 				") to (" + addressB.getLatitude() + Constants.LOG_SEPARATOR + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
+	}
+
+	@Override
+	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius)
+			throws PersonsException {
+		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
+				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
+				person.getWorkAddress().getPostalCode());
+		Persons nearbyPersons = new Persons();
+		if (persons.getPersons().contains(person)) {
+			persons.getPersons().remove(person);
+			logger.info("FindNearbyPersons: removed " + person.getName() + Constants.LOG_SEPARATOR +
+					person.getSurname() + " from person list");
+		}
+		for (Person innerPerson : persons.getPersons()) {
+			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
+			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
+			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius) {
+				logger.info("FindNearbyPersons: found " + innerPerson.getName() + Constants.LOG_SEPARATOR +
+						innerPerson.getSurname() + Constants.LOG_SEPARATOR + "distance home: " + distanceBetweenHome
+						+ Constants.LOG_SEPARATOR + "distance work: " + distanceBetweenWork);
+				nearbyPersons.addPerson(innerPerson);
+			} else {
+				logger.info("FindNearbyPersons: excluded " + innerPerson.getName() + Constants.LOG_SEPARATOR +
+						innerPerson.getSurname() + Constants.LOG_SEPARATOR + "distance home: " + distanceBetweenHome
+						+ Constants.LOG_SEPARATOR + "distance work: " + distanceBetweenWork);
+			}
+		}
+		return nearbyPersons;
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {

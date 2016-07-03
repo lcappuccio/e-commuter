@@ -1,5 +1,8 @@
 package org.systemexception.ecommuter.api;
 
+import org.systemexception.ecommuter.exceptions.CsvParserException;
+import org.systemexception.ecommuter.exceptions.TerritoriesException;
+
 /**
  * @author leo
  * @date 02/07/16 23:07
@@ -18,5 +21,5 @@ public interface DatabaseApi {
 	 *
 	 * @param fileName the csv file containing the structure
 	 */
-	void addTerritories(String fileName);
+	void addTerritories(String fileName) throws CsvParserException, TerritoriesException;
 }

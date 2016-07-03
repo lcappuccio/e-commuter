@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter.test.pojo;
 
 import org.apache.commons.csv.CSVRecord;
 import org.junit.BeforeClass;

@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter.test.model;
 
 import org.junit.Before;
 import org.junit.Test;

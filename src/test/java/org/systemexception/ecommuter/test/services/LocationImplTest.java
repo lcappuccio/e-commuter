@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter.test.services;
 
 import org.junit.Test;
 import org.systemexception.ecommuter.api.LocationApi;

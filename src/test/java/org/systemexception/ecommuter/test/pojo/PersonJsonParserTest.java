@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter.test.pojo;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

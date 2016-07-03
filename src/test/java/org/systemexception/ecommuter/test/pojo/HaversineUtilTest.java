@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter.test.pojo;
 
 import org.junit.Test;
 import org.systemexception.ecommuter.pojo.HaversineUtil;

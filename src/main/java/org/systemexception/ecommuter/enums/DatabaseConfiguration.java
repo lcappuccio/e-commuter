@@ -9,9 +9,8 @@ public enum DatabaseConfiguration {
 	NEO_INDEX_PARAMETER("exact"),
 	VERTEX_TERRITORY_CLASS("class:Territory"),
 	VERTEX_INDEX("vertexIndex"),
-	NODE_ID("nodeId"),
-	NODE_DESC("nodeDesc"),
-	NODE_TYPE("nodeType");
+	POSTAL_CODE("postalCode"),
+	PLACE_NAME("placeName");
 
 	private final String databaseConfiguration;
 

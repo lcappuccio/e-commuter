@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
 
@@ -25,7 +25,7 @@ public class LocationImpl implements LocationApi {
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
-	public Address geoToAddress(double latitude, double longitude) throws LocationException {
+	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
 		logger.info("GeoToAddress (" + latitude + "," + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
@@ -34,7 +34,7 @@ public class LocationImpl implements LocationApi {
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationException(errorMessage);
+			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
 			logger.info("Found no Address from (" + latitude + "," + longitude + ")");
@@ -46,7 +46,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(String stringAddress) throws LocationException {
+	public Address addressToGeo(String stringAddress) throws LocationImplException {
 		logger.info("AddressToGeo " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -54,7 +54,7 @@ public class LocationImpl implements LocationApi {
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage);
-			throw new LocationException(errorMessage);
+			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
 			logger.info("Found no Geo from Address " + stringAddress);

@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.LocationImplException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.services.LocationImpl;
@@ -24,7 +24,7 @@ public class PersonJsonParserTest {
 	private Person person;
 
 	@Before
-	public void setSut() throws LocationException {
+	public void setSut() throws LocationImplException {
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo);
 		person.setAddress(addressFromGeo);

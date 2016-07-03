@@ -15,8 +15,7 @@ import static org.junit.Assert.*;
 public class LocationImplTest {
 
 	private final LocationApi sut = new LocationImpl();
-
-
+	
 	@Test
 	public void address_to_geo() throws LocationImplException {
 		String stringAddress = "Piazza del Duomo Milano";

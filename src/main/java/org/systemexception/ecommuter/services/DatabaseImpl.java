@@ -69,8 +69,7 @@ public class DatabaseImpl implements DatabaseApi {
 				Node territoryNode = graphDb.createNode();
 				territoryNode.setProperty(POSTAL_CODE.toString(), territory.getPostalCode());
 				territoryNode.setProperty(PLACE_NAME.toString(), territory.getPlaceName());
-				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(),
-						territory.getPostalCode());
+				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(), territory.getPostalCode());
 				tx.success();
 			}
 
@@ -96,21 +95,18 @@ public class DatabaseImpl implements DatabaseApi {
 			Node homeNode = getNodeByPostalCode(homeAddress.getPostalCode()).get();
 			Node workNode = getNodeByPostalCode(workAddress.getPostalCode()).get();
 			Node personNode = graphDb.createNode();
-			personNode.setProperty(PERSON_DATA.toString(),
-					PersonJsonParser.fromPerson(person).toString());
+			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			indexPerson.add(personNode, PERSON.toString(), person);
 			// Add LIVES_IN edge
 			logger.info("AddPerson edge: " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
 					homeAddress.getPostalCode());
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
-			indexLivesIn.add(livesIn, LIVES_IN.toString(),
-					LIVES_IN.toString());
+			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
 			// Add WORKS_IN edge
 			logger.info("AddPerson edge: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
 					workAddress.getPostalCode());
 			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
-			indexWorksIn.add(worksIn, WORKS_IN.toString(),
-					WORKS_IN.toString());
+			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 			logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
 					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
 					"works in " + workAddress.getPostalCode());
@@ -189,8 +185,7 @@ public class DatabaseImpl implements DatabaseApi {
 	// TODO LC This can return more than one vertex
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
 		logger.info("GetNodeByPostalCode: " + postalCode);
-		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(),
-				postalCode).iterator();
+		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
 		if (nodeIterator.hasNext()) {
 			return Optional.of(nodeIterator.next());
 		} else {

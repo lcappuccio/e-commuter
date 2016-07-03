@@ -1,6 +1,5 @@
 package org.systemexception.ecommuter.api;
 
-import com.tinkerpop.blueprints.Vertex;
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.PersonsException;
@@ -9,7 +8,6 @@ import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * @author leo
@@ -31,22 +29,6 @@ public interface DatabaseApi {
 	 * @param fileName the csv file containing the structure
 	 */
 	void addTerritories(String fileName) throws CsvParserException, TerritoriesException;
-
-	/**
-	 * Returns the vertex given the postalCode
-	 *
-	 * @param postalCode
-	 * @return
-	 */
-	Optional<Vertex> getVertexByPostalCode(String postalCode);
-
-	/**
-	 * Returns the vertex given the placeName
-	 *
-	 * @param placeName
-	 * @return
-	 */
-	Optional<Vertex> getVertexByPlaceName(String placeName);
 
 	/**
 	 * Adds a person to the database

@@ -77,40 +77,6 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	// TODO LC This can return more than one vertex
-	public Optional<Vertex> getVertexByPostalCode(final String postalCode) {
-		logger.info("GetVertexByPostalCode: " + postalCode);
-		Iterator<Vertex> vertexIterator = indexPostalCode.get(DatabaseConfiguration.POSTAL_CODE.toString(),
-				postalCode).iterator();
-		if (vertexIterator.hasNext()) {
-			return Optional.of(vertexIterator.next());
-		} else {
-			logger.info("GetVertexByPostalCode: " + postalCode + " does not exist");
-			return Optional.empty();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	// TODO LC This can return more than one vertex
-	public Optional<Vertex> getVertexByPlaceName(final String placeName) {
-		logger.info("GetVertexByPlaceName: " + placeName);
-		Iterator<Vertex> vertexIterator = indexPlaceName.get(DatabaseConfiguration.PLACE_NAME.toString(),
-				placeName).iterator();
-		if (vertexIterator.hasNext()) {
-			return Optional.of(vertexIterator.next());
-		} else {
-			logger.info("GetVertexByPlaceName: " + placeName + " does not exist");
-			return Optional.empty();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void addPerson(final Person person) {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
@@ -195,6 +161,44 @@ public class DatabaseImpl implements DatabaseApi {
 	public void drop() throws IOException {
 		graph.shutdown();
 		FileUtils.deleteRecursively(new File(dbFolder));
+	}
+
+	/**
+	 * Returns the vertex given the postalCode
+	 *
+	 * @param postalCode
+	 * @return
+	 */
+	// TODO LC This can return more than one vertex
+	private Optional<Vertex> getVertexByPostalCode(final String postalCode) {
+		logger.info("GetVertexByPostalCode: " + postalCode);
+		Iterator<Vertex> vertexIterator = indexPostalCode.get(DatabaseConfiguration.POSTAL_CODE.toString(),
+				postalCode).iterator();
+		if (vertexIterator.hasNext()) {
+			return Optional.of(vertexIterator.next());
+		} else {
+			logger.info("GetVertexByPostalCode: " + postalCode + " does not exist");
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Returns the vertex given the placeName
+	 *
+	 * @param placeName
+	 * @return
+	 */
+	// TODO LC This can return more than one vertex
+	private Optional<Vertex> getVertexByPlaceName(final String placeName) {
+		logger.info("GetVertexByPlaceName: " + placeName);
+		Iterator<Vertex> vertexIterator = indexPlaceName.get(DatabaseConfiguration.PLACE_NAME.toString(),
+				placeName).iterator();
+		if (vertexIterator.hasNext()) {
+			return Optional.of(vertexIterator.next());
+		} else {
+			logger.info("GetVertexByPlaceName: " + placeName + " does not exist");
+			return Optional.empty();
+		}
 	}
 
 	private void readCsvTerritories(final String fileName) throws CsvParserException, TerritoriesException {

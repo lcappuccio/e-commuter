@@ -86,5 +86,6 @@ public class End2End {
 		Persons nearbyPersons = locationService.findNearbyPersons(personA, persons, 0.5);
 
 		assertTrue(nearbyPersons.getPersons().size() == 1);
+		assertTrue(nearbyPersons.getPersons().get(0).equals(personB));
 	}
 }

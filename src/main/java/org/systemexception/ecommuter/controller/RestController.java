@@ -18,6 +18,7 @@ import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -40,9 +41,12 @@ public class RestController {
 	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException, CsvParserException, TerritoriesException {
 
-		File savedDataFile = new File(dataFile.getOriginalFilename());
-		dataFile.transferTo(savedDataFile);
-		databaseApi.addTerritories(savedDataFile);
+		File receivedFile = new File(dataFile.getOriginalFilename());
+		receivedFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(receivedFile);
+		fos.write(dataFile.getBytes());
+		fos.close();
+		databaseApi.addTerritories(receivedFile);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

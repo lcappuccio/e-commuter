@@ -13,7 +13,6 @@ import org.systemexception.ecommuter.services.StorageImpl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.Format;
@@ -33,7 +32,6 @@ public class StorageImplTest {
 	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
 	private StorageApi sut;
 	private static final String testFile = "it_data_SMALL.csv";
-	private static File resourceFile;
 	private MultipartFile multipartFile;
 
 	@BeforeClass
@@ -67,8 +65,6 @@ public class StorageImplTest {
 	@Before
 	public void setUp() throws IOException, URISyntaxException {
 		sut = new StorageImpl(STORAGE_FOLDER);
-		URL myTestURL = ClassLoader.getSystemResource(testFile);
-		resourceFile = new File(myTestURL.toURI());
 		multipartFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD, UUID.randomUUID().toString(),
 				"text/plain", "some data".getBytes());
 	}

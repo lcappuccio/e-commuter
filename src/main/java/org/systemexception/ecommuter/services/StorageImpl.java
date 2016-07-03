@@ -31,7 +31,8 @@ public class StorageImpl implements StorageApi {
 
 	@Override
 	public File saveFile(MultipartFile receivedFile) throws IOException {
-		File dataFile = new File(storageFolder + File.separator + receivedFile.getName());
+		File dataFile = new File(storageFolder + File.separator + receivedFile.getName() + "_" +
+				convertTime(System.currentTimeMillis()));
 		historifyFile(dataFile);
 		dataFile.createNewFile();
 		FileOutputStream fos = new FileOutputStream(dataFile);

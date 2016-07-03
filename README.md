@@ -25,16 +25,24 @@ See `e-commuter.pdf` for more details.
 
 Set `API_KEY` environment variable with your Google Maps API Key.
 
-*WARNING*
+**WARNING**
 
 Any class that references `org.systemexception.ecommuter.services.LocationImpl` will produce logs with your google
 api key, remember to use the spring context to disable the logs if using public repositories or continuous
 integration services.
 
-## Logging
-
 Logging in test `application.properties` has been disabled for class `org.systemexception.ecommuter.services.GeoApi`
 to hide the api key in Travis logs, re-enable in local environment for debugging or analysis.
+
+This implies that the Spring context has to be booted in order to read the properties file, add to every impacted
+test the necessary configuration annotations:
+
+```
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
+@TestPropertySource(locations = "classpath:application.properties")
+```
 
 ## ToDo
 

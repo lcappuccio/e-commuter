@@ -17,9 +17,19 @@ Use Google Maps Geocoding API to calculate distances between two addresses or ge
 We're using the Google API only to geocode an address and viceversa (reverse geocoding).
 The haversine formula is used to calculate the distance between two addresses in order to keep API calls to a minimum.
 
+## Data Model
+
+See `e-commuter.pdf` for more details.
+
 ## Usage
 
 Set `API_KEY` environment variable with your Google Maps API Key.
+
+*WARNING*
+
+Any class that references `org.systemexception.ecommuter.services.LocationImpl` will produce logs with your google
+api key, remember to use the spring context to disable the logs if using public repositories or continuous
+integration services.
 
 ## Logging
 
@@ -28,5 +38,6 @@ to hide the api key in Travis logs, re-enable in local environment for debugging
 
 ## ToDo
 
-- Bind Person domain object to Address
+- REST endpoints
+- Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)

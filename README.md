@@ -49,3 +49,4 @@ test the necessary configuration annotations:
 - REST endpoints
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
+- Pending `spring-boot-starter-data-neo4j` release

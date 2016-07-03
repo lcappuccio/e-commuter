@@ -23,10 +23,11 @@ public class LocationImpl implements LocationApi {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 	private final HaversineUtil haversineUtil = new HaversineUtil();
+	private final String logSeparator = ",";
 
 	@Override
 	public Address geoToAddress(double latitude, double longitude) throws LocationImplException {
-		logger.info("GeoToAddress: (" + latitude + "," + longitude + ")");
+		logger.info("GeoToAddress: (" + latitude + logSeparator + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
 			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
@@ -37,7 +38,7 @@ public class LocationImpl implements LocationApi {
 			throw new LocationImplException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("GeoToAddress: no Address from (" + latitude + "," + longitude + ")");
+			logger.info("GeoToAddress: no Address from (" + latitude + logSeparator + longitude + ")");
 			return new Address();
 		}
 		GeocodingResult geocodingResult = geocodingResults[0];
@@ -67,8 +68,8 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public double distanceBetween(Address addressA, Address addressB) {
-		logger.info("DistanceBetween: (" + addressA.getLatitude() + "," + addressA.getLongitude() + ") to (" +
-				addressB.getLatitude() + "," + addressB.getLongitude() + ")");
+		logger.info("DistanceBetween: (" + addressA.getLatitude() + logSeparator + addressA.getLongitude() +
+				") to (" + addressB.getLatitude() + logSeparator + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
 	}

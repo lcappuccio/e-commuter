@@ -1,7 +1,7 @@
 package org.systemexception.ecommuter.api;
 
 import org.springframework.stereotype.Service;
-import org.systemexception.ecommuter.exceptions.LocationImplException;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -20,7 +20,7 @@ public interface LocationApi {
 	 * @param longitude
 	 * @return
 	 */
-	Address geoToAddress(double latitude, double longitude) throws LocationImplException;
+	Address geoToAddress(double latitude, double longitude) throws LocationException;
 
 	/**
 	 * Return a formatted address from a generic string
@@ -28,7 +28,7 @@ public interface LocationApi {
 	 * @param address the generic string with an address
 	 * @return
 	 */
-	Address addressToGeo(String address) throws LocationImplException;
+	Address addressToGeo(String address) throws LocationException;
 
 	/**
 	 * Calculates distance between two addresses

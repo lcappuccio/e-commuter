@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.LocationImplException;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.services.LocationImpl;
 
@@ -27,7 +27,7 @@ public class LocationImplTest {
 	private final LocationApi sut = new LocationImpl();
 
 	@Test
-	public void address_to_geo() throws LocationImplException {
+	public void address_to_geo() throws LocationException {
 		String stringAddress = "Piazza del Duomo Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -45,7 +45,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void geo_to_address() throws LocationImplException {
+	public void geo_to_address() throws LocationException {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
@@ -62,7 +62,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_addresses() throws LocationImplException {
+	public void calculate_distance_for_addresses() throws LocationException {
 		Address addressLuino = sut.addressToGeo("Piazza Garibaldi, Luino, VA");
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
@@ -71,7 +71,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_coordinates() throws LocationImplException {
+	public void calculate_distance_for_coordinates() throws LocationException {
 		Address addressLuino = sut.geoToAddress(46.0021, 8.7507);
 		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);

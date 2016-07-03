@@ -14,7 +14,7 @@ import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.DatabaseConfiguration;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.LocationImplException;
+import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
@@ -49,7 +49,7 @@ public class DatabaseImplTest {
 	private Person person;
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationImplException {
+	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
 		File myFile = new File(myTestURL.toURI());
 		sut = new DatabaseImpl();

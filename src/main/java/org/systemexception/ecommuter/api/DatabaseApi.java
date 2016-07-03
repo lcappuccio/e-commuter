@@ -6,8 +6,6 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 
-import java.io.IOException;
-
 /**
  * @author leo
  * @date 02/07/16 23:07

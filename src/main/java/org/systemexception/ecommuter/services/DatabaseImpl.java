@@ -6,6 +6,7 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import org.apache.commons.csv.CSVRecord;
 import org.neo4j.index.impl.lucene.LowerCaseKeywordAnalyzer;
+import org.neo4j.kernel.impl.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.api.DatabaseApi;
@@ -17,6 +18,9 @@ import org.systemexception.ecommuter.model.Territories;
 import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.CsvParser;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,16 +30,17 @@ import java.util.List;
 public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final String logSeparator = ", ";
+	private String dbFolder;
 	private Neo4jGraph graph;
 	private Index<Vertex> index;
-	private String dbFolder;
 	private Territories territories;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void initialSetup(String dbFolder) {
+	public void initialSetup(final String dbFolder) {
 		this.dbFolder = dbFolder;
 		graph = new Neo4jGraph(dbFolder);
 		index = graph.createIndex(DatabaseConfiguration.VERTEX_INDEX.toString(), Vertex.class, new Parameter
@@ -43,7 +48,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	@Override
-	public void addTerritories(String fileName) throws CsvParserException, TerritoriesException {
+	public void addTerritories(final String fileName) throws CsvParserException, TerritoriesException {
 		readCsvTerritories(fileName);
 		logger.info("Loading " + fileName);
 		// Create all nodes
@@ -53,12 +58,36 @@ public class DatabaseImpl implements DatabaseApi {
 			territoryVertex.setProperty(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName());
 			index.put(DatabaseConfiguration.POSTAL_CODE.toString(), territory.getPostalCode(), territoryVertex);
 			index.put(DatabaseConfiguration.PLACE_NAME.toString(), territory.getPlaceName(), territoryVertex);
-			logger.info("Adding territory: " + territory.getPostalCode() + " , " + territory.getPlaceName());
+			logger.info("Adding territory: " + territory.getPostalCode() + logSeparator + territory.getPlaceName());
 		}
 		logger.info("Loaded " + fileName);
 	}
 
-	private void readCsvTerritories(String fileName) throws CsvParserException, TerritoriesException {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Vertex getVertexByPostalCode(final String postalCode) {
+		Iterator<Vertex> vertexIterator = index.get(DatabaseConfiguration.POSTAL_CODE.toString(),
+				postalCode).iterator();
+		if (vertexIterator.hasNext()) {
+			return vertexIterator.next();
+		} else {
+			logger.info(postalCode + logSeparator + " postal code does not exist");
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void drop() throws IOException {
+		graph.shutdown();
+		FileUtils.deleteRecursively(new File(dbFolder));
+	}
+
+	private void readCsvTerritories(final String fileName) throws CsvParserException, TerritoriesException {
 		logger.info("Start loading territories file");
 		CsvParser csvParser = new CsvParser(fileName);
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();

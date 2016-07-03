@@ -8,8 +8,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
+import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
+import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.LocationImpl;
 
 import static org.junit.Assert.*;
@@ -77,6 +82,52 @@ public class LocationImplTest {
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
 
 		assertEquals(737.9, distanceBetween, 0);
+	}
+
+	@Test
+	public void find_nearby_persons() throws PersonsException, LocationException, CsvParserException,
+			TerritoriesException {
+		Person personA = new Person();
+		Address addressWorkA = getAddress("21016", 46.003509, 8.742917);
+		Address addressHomeA = getAddress("21016", 46.000490, 8.738347);
+		personA.setName("TEST_NAME_A");
+		personA.setSurname("TEST_SURNAME_A");
+		personA.setHomeAddress(addressHomeA);
+		personA.setWorkAddress(addressWorkA);
+
+		Person personB = new Person();
+		Address addressWorkB = getAddress("21016", 46.002834, 8.742499);
+		Address addressHomeB = getAddress("21016", 45.999950, 8.740594);
+		personB.setName("TEST_NAME_B");
+		personB.setSurname("TEST_SURNAME_B");
+		personB.setHomeAddress(addressHomeB);
+		personB.setWorkAddress(addressWorkB);
+
+		Person personC = new Person();
+		Address addressWorkC = getAddress("21016", 45.996015, 8.732703);
+		Address addressHomeC = getAddress("21016", 45.999659, 8.737842);
+		personC.setName("TEST_NAME_C");
+		personC.setSurname("TEST_SURNAME_C");
+		personC.setHomeAddress(addressHomeC);
+		personC.setWorkAddress(addressWorkC);
+
+		Persons persons = new Persons();
+		persons.addPerson(personA);
+		persons.addPerson(personB);
+		persons.addPerson(personC);
+
+		Persons nearbyPersons = sut.findNearbyPersons(personA, persons, 0.5);
+
+		assertTrue(nearbyPersons.getPersons().size() == 1);
+
+	}
+
+	private Address getAddress(String postalCode, double latitude, double longitude) {
+		Address address = new Address();
+		address.setPostalCode(postalCode);
+		address.setLatitude(latitude);
+		address.setLongitude(longitude);
+		return address;
 	}
 
 }

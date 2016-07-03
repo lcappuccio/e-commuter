@@ -12,11 +12,11 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.exceptions.LocationException;
+import org.systemexception.ecommuter.exceptions.PersonsException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author leo
@@ -78,8 +78,32 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		throw new NotImplementedException();
+	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius)
+			throws PersonsException {
+		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
+				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
+				person.getWorkAddress().getPostalCode());
+		Persons nearbyPersons = new Persons();
+		if (persons.getPersons().contains(person)) {
+			persons.getPersons().remove(person);
+			logger.info("FindNearbyPersons: removed " + person.getName() + Constants.LOG_SEPARATOR +
+					person.getSurname() + " from person list");
+		}
+		for (Person innerPerson : persons.getPersons()) {
+			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
+			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
+			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius) {
+				logger.info("FindNearbyPersons: found " + innerPerson.getName() + Constants.LOG_SEPARATOR +
+						innerPerson.getSurname() + Constants.LOG_SEPARATOR + "distance home: " + distanceBetweenHome
+						+ Constants.LOG_SEPARATOR + "distance work: " + distanceBetweenWork);
+				nearbyPersons.addPerson(innerPerson);
+			} else {
+				logger.info("FindNearbyPersons: excluded " + innerPerson.getName() + Constants.LOG_SEPARATOR +
+						innerPerson.getSurname() + Constants.LOG_SEPARATOR + "distance home: " + distanceBetweenHome
+						+ Constants.LOG_SEPARATOR + "distance work: " + distanceBetweenWork);
+			}
+		}
+		return nearbyPersons;
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {

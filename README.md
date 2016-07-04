@@ -1,5 +1,5 @@
 # e-commuter
-Use Google Maps Geocoding API to calculate distances between two addresses or geographic coordinates.
+Use Google Maps Geocoding API to calculate distances between two addresses of a collection of persons.
 
 **Master**
 
@@ -25,6 +25,20 @@ See `e-commuter.pdf` for more details.
 
 Set `API_KEY` environment variable with your Google Maps API Key.
 
+### Testing
+
+Since I'm a lazy guy there's no database cleaning after tests, so if you run them two times consecutively there will
+be errors.
+The interesting side effect of this is that the database can be restored.
+
+### Application
+
+Launch the application and use the includd Postman collection to interact with the API.
+- Load a territories set (or use the included ones)
+- Add the persons included in `persons.txt`
+- Locate nearby persons
+- Play with addresses and geo coordinates to fetch addresses from Google Geocode API
+
 **WARNING**
 
 Any class that references `org.systemexception.ecommuter.services.LocationImpl` will produce logs with your google
@@ -46,7 +60,11 @@ test the necessary configuration annotations:
 
 ## ToDo
 
-- REST endpoints
+In sparse order:
+
+- Add google api key in properties file if needed, otherwise fetch key from environment variable
+- Update person
+- Add Swagger
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
-- Pending `spring-boot-starter-data-neo4j` release
+- Pending `spring-boot-starter-data-neo4j` release for refactor

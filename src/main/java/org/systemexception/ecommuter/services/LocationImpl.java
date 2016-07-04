@@ -29,6 +29,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws LocationException {
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.geoToAddress
 		logger.info("GeoToAddress: (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
 		GeocodingResult[] geocodingResults;
 		try {
@@ -50,6 +51,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address addressToGeo(final String stringAddress) throws LocationException {
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.addressToGeo
 		logger.info("AddressToGeo: " + stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -78,6 +80,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.nearbyPersons()
 		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
 				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
 				person.getWorkAddress().getPostalCode());

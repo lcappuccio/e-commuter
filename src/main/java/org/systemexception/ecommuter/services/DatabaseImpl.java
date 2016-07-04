@@ -91,7 +91,7 @@ public class DatabaseImpl implements DatabaseApi {
 				Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
 				"works in " + workAddress.getPostalCode());
 		// Get vertices for addresses
-		// TODO LC Strategy for non existing vertices. Now will throw java.util.NoSuchElementException
+		// TODO LC Strategy for non existing nodes. Now will throw java.util.NoSuchElementException
 		try (Transaction tx = graphDb.beginTx()) {
 			Node homeNode = getNodeByPostalCode(homeAddress.getPostalCode()).get();
 			Node workNode = getNodeByPostalCode(workAddress.getPostalCode()).get();

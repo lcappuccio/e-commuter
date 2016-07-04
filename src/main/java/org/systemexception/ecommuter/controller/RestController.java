@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.api.StorageApi;
+import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.LocationException;
@@ -54,6 +55,7 @@ public class RestController {
 			@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException, CsvParserException, TerritoriesException {
 
+		logger.info("AddTerritories: " + dataFile.getName());
 		File territoriesFile = storageService.saveFile(dataFile);
 		databaseService.addTerritories(territoriesFile);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -63,6 +65,7 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) {
 
+		logger.info("AddPerson: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname());
 		Person personSaved = databaseService.addPerson(person);
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 		return personResponseEntity;
@@ -72,6 +75,7 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {
 
+		logger.info("DeletePerson: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname());
 		databaseService.deletePerson(person);
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(person, HttpStatus.OK);
 		return personResponseEntity;
@@ -83,6 +87,8 @@ public class RestController {
 			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
 			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws LocationException {
 
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.geoToAddress()
+		logger.info("GeoToAddress: (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
 		Address address = locationService.geoToAddress(latitude, longitude);
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
 		return addressResponseEntity;
@@ -92,6 +98,8 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws LocationException {
 
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.addressToGeo()
+		logger.info("AddressToGeo: " + address.getFormattedAddress());
 		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(responseAddress, HttpStatus.OK);
 		return addressResponseEntity;
@@ -101,6 +109,10 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Persons> nearbyPersons(@RequestBody @Valid final Person person) {
 
+		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.findNearbyPersons()
+		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
+				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
+				person.getWorkAddress().getPostalCode());
 		Persons personsLivesIn = databaseService.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
 		Persons personsWorksIn = databaseService.findPersonsWorksIn(person.getWorkAddress().getPostalCode());
 		Persons fullPersonList = new Persons();

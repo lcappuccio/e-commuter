@@ -7,9 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.services.DatabaseImpl;
 import org.systemexception.ecommuter.services.LocationImpl;
+import org.systemexception.ecommuter.services.StorageImpl;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 /**
@@ -21,6 +24,9 @@ public class Application {
 
 	@Value("${database.name}")
 	private String databaseName;
+
+	@Value("${storage.folder}")
+	private String storageFolder;
 
 	private final static Logger logger = Logger.getLogger(Application.class);
 	public final static String apiKey = System.getenv("API_KEY");
@@ -45,5 +51,10 @@ public class Application {
 	public LocationApi locationApi() {
 		return new LocationImpl();
 	}
-	
+
+	@Bean
+	public StorageApi storageApi() throws IOException {
+		return new StorageImpl(storageFolder);
+	}
+
 }

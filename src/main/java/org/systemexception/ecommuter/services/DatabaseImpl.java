@@ -17,6 +17,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -60,9 +61,9 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	@Override
-	public void addTerritories(final String fileName) throws CsvParserException, TerritoriesException {
-		readCsvTerritories(fileName);
-		logger.info("AddTerritories: " + fileName);
+	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
+		readCsvTerritories(territoriesFile);
+		logger.info("AddTerritories: " + territoriesFile.getName());
 		// Create all nodes
 		for (Territory territory : territories.getTerritories()) {
 			try (Transaction tx = graphDb.beginTx()) {
@@ -76,14 +77,14 @@ public class DatabaseImpl implements DatabaseApi {
 			logger.info("AddTerritories territory: " + territory.getPostalCode() + Constants.LOG_SEPARATOR +
 					territory.getPlaceName());
 		}
-		logger.info("Loaded " + fileName);
+		logger.info("Loaded " + territoriesFile.getName());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addPerson(final Person person) {
+	public Person addPerson(final Person person) {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("AddPerson adding: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
@@ -98,20 +99,30 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			indexPerson.add(personNode, PERSON.toString(), person);
 			// Add LIVES_IN edge
-			logger.info("AddPerson edge: " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
-					homeAddress.getPostalCode());
+			logger.info("AddPerson relation " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
+					homeAddress.getFormattedAddress());
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
 			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
 			// Add WORKS_IN edge
-			logger.info("AddPerson edge: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
-					workAddress.getPostalCode());
+			logger.info("AddPerson relation: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
+					workAddress.getFormattedAddress());
 			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
 			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 			logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
-					"works in " + workAddress.getPostalCode());
+					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getFormattedAddress() +
+					Constants.LOG_SEPARATOR + "works in " + workAddress.getFormattedAddress());
 			tx.success();
 		}
+		return person;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Person updatePerson(Person person) {
+		// TODO LC implement
+		throw new NotImplementedException();
 	}
 
 	/**
@@ -194,9 +205,9 @@ public class DatabaseImpl implements DatabaseApi {
 		}
 	}
 
-	private void readCsvTerritories(final String fileName) throws CsvParserException, TerritoriesException {
+	private void readCsvTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
 		logger.info("Start loading territories file");
-		CsvParser csvParser = new CsvParser(fileName);
+		CsvParser csvParser = new CsvParser(territoriesFile);
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		territories = new Territories();
 		for (CSVRecord csvRecord : csvRecords) {

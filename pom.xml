@@ -70,6 +70,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/Application.*</exclude>
+						<exclude>**/Endpoints.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

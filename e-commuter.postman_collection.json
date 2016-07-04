@@ -1,0 +1,112 @@
+{
+	"variables": [],
+	"info": {
+		"name": "e-commuter",
+		"_postman_id": "f0c6d096-833a-9b84-ac46-f5a713920fab",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST - Add person",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/person/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"TEST_NAME_A\",\n\t\"surname\": \"TEST_SURNAME_A\",\n\t\"homeAddress\": {\n\t\t\"streetNumber\": \"37\",\n\t\t\"route\": \"Viale Dante Alighieri\",\n\t\t\"locality\": \"Luino\",\n\t\t\"administrativeAreaLevel2\": \"Provincia di Varese\",\n\t\t\"administrativeAreaLevel1\": \"Lombardia\",\n\t\t\"country\": \"Italy\",\n\t\t\"postalCode\": \"21016\",\n\t\t\"formattedAddress\": \"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\",\n\t\t\"latitude\": 46.00051029999999,\n\t\t\"longitude\": 8.7385149\n\t},\n\t\"workAddress\": {\n\t\t\"streetNumber\": \"9A\",\n\t\t\"route\": \"Piazza Libertà\",\n\t\t\"locality\": \"Luino\",\n\t\t\"administrativeAreaLevel2\": \"Provincia di Varese\",\n\t\t\"administrativeAreaLevel1\": \"Lombardia\",\n\t\t\"country\": \"Italy\",\n\t\t\"postalCode\": \"21016\",\n\t\t\"formattedAddress\": \"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\n\t\t\"latitude\": 46.0035187,\n\t\t\"longitude\": 8.7429054\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST - Add territories",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/addterritories",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileToUpload",
+							"type": "file",
+							"enabled": true,
+							"value": "it_data_SMALL.csv"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - Address to geo",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/address/togeo",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"streetNumber\": \"\",\n\t\"route\": \"\",\n\t\"locality\": \"Luino\",\n\t\"administrativeAreaLevel2\": \"Provincia di Varese\",\n\t\"administrativeAreaLevel1\": \"Lombardia\",\n\t\"country\": \"Italy\",\n\t\"postalCode\": \"21016\",\n\t\"formattedAddress\": \"Piazza Liberta, Luino, Italy\",\n\t\"latitude\": 0,\n\t\"longitude\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - Geo to address",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/address/fromgeo?latitude=46.0032143&longitude=8.742675799999999",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - Persons nearby",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/person/nearby",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"TEST_NAME_A\",\n\t\"surname\": \"TEST_SURNAME_A\",\n\t\"homeAddress\": {\n\t\t\"streetNumber\": \"37\",\n\t\t\"route\": \"Viale Dante Alighieri\",\n\t\t\"locality\": \"Luino\",\n\t\t\"administrativeAreaLevel2\": \"Provincia di Varese\",\n\t\t\"administrativeAreaLevel1\": \"Lombardia\",\n\t\t\"country\": \"Italy\",\n\t\t\"postalCode\": \"21016\",\n\t\t\"formattedAddress\": \"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\",\n\t\t\"latitude\": 46.00051029999999,\n\t\t\"longitude\": 8.7385149\n\t},\n\t\"workAddress\": {\n\t\t\"streetNumber\": \"9A\",\n\t\t\"route\": \"Piazza Libertà\",\n\t\t\"locality\": \"Luino\",\n\t\t\"administrativeAreaLevel2\": \"Provincia di Varese\",\n\t\t\"administrativeAreaLevel1\": \"Lombardia\",\n\t\t\"country\": \"Italy\",\n\t\t\"postalCode\": \"21016\",\n\t\t\"formattedAddress\": \"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\n\t\t\"latitude\": 46.0035187,\n\t\t\"longitude\": 8.7429054\n\t}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

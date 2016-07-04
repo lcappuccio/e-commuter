@@ -19,6 +19,5 @@ public class Endpoints {
 	public static final String GEO_TO_ADDRESS = "/fromgeo";
 	public static final String ADDRESS_TO_GEO = "/togeo";
 	// PARAMETERS
-	public static final String ID_WITH_EXTENSION = "/{id:.+}";
 	public static final String FILE_TO_UPLOAD = "fileToUpload";
 }

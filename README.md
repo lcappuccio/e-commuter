@@ -33,7 +33,7 @@ The interesting side effect of this is that the database can be restored.
 
 ### Application
 
-Launch the application and use the includd Postman collection to interact with the API.
+Launch the application and use the included Postman collection to interact with the API.
 - Load a territories set (or use the included ones)
 - Add the persons included in `persons.txt`
 - Locate nearby persons

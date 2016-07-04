@@ -1,5 +1,6 @@
 package org.systemexception.ecommuter.controller;
 
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -33,6 +35,8 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping(value = Endpoints.CONTEXT)
+@EnableSwagger2
+@Api(basePath = Endpoints.CONTEXT, description = "e-commuter REST API")
 public class RestController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

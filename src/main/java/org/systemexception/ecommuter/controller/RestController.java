@@ -57,8 +57,18 @@ public class RestController {
 
 		Person personSaved = databaseService.addPerson(person);
 
-		ResponseEntity<Person> personResponseEntity =
-				new ResponseEntity<>(personSaved, HttpStatus.CREATED);
+		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(personSaved, HttpStatus.CREATED);
+
+		return personResponseEntity;
+	}
+
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_DELETE, method = RequestMethod.DELETE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {
+
+		databaseService.deletePerson(person);
+
+		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(person, HttpStatus.OK);
 
 		return personResponseEntity;
 	}

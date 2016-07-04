@@ -80,6 +80,16 @@ public class RestControllerTest {
 		verify(databaseApi).addPerson(person);
 	}
 
+	@Test
+	public void delete_person() throws Exception {
+		Person person = PersonJsonParser.fromString(getPerson());
+		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)
+				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(databaseApi).deletePerson(person);
+	}
+
 	private String getPerson() {
 		return "{\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"streetNumber\":\"37\"," +
 				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia " +

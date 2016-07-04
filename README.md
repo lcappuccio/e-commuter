@@ -21,6 +21,11 @@ The haversine formula is used to calculate the distance between two addresses in
 
 See `e-commuter.pdf` for more details.
 
+## Territories
+
+Download a Postal Code collection from [Geonames](http://www.geonames.org) and use it as you please. Please keep in
+mind that duplicates will generate an exception. I've used a SQL database to clean down the Italian file.
+
 ## Usage
 
 Set `API_KEY` environment variable with your Google Maps API Key.
@@ -68,3 +73,7 @@ In sparse order:
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
 - Pending `spring-boot-starter-data-neo4j` release for refactor
+
+## Credits
+
+- [Geonames](http://www.geonames.org) for the Italian Postal Code Database

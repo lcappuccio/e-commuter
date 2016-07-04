@@ -27,7 +27,15 @@ public interface DatabaseApi {
 	 *
 	 * @param person
 	 */
+	// TODO LC Should return Person
 	void addPerson(Person person);
+
+	/**
+	 * Updates a person
+	 *
+	 * @param person
+	 */
+	Person updatePerson(Person person);
 
 	/**
 	 * Deletes a person from the database

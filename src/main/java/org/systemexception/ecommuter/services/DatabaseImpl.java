@@ -17,6 +17,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -108,10 +109,19 @@ public class DatabaseImpl implements DatabaseApi {
 			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
 			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 			logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getFormattedAddress() + Constants.LOG_SEPARATOR +
-					"works in " + workAddress.getFormattedAddress());
+					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getFormattedAddress() +
+					Constants.LOG_SEPARATOR + "works in " + workAddress.getFormattedAddress());
 			tx.success();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Person updatePerson(Person person) {
+		// TODO LC implement
+		throw new NotImplementedException();
 	}
 
 	/**

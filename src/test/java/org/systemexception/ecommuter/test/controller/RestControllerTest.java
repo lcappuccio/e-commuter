@@ -97,8 +97,8 @@ public class RestControllerTest {
 	public void geo_to_address() throws Exception {
 		String latitude = "123.4";
 		String longitude = "456.7";
-		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
-		.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
+		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
+				.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
 		verify(locationApi).geoToAddress(Double.valueOf(latitude), Double.valueOf(longitude));
@@ -109,7 +109,7 @@ public class RestControllerTest {
 		Gson gson = new Gson();
 		JsonParser jsonParser = new JsonParser();
 		Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
-		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
+		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
 				.contentType(MediaType.APPLICATION_JSON).content(getAddress().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
@@ -129,7 +129,7 @@ public class RestControllerTest {
 		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
 		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
 
-		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
+		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
@@ -155,7 +155,8 @@ public class RestControllerTest {
 	private String getAddress() {
 		return "{\"streetNumber\":\"9A\",\"route\":\"Piazza Libertà\",\"locality\":\"Luino\"," +
 				"\"administrativeAreaLevel2\":\"Provincia di Varese\",\"administrativeAreaLevel1\":\"Lombardia\"," +
-				"\"country\":\"Italy\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino" +
+				"\"country\":\"Italy\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 " +
+				"Luino" +
 				" VA, Italy\",\"latitude\":46.0035187,\"longitude\":8.7429054}";
 	}
 

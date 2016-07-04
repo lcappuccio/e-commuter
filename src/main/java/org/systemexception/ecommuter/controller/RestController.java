@@ -46,7 +46,8 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.ADD_TERRITORIES, method = RequestMethod.POST,
 			produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
+	public ResponseEntity<HttpStatus> addTerritories(
+			@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException, CsvParserException, TerritoriesException {
 
 		File territoriesFile = storageService.saveFile(dataFile);
@@ -72,29 +73,29 @@ public class RestController {
 		return personResponseEntity;
 	}
 
-	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.GET,
+	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.PUT,
 			params = {Endpoints.LATITUDE, Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> geoToAddress(@RequestParam(value = Endpoints.LATITUDE) double latitude,
-	                                            @RequestParam(value = Endpoints.LONGITUDE) double longitude) throws
-			LocationException {
+	public ResponseEntity<Address> geoToAddress(
+			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
+			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws LocationException {
 
 		Address address = locationService.geoToAddress(latitude, longitude);
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
 		return addressResponseEntity;
 	}
 
-	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.GET,
+	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid Address address) throws LocationException {
+	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws LocationException {
 
 		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(responseAddress, HttpStatus.OK);
 		return addressResponseEntity;
 	}
 
-	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.GET,
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Persons> nearbyPersons(@RequestBody @Valid Person person) {
+	public ResponseEntity<Persons> nearbyPersons(@RequestBody @Valid final Person person) {
 
 		Persons personsLivesIn = databaseService.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
 		Persons personsWorksIn = databaseService.findPersonsWorksIn(person.getWorkAddress().getPostalCode());

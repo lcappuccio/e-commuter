@@ -25,6 +25,7 @@ import org.systemexception.ecommuter.controller.RestController;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import java.io.File;
@@ -113,6 +114,29 @@ public class RestControllerTest {
 				.andExpect(status().is(HttpStatus.OK.value()));
 
 		verify(locationApi).addressToGeo(address.getFormattedAddress());
+	}
+
+	@Test
+	public void nearby_persons() throws Exception {
+		Person person = mock(Person.class);
+		Persons personsLiving = mock(Persons.class);
+		Persons personsWorking = mock(Persons.class);
+
+		when(person.getHomeAddress()).thenReturn(mock(Address.class));
+		when(person.getWorkAddress()).thenReturn(mock(Address.class));
+		when(person.getHomeAddress().getPostalCode()).thenReturn("21016");
+		when(person.getWorkAddress().getPostalCode()).thenReturn("21016");
+		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
+		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
+
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
+				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getPostalCode());
+		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getPostalCode());
+		// Testing only interaction
+		verify(locationApi).findNearbyPersons(any(), any(), anyDouble());
 	}
 
 	private String getPerson() {

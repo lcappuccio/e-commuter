@@ -21,6 +21,7 @@ import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
+import org.systemexception.ecommuter.model.Persons;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -74,7 +75,8 @@ public class RestController {
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.GET,
 			params = {Endpoints.LATITUDE, Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> geoToAddress(@RequestParam(value = Endpoints.LATITUDE) double latitude,
-			@RequestParam(value = Endpoints.LONGITUDE) double longitude) throws LocationException {
+	                                            @RequestParam(value = Endpoints.LONGITUDE) double longitude) throws
+			LocationException {
 
 		Address address = locationService.geoToAddress(latitude, longitude);
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
@@ -82,12 +84,33 @@ public class RestController {
 	}
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.GET,
-	produces = MediaType.APPLICATION_JSON_VALUE)
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid Address address) throws LocationException {
 
 		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(responseAddress, HttpStatus.OK);
 		return addressResponseEntity;
+	}
+
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Persons> nearbyPersons(@RequestBody @Valid Person person) {
+
+		Persons personsLivesIn = databaseService.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
+		Persons personsWorksIn = databaseService.findPersonsWorksIn(person.getWorkAddress().getPostalCode());
+		Persons fullPersonList = new Persons();
+		for (Person personLiving : personsLivesIn.getPersons()) {
+			fullPersonList.addPerson(personLiving);
+		}
+		for (Person personWorking : personsWorksIn.getPersons()) {
+			if (!fullPersonList.getPersons().contains(person)) {
+				fullPersonList.addPerson(personWorking);
+			}
+		}
+		// TODO LC distance should be extracted to a parameter
+		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, 0.5);
+		ResponseEntity<Persons> personsResponseEntity = new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
+		return personsResponseEntity;
 	}
 
 }

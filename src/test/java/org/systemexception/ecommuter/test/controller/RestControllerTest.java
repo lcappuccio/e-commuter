@@ -27,9 +27,7 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 import java.io.File;
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -88,6 +86,17 @@ public class RestControllerTest {
 				.andExpect(status().is(HttpStatus.OK.value()));
 
 		verify(databaseApi).deletePerson(person);
+	}
+
+	@Test
+	public void geo_to_address() throws Exception {
+		String latitude = "123.4";
+		String longitude = "456.7";
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
+		.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude)).andExpect(status().is(HttpStatus.OK
+				.value
+				()));
+		verify(locationApi).geoToAddress(Double.valueOf(latitude), Double.valueOf(longitude));
 	}
 
 	private String getPerson() {

@@ -20,4 +20,6 @@ public class Endpoints {
 	public static final String ADDRESS_TO_GEO = "/togeo";
 	// PARAMETERS
 	public static final String FILE_TO_UPLOAD = "fileToUpload";
+	public static final String LATITUDE = "latitude";
+	public static final String LONGITUDE = "longitude";
 }

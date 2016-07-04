@@ -1,5 +1,7 @@
 package org.systemexception.ecommuter.test.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.controller.RestController;
 import org.systemexception.ecommuter.enums.Endpoints;
+import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
@@ -64,6 +67,7 @@ public class RestControllerTest {
 		sut.perform(MockMvcRequestBuilders.fileUpload(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		File receivedFile = storageApi.saveFile(dataFile);
+
 		verify(databaseApi).addTerritories(receivedFile);
 	}
 
@@ -93,15 +97,28 @@ public class RestControllerTest {
 		String latitude = "123.4";
 		String longitude = "456.7";
 		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
-		.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude)).andExpect(status().is(HttpStatus.OK
-				.value
-				()));
+		.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
 		verify(locationApi).geoToAddress(Double.valueOf(latitude), Double.valueOf(longitude));
+	}
+
+	@Test
+	public void address_to_geo() throws Exception {
+		Gson gson = new Gson();
+		JsonParser jsonParser = new JsonParser();
+		Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
+				.contentType(MediaType.APPLICATION_JSON).content(getAddress().getBytes()))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(locationApi).addressToGeo(address.getFormattedAddress());
 	}
 
 	private String getPerson() {
 		return "{\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"streetNumber\":\"37\"," +
-				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia " +
+				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia" +
+				" " +
 				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\"," +
 				"\"postalCode\":\"21016\",\"formattedAddress\":\"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\"," +
 				"\"latitude\":46.00051029999999,\"longitude\":8.7385149},\"workAddress\":{\"streetNumber\":\"9A\"," +
@@ -109,6 +126,13 @@ public class RestControllerTest {
 				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\",\"postalCode\":\"21016\"," +
 				"\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\"latitude\":46.0035187," +
 				"\"longitude\":8.7429054}}";
+	}
+
+	private String getAddress() {
+		return "{\"streetNumber\":\"9A\",\"route\":\"Piazza Libertà\",\"locality\":\"Luino\"," +
+				"\"administrativeAreaLevel2\":\"Provincia di Varese\",\"administrativeAreaLevel1\":\"Lombardia\"," +
+				"\"country\":\"Italy\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino" +
+				" VA, Italy\",\"latitude\":46.0035187,\"longitude\":8.7429054}";
 	}
 
 }

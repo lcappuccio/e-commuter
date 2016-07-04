@@ -58,9 +58,7 @@ public class RestController {
 	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) {
 
 		Person personSaved = databaseService.addPerson(person);
-
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(personSaved, HttpStatus.CREATED);
-
 		return personResponseEntity;
 	}
 
@@ -69,21 +67,26 @@ public class RestController {
 	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {
 
 		databaseService.deletePerson(person);
-
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(person, HttpStatus.OK);
-
 		return personResponseEntity;
 	}
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.GET,
 			params = {Endpoints.LATITUDE, Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> addressToGeo(@RequestParam(value = Endpoints.LATITUDE) double latitude,
+	public ResponseEntity<Address> geoToAddress(@RequestParam(value = Endpoints.LATITUDE) double latitude,
 			@RequestParam(value = Endpoints.LONGITUDE) double longitude) throws LocationException {
 
 		Address address = locationService.geoToAddress(latitude, longitude);
+		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
+		return addressResponseEntity;
+	}
 
-		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<Address>(address, HttpStatus.OK);
+	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.GET,
+	produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid Address address) throws LocationException {
 
+		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
+		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(responseAddress, HttpStatus.OK);
 		return addressResponseEntity;
 	}
 

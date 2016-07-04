@@ -1,0 +1,86 @@
+{
+	"name": "TEST_NAME_A",
+	"surname": "TEST_SURNAME_A",
+	"homeAddress": {
+		"streetNumber": "37",
+		"route": "Viale Dante Alighieri",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Viale Dante Alighieri, 37, 21016 Luino VA, Italy",
+		"latitude": 46.00051029999999,
+		"longitude": 8.7385149
+	},
+	"workAddress": {
+		"streetNumber": "9A",
+		"route": "Piazza Libertà",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Piazza Libertà, 9A, 21016 Luino VA, Italy",
+		"latitude": 46.0035187,
+		"longitude": 8.7429054
+	}
+}
+
+{
+	"name": "TEST_NAME_B",
+	"surname": "TEST_SURNAME_B",
+	"homeAddress": {
+		"streetNumber": "25",
+		"route": "Via Vittorio Veneto",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Via Vittorio Veneto, 25, 21016 Luino VA, Italy",
+		"latitude": 45.9999465,
+		"longitude": 8.740607899999999
+	},
+	"workAddress": {
+		"streetNumber": "12",
+		"route": "Piazza Libertà",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Piazza Libertà, 12, 21016 Luino VA, Italy",
+		"latitude": 46.0028623,
+		"longitude": 8.742490499999999
+	}
+}
+
+{
+	"name": "TEST_NAME_C",
+	"surname": "TEST_SURNAME_C",
+	"homeAddress": {
+		"streetNumber": "20",
+		"route": "Via del Carmine",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Via del Carmine, 20, 21016 Luino VA, Italy",
+		"latitude": 45.99957999999999,
+		"longitude": 8.737845
+	},
+	"workAddress": {
+		"streetNumber": "12A",
+		"route": "Viale Dante Alighieri",
+		"locality": "Luino",
+		"administrativeAreaLevel2": "Provincia di Varese",
+		"administrativeAreaLevel1": "Lombardia",
+		"country": "Italy",
+		"postalCode": "21016",
+		"formattedAddress": "Viale Dante Alighieri, 12A, 21016 Luino VA, Italy",
+		"latitude": 45.99604000000001,
+		"longitude": 8.7326827
+	}
+}

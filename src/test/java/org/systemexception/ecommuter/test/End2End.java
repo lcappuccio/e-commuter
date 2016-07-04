@@ -44,7 +44,7 @@ public class End2End {
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
 		File myFile = new File(myTestURL.toURI());
-		databaseApi.addTerritories(myFile.getAbsolutePath());
+		databaseApi.addTerritories(myFile);
 	}
 
 	@Test
@@ -78,12 +78,12 @@ public class End2End {
 		personC.setHomeAddress(addressHomeC);
 		personC.setWorkAddress(addressWorkC);
 
-		Persons persons = new Persons();
-		persons.addPerson(personA);
-		persons.addPerson(personB);
-		persons.addPerson(personC);
+		databaseApi.addPerson(personA);
+		databaseApi.addPerson(personB);
+		databaseApi.addPerson(personC);
 
-		Persons nearbyPersons = locationService.findNearbyPersons(personA, persons, 0.5);
+		Persons nearbyPersons =
+				locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn("21016"), 0.5);
 
 		assertTrue(nearbyPersons.getPersons().size() == 1);
 		assertTrue(nearbyPersons.getPersons().get(0).equals(personB));

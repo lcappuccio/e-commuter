@@ -6,14 +6,13 @@
 
 	<groupId>org.systemexception</groupId>
 	<artifactId>e-commuter</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<tinkerpop.version>2.6.0</tinkerpop.version>
 	</properties>
 
 	<!-- Inherit defaults from Spring Boot -->
@@ -44,6 +43,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- Swagger Dependencies -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.2.2</version>
+		</dependency>
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -71,6 +81,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/Application.*</exclude>
+						<exclude>**/Endpoints.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

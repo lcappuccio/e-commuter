@@ -84,7 +84,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addPerson(final Person person) {
+	public Person addPerson(final Person person) {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("AddPerson adding: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
@@ -113,6 +113,7 @@ public class DatabaseImpl implements DatabaseApi {
 					Constants.LOG_SEPARATOR + "works in " + workAddress.getFormattedAddress());
 			tx.success();
 		}
+		return person;
 	}
 
 	/**

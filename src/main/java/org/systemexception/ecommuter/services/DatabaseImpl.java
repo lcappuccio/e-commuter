@@ -193,7 +193,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param postalCode
 	 * @return
 	 */
-	// TODO LC This can return more than one vertex
+	// TODO LC This can return more than one node
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
 		logger.info("GetNodeByPostalCode: " + postalCode);
 		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();

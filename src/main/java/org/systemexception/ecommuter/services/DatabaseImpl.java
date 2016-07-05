@@ -146,21 +146,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsLivesIn(final String postalCode) {
-		List<Node> foundNode = new ArrayList<>();
-		Persons foundPersons = new Persons();
-		try (Transaction tx = graphDb.beginTx()) {
-			Node nodeByPostalCode = getNodeByPostalCode(postalCode).get();
-			for (Relationship relationship : nodeByPostalCode.getRelationships(livesInRelation)) {
-				foundNode.add(relationship.getStartNode());
-			}
-			for (Node node : foundNode) {
-				String personJson = node.getProperty(PERSON_DATA.toString()).toString();
-				if (!foundPersons.getPersons().contains(personJson)) {
-					foundPersons.addPerson(PersonJsonParser.fromString(personJson));
-				}
-			}
-			tx.success();
-		}
+		Persons foundPersons = getPersons(postalCode, livesInRelation);
 		return foundPersons;
 	}
 
@@ -169,26 +155,12 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsWorksIn(final String postalCode) {
-		List<Node> foundNode = new ArrayList<>();
-		Persons foundPersons = new Persons();
-		try (Transaction tx = graphDb.beginTx()) {
-			Node nodeByPostalCode = getNodeByPostalCode(postalCode).get();
-			for (Relationship relationship : nodeByPostalCode.getRelationships(worksInRelation)) {
-				foundNode.add(relationship.getStartNode());
-			}
-			for (Node node : foundNode) {
-				String personJson = node.getProperty(PERSON_DATA.toString()).toString();
-				if (!foundPersons.getPersons().contains(personJson)) {
-					foundPersons.addPerson(PersonJsonParser.fromString(personJson));
-				}
-			}
-			tx.success();
-		}
+		Persons foundPersons = getPersons(postalCode, worksInRelation);
 		return foundPersons;
 	}
 
 	/**
-	 * Returns the vertex given the postalCode
+	 * Returns a node given the postalCode
 	 *
 	 * @param postalCode
 	 * @return
@@ -203,6 +175,32 @@ public class DatabaseImpl implements DatabaseApi {
 			logger.info("GetNodeByPostalCode: " + postalCode + " does not exist");
 			return Optional.empty();
 		}
+	}
+
+	/**
+	 * Returns Persons for the given postal code and territory relation
+	 *
+	 * @param postalCode
+	 * @param relationshipType
+	 * @return
+	 */
+	private Persons getPersons(String postalCode, RelationshipType relationshipType) {
+		List<Node> foundNode = new ArrayList<>();
+		Persons foundPersons = new Persons();
+		try (Transaction tx = graphDb.beginTx()) {
+			Node nodeByPostalCode = getNodeByPostalCode(postalCode).get();
+			for (Relationship relationship : nodeByPostalCode.getRelationships(relationshipType)) {
+				foundNode.add(relationship.getStartNode());
+			}
+			for (Node node : foundNode) {
+				String personJson = node.getProperty(PERSON_DATA.toString()).toString();
+				if (!foundPersons.getPersons().contains(personJson)) {
+					foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+				}
+			}
+			tx.success();
+		}
+		return foundPersons;
 	}
 
 	private void readCsvTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {

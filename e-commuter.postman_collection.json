@@ -91,7 +91,7 @@
 		{
 			"name": "PUT - Persons nearby",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/nearby",
+				"url": "http://{{ip}}:{{port}}/ecommuter/person/nearby?ditance=0.1",
 				"method": "PUT",
 				"header": [
 					{

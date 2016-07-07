@@ -8,6 +8,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
+import org.systemexception.ecommuter.pojo.FileUtils;
 import org.systemexception.ecommuter.services.StorageImpl;
 
 import java.io.File;
@@ -20,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -29,37 +29,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class StorageImplTest {
 
-	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
+	private final static String STORAGE_FOLDER = "target" + File.separator + "test_storage";
 	private StorageApi sut;
-	private static final String testFile = "it_data_SMALL.csv";
 	private MultipartFile multipartFile;
 
 	@BeforeClass
-	public static void setSut() {
-		File toRemove = new File(STORAGE_FOLDER);
-		if (toRemove.exists()) {
-			String[] files = toRemove.list();
-			for (String file : files) {
-				new File(STORAGE_FOLDER + File.separator + file).delete();
-			}
-		}
-		toRemove.delete();
-
-		assertFalse(toRemove.exists());
+	public static void setSut() throws IOException {
+		FileUtils.removeFolder(STORAGE_FOLDER);
 	}
 
 	@AfterClass
-	public static void tearDownSut() {
-		File toRemove = new File(STORAGE_FOLDER);
-		if (toRemove.exists()) {
-			String[] files = toRemove.list();
-			for (String file : files) {
-				new File(STORAGE_FOLDER + File.separator + file).delete();
-			}
-		}
-		toRemove.delete();
-
-		assertFalse(toRemove.exists());
+	public static void tearDownSut() throws IOException {
+		FileUtils.removeFolder(STORAGE_FOLDER);
 	}
 
 	@Before

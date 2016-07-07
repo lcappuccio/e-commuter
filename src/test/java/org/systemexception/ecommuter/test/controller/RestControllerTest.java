@@ -121,6 +121,7 @@ public class RestControllerTest {
 		Person person = mock(Person.class);
 		Persons personsLiving = mock(Persons.class);
 		Persons personsWorking = mock(Persons.class);
+		double distance = 0.5;
 
 		when(person.getHomeAddress()).thenReturn(mock(Address.class));
 		when(person.getWorkAddress()).thenReturn(mock(Address.class));
@@ -130,6 +131,7 @@ public class RestControllerTest {
 		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
 
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
+				.param(Endpoints.DISTANCE, String.valueOf(distance))
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 

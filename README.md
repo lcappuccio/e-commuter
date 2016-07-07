@@ -30,12 +30,6 @@ mind that duplicates will generate an exception. I've used a SQL database to cle
 
 Set `API_KEY` environment variable with your Google Maps API Key.
 
-### Testing
-
-Since I'm a lazy guy there's no database cleaning after tests, so if you run them two times consecutively there will
-be errors.
-The interesting side effect of this is that the database can be restored.
-
 ### Application
 
 Launch the application and use the included Postman collection to interact with the API.

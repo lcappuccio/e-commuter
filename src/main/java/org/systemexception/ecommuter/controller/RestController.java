@@ -106,8 +106,10 @@ public class RestController {
 	}
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.PUT,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Persons> nearbyPersons(@RequestBody @Valid final Person person) {
+			params = {Endpoints.DISTANCE}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Persons> nearbyPersons(
+			@RequestBody @Valid final Person person,
+			@RequestParam(value = Endpoints.DISTANCE) final double distance) {
 
 		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.findNearbyPersons()
 		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
@@ -124,8 +126,7 @@ public class RestController {
 				fullPersonList.addPerson(personWorking);
 			}
 		}
-		// TODO LC distance should be extracted to a parameter
-		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, 0.5);
+		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		ResponseEntity<Persons> personsResponseEntity = new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 		return personsResponseEntity;
 	}

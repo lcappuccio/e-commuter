@@ -1,6 +1,7 @@
 package org.systemexception.ecommuter.test;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.pojo.FileUtils;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -35,10 +37,16 @@ import static org.junit.Assert.assertTrue;
 @TestPropertySource(locations = "classpath:application.properties")
 public class End2End {
 
+	private final static String DATABASE_FOLDER = "target" + File.separator + "test_database";
 	@Autowired
 	private DatabaseApi databaseApi;
 	@Autowired
 	private LocationApi locationService;
+
+	@BeforeClass
+	public static void setSut() {
+		FileUtils.removeFolder(DATABASE_FOLDER);
+	}
 
 	@Before
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {

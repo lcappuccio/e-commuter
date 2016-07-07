@@ -49,6 +49,18 @@ public class LocationImplTest {
 	}
 
 	@Test
+	public void address_to_geo_empty() throws LocationException {
+		String stringAddress = "A place that really does not exist";
+		Address geoFromAddress = sut.addressToGeo(stringAddress);
+
+		assertNull(geoFromAddress.getStreetNumber());
+		assertNull(geoFromAddress.getLocality());
+		assertNull(geoFromAddress.getCountry());
+		assertTrue(geoFromAddress.getLatitude() == 0d);
+		assertTrue(geoFromAddress.getLongitude() == 0d);
+	}
+
+	@Test
 	public void geo_to_address() throws LocationException {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
@@ -63,6 +75,17 @@ public class LocationImplTest {
 		assertEquals("Italy", addressFromGeo.getCountry());
 		assertEquals("Piazza del Duomo", addressFromGeo.getRoute());
 		assertEquals("20122", addressFromGeo.getPostalCode());
+	}
+
+	@Test
+	public void geo_to_address_empty() throws LocationException {
+		Address addressFromGeo = sut.geoToAddress(0, 0);
+
+		assertNull(addressFromGeo.getStreetNumber());
+		assertNull(addressFromGeo.getLocality());
+		assertNull(addressFromGeo.getCountry());
+		assertTrue(addressFromGeo.getLatitude() == 0d);
+		assertTrue(addressFromGeo.getLongitude() == 0d);
 	}
 
 	@Test

@@ -27,8 +27,7 @@ public class LogService implements LoggerApi {
 	/**
 	 * Factory for logger
 	 *
-	 * @param clazz
-	 * @return
+	 * @param clazz the class to obtain a logger or
 	 */
 	public static LogService getFor(Class clazz) {
 		Logger logger = LoggerFactory.getLogger(clazz);

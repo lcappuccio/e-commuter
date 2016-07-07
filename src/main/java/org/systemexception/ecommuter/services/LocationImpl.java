@@ -14,7 +14,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
-import org.systemexception.ecommuter.pojo.LogService;
+import org.systemexception.ecommuter.pojo.LoggerService;
 
 /**
  * @author leo
@@ -22,13 +22,12 @@ import org.systemexception.ecommuter.pojo.LogService;
  */
 public class LocationImpl implements LocationApi {
 
-	private final LoggerApi logger = LogService.getFor(this.getClass());
+	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws LocationException {
-		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.geoToAddress
 		logger.geoToAddress(latitude, longitude);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -50,7 +49,6 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address addressToGeo(final String stringAddress) throws LocationException {
-		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.addressToGeo
 		logger.addressToGeo(stringAddress);
 		GeocodingResult[] geocodingResults;
 		try {
@@ -78,7 +76,6 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		// TODO LC this logger is duplicated, org.systemexception.ecommuter.controller.RestController.nearbyPersons()
 		logger.findNearbyPersons(person, persons, radius);
 		Persons nearbyPersons = new Persons();
 		if (persons.getPersons().contains(person)) {

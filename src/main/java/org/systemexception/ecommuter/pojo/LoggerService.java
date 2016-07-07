@@ -16,11 +16,11 @@ import java.io.File;
  * @author cappuccio
  * @date 07/07/16 14:16.
  */
-public class LogService implements LoggerApi {
+public class LoggerService implements LoggerApi {
 
 	private final Logger logger;
 
-	private LogService(Logger logger) {
+	private LoggerService(Logger logger) {
 		this.logger = logger;
 	}
 
@@ -29,14 +29,14 @@ public class LogService implements LoggerApi {
 	 *
 	 * @param clazz the class to obtain a logger or
 	 */
-	public static LogService getFor(Class clazz) {
+	public static LoggerService getFor(Class clazz) {
 		Logger logger = LoggerFactory.getLogger(clazz);
-		return new LogService(logger);
+		return new LoggerService(logger);
 	}
 
 	@Override
-	public void addTerritories(File file) {
-		logger.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + file.getName());
+	public void addTerritories(String fileName) {
+		logger.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + fileName);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import java.io.File;
  */
 public interface LoggerApi {
 
-	void addTerritories(File file);
+	void addTerritories(String fileName);
 
 	void addedTerritory(Territory territory);
 

@@ -3,7 +3,7 @@ package org.systemexception.ecommuter.services;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.api.StorageApi;
-import org.systemexception.ecommuter.pojo.LogService;
+import org.systemexception.ecommuter.pojo.LoggerService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class StorageImpl implements StorageApi {
 
-	private final LoggerApi logger = LogService.getFor(this.getClass());
+	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private final String storageFolder;
 
 	public StorageImpl(final String storageFolder) throws IOException {
@@ -30,8 +30,8 @@ public class StorageImpl implements StorageApi {
 
 	@Override
 	public File saveFile(MultipartFile receivedFile) throws IOException {
-		File dataFile = new File(storageFolder + File.separator + receivedFile.getName() + "_" +
-				convertTime(System.currentTimeMillis()));
+		File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
+				receivedFile.getOriginalFilename());
 		historifyFile(dataFile);
 		dataFile.createNewFile();
 		FileOutputStream fos = new FileOutputStream(dataFile);
@@ -54,7 +54,7 @@ public class StorageImpl implements StorageApi {
 			BasicFileAttributes attrs;
 			attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
 			long fileTime = attrs.creationTime().toMillis();
-			String historifiedFilename = file.getName() + "_" + convertTime(fileTime);
+			String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
 			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
 			logger.historiFyFile(file, historifiedFilename);
 		}

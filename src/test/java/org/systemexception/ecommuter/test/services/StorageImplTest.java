@@ -46,7 +46,7 @@ public class StorageImplTest {
 	public void setUp() throws IOException, URISyntaxException {
 		sut = new StorageImpl(STORAGE_FOLDER);
 		multipartFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD, UUID.randomUUID().toString(),
-				"text/plain", "some data".getBytes());
+				"text/plain", "some data" .getBytes());
 	}
 
 	@Test
@@ -68,8 +68,8 @@ public class StorageImplTest {
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
-		assertTrue(new File(STORAGE_FOLDER + File.separator +
-				testDataFile.getName() + "_" + convertTime(attrs.creationTime().toMillis())).exists());
+		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
+				+ "_" + testDataFile.getName()).exists());
 	}
 
 	private String convertTime(long time) {

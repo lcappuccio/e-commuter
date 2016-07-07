@@ -14,7 +14,7 @@ import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
-import org.systemexception.ecommuter.pojo.LogService;
+import org.systemexception.ecommuter.pojo.LoggerService;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -33,7 +33,7 @@ import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
  */
 public class DatabaseImpl implements DatabaseApi {
 
-	private final LoggerApi logger = LogService.getFor(this.getClass());
+	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private String dbFolder;
 	private GraphDatabaseService graphDb;
 	private Index<Node> indexPostalCode, indexPerson;
@@ -62,7 +62,7 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
 		readCsvTerritories(territoriesFile);
-		logger.addTerritories(territoriesFile);
+		logger.addTerritories(territoriesFile.getName());
 		// Create all nodes
 		for (Territory territory : territories.getTerritories()) {
 			try (Transaction tx = graphDb.beginTx()) {

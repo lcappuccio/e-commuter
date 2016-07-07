@@ -1,6 +1,5 @@
 package org.systemexception.ecommuter.test.services;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,10 +37,10 @@ public class StorageImplTest {
 		FileUtils.removeFolder(STORAGE_FOLDER);
 	}
 
-	@AfterClass
-	public static void tearDownSut() throws IOException {
-		FileUtils.removeFolder(STORAGE_FOLDER);
-	}
+//	@AfterClass
+//	public static void tearDownSut() throws IOException {
+//		FileUtils.removeFolder(STORAGE_FOLDER);
+//	}
 
 	@Before
 	public void setUp() throws IOException, URISyntaxException {
@@ -69,8 +68,8 @@ public class StorageImplTest {
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
-		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +
-				testDataFile.getName()).exists());
+		assertTrue(new File(STORAGE_FOLDER + File.separator +
+				testDataFile.getName() + "_" + convertTime(attrs.creationTime().toMillis())).exists());
 	}
 
 	private String convertTime(long time) {

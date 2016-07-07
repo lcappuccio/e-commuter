@@ -65,7 +65,7 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) {
 
-		logger.info("AddPerson: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname());
+		logger.info("AddPerson: " + person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 		Person personSaved = databaseService.addPerson(person);
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 		return personResponseEntity;
@@ -75,7 +75,7 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {
 
-		logger.info("DeletePerson: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname());
+		logger.info("DeletePerson: " + person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 		databaseService.deletePerson(person);
 		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(person, HttpStatus.OK);
 		return personResponseEntity;
@@ -88,7 +88,7 @@ public class RestController {
 			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws LocationException {
 
 		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.geoToAddress()
-		logger.info("GeoToAddress: (" + latitude + Constants.LOG_SEPARATOR + longitude + ")");
+		logger.info("GeoToAddress: (" + latitude + Constants.LOG_ITEM_SEPARATOR + longitude + ")");
 		Address address = locationService.geoToAddress(latitude, longitude);
 		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
 		return addressResponseEntity;
@@ -112,8 +112,8 @@ public class RestController {
 			@RequestParam(value = Endpoints.DISTANCE) final double distance) {
 
 		// TODO LC this logger is duplicated, org.systemexception.ecommuter.services.LocationImpl.findNearbyPersons()
-		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-				Constants.LOG_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_SEPARATOR +
+		logger.info("FindNearbyPersons: " + person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname() +
+				Constants.LOG_ITEM_SEPARATOR + person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
 				person.getWorkAddress().getPostalCode());
 		Persons personsLivesIn = databaseService.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
 		Persons personsWorksIn = databaseService.findPersonsWorksIn(person.getWorkAddress().getPostalCode());

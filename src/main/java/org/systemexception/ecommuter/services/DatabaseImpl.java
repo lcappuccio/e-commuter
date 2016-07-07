@@ -7,15 +7,14 @@ import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.api.DatabaseApi;
-import org.systemexception.ecommuter.enums.Constants;
+import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
+import org.systemexception.ecommuter.pojo.LogService;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -34,7 +33,7 @@ import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
  */
 public class DatabaseImpl implements DatabaseApi {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final LoggerApi logger = LogService.getFor(this.getClass());
 	private String dbFolder;
 	private GraphDatabaseService graphDb;
 	private Index<Node> indexPostalCode, indexPerson;
@@ -63,7 +62,7 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
 		readCsvTerritories(territoriesFile);
-		logger.info("AddTerritories: " + territoriesFile.getName());
+		logger.addTerritories(territoriesFile);
 		// Create all nodes
 		for (Territory territory : territories.getTerritories()) {
 			try (Transaction tx = graphDb.beginTx()) {
@@ -73,11 +72,9 @@ public class DatabaseImpl implements DatabaseApi {
 				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(), territory.getPostalCode());
 				tx.success();
 			}
-
-			logger.info("AddTerritories territory: " + territory.getPostalCode() + Constants.LOG_SEPARATOR +
-					territory.getPlaceName());
+			logger.addedTerritory(territory);
 		}
-		logger.info("Loaded " + territoriesFile.getName());
+		logger.loadedTerritories(territoriesFile);
 	}
 
 	/**
@@ -87,9 +84,7 @@ public class DatabaseImpl implements DatabaseApi {
 	public Person addPerson(final Person person) {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
-		logger.info("AddPerson adding: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-				Constants.LOG_SEPARATOR + "lives in " + homeAddress.getPostalCode() + Constants.LOG_SEPARATOR +
-				"works in " + workAddress.getPostalCode());
+		logger.addPerson(person);
 		// Get vertices for addresses
 		// TODO LC Strategy for non existing nodes. Now will throw java.util.NoSuchElementException
 		try (Transaction tx = graphDb.beginTx()) {
@@ -99,18 +94,14 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			indexPerson.add(personNode, PERSON.toString(), person);
 			// Add LIVES_IN edge
-			logger.info("AddPerson relation " + LIVES_IN.toString() + Constants.LOG_SEPARATOR +
-					homeAddress.getFormattedAddress());
+			logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
 			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
 			// Add WORKS_IN edge
-			logger.info("AddPerson relation: " + WORKS_IN.toString() + Constants.LOG_SEPARATOR +
-					workAddress.getFormattedAddress());
+			logger.addPersonRelation(person, workAddress, WORKS_IN.toString());
 			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
 			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
-			logger.info("AddPerson added: " + person.getName() + Constants.LOG_SEPARATOR + person.getSurname() +
-					Constants.LOG_SEPARATOR + "lives in " + homeAddress.getFormattedAddress() +
-					Constants.LOG_SEPARATOR + "works in " + workAddress.getFormattedAddress());
+			logger.addedPerson(person);
 			tx.success();
 		}
 		return person;
@@ -121,6 +112,8 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Person updatePerson(Person person) {
+		logger.updatePerson(person);
+		logger.updatedPerson(person);
 		// TODO LC implement
 		throw new NotImplementedException();
 	}
@@ -130,6 +123,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public void deletePerson(Person person) {
+		logger.deletePerson(person);
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> nodes = indexPerson.get(PERSON.toString(), person);
 			Node personNode = nodes.getSingle();
@@ -139,6 +133,7 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.delete();
 			tx.success();
 		}
+		logger.deletedPerson(person);
 	}
 
 	/**
@@ -146,6 +141,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsLivesIn(final String postalCode) {
+		logger.findPersonsLivingIn(postalCode);
 		Persons foundPersons = getPersons(postalCode, livesInRelation);
 		return foundPersons;
 	}
@@ -155,6 +151,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsWorksIn(final String postalCode) {
+		logger.findPersonsWorkingIn(postalCode);
 		Persons foundPersons = getPersons(postalCode, worksInRelation);
 		return foundPersons;
 	}
@@ -167,12 +164,12 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	// TODO LC This can return more than one node
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
-		logger.info("GetNodeByPostalCode: " + postalCode);
+		logger.getNodeByPostalCode(postalCode);
 		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
 		if (nodeIterator.hasNext()) {
 			return Optional.of(nodeIterator.next());
 		} else {
-			logger.info("GetNodeByPostalCode: " + postalCode + " does not exist");
+			logger.getNodeByPostalCodeNotExists(postalCode);
 			return Optional.empty();
 		}
 	}
@@ -185,6 +182,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @return
 	 */
 	private Persons getPersons(String postalCode, RelationshipType relationshipType) {
+		logger.getPersonsByPostalCodeRelation(postalCode, relationshipType.toString());
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
@@ -195,6 +193,7 @@ public class DatabaseImpl implements DatabaseApi {
 			for (Node node : foundNode) {
 				String personJson = node.getProperty(PERSON_DATA.toString()).toString();
 				if (!foundPersons.getPersons().contains(personJson)) {
+					logger.foundPersonByPostalCodeRelation(postalCode, relationshipType.toString());
 					foundPersons.addPerson(PersonJsonParser.fromString(personJson));
 				}
 			}
@@ -204,7 +203,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	private void readCsvTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
-		logger.info("Start loading territories file");
+		logger.readCsvTerritories(territoriesFile);
 		CsvParser csvParser = new CsvParser(territoriesFile);
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		territories = new Territories();
@@ -214,14 +213,13 @@ public class DatabaseImpl implements DatabaseApi {
 			Territory territory = new Territory(postalCode, placeName);
 			territories.addTerritory(territory);
 		}
-		logger.info("Finished loading territories file");
+		logger.finishCsvTerritories(territoriesFile);
 	}
 
 	@PreDestroy
 	private void close() {
-		logger.info("Close: started shutdown");
+		logger.closeDatabase();
 		graphDb.shutdown();
-		logger.info("Close: " + dbFolder);
 	}
 
 }

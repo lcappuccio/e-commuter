@@ -215,6 +215,11 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
+	public void deleteFile(File file) {
+		logger.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName());
+	}
+
+	@Override
 	public void createStorageFolder(File folder) {
 		logger.info("createStorageFolder" + Constants.LOG_OBJECT_SEPARATOR + folder.getName());
 	}
@@ -223,6 +228,16 @@ public class LoggerService implements LoggerApi {
 	public void historiFyFile(File file, String historifiedFileName) {
 		logger.info("historiFyFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName() + Constants.LOG_ITEM_SEPARATOR +
 				historifiedFileName);
+	}
+
+	@Override
+	public void removeFolderOk(String folderName) {
+		logger.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderName);
+	}
+
+	@Override
+	public void removeFolderKo(String folderName) {
+		logger.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderName);
 	}
 
 	@Override

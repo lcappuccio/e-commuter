@@ -18,7 +18,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
-import org.systemexception.ecommuter.pojo.FileUtils;
+import org.systemexception.ecommuter.services.StorageImpl;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -45,7 +45,7 @@ public class End2End {
 
 	@BeforeClass
 	public static void setSut() {
-		FileUtils.removeFolder(DATABASE_FOLDER);
+		StorageImpl.removeFolder(DATABASE_FOLDER);
 	}
 
 	@Before

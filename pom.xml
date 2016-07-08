@@ -81,8 +81,8 @@
 				<configuration>
 					<excludes>
 						<exclude>**/Application.*</exclude>
-						<exclude>**/Endpoints.*</exclude>
-						<exclude>**/Exception.*</exclude>
+						<exclude>**/*Endpoints.*</exclude>
+						<exclude>**/*Exception.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

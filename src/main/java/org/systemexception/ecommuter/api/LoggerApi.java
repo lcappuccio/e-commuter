@@ -78,5 +78,11 @@ public interface LoggerApi {
 
 	void historiFyFile(File file, String historifiedFileName);
 
+	void deleteFile(File file);
+
+	void removeFolderOk(String folderName);
+
+	void removeFolderKo(String folderName);
+
 	void closeDatabase();
 }

@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class StorageImpl implements StorageApi {
 
-	private final LoggerApi logger = LoggerService.getFor(this.getClass());
+	private final static LoggerApi logger = LoggerService.getFor(StorageImpl.class);
 	private final String storageFolder;
 
 	public StorageImpl(final String storageFolder) throws IOException {
@@ -39,6 +39,23 @@ public class StorageImpl implements StorageApi {
 		fos.close();
 		logger.saveFile(receivedFile);
 		return dataFile;
+	}
+
+	public static void removeFolder(String folderToRemove) {
+		File toRemove = new File(folderToRemove);
+		if (toRemove.exists()) {
+			String[] files = toRemove.list();
+			for (String file : files) {
+				new File(folderToRemove + File.separator + file).delete();
+			}
+		}
+		logger.deleteFile(toRemove);
+		boolean deleted = toRemove.delete();
+		if (deleted) {
+			logger.removeFolderOk(folderToRemove);
+		} else {
+			logger.removeFolderKo(folderToRemove);
+		}
 	}
 
 	private void createStorageFolder() throws IOException {

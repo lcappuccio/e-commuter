@@ -186,15 +186,18 @@ public class DatabaseImpl implements DatabaseApi {
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
-			Node nodeByPostalCode = getNodeByPostalCode(postalCode).get();
-			for (Relationship relationship : nodeByPostalCode.getRelationships(relationshipType)) {
-				foundNode.add(relationship.getStartNode());
-			}
-			for (Node node : foundNode) {
-				String personJson = node.getProperty(PERSON_DATA.toString()).toString();
-				if (!foundPersons.getPersons().contains(personJson)) {
-					logger.foundPersonByPostalCodeRelation(postalCode, relationshipType.toString());
-					foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+			Optional<Node> optionalNodeByPostalCode = getNodeByPostalCode(postalCode);
+			if (getNodeByPostalCode(postalCode).isPresent()) {
+				Node node1 = optionalNodeByPostalCode.get();
+				for (Relationship relationship : node1.getRelationships(relationshipType)) {
+					foundNode.add(relationship.getStartNode());
+				}
+				for (Node node : foundNode) {
+					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
+					if (!foundPersons.getPersons().contains(personJson)) {
+						logger.foundPersonByPostalCodeRelation(postalCode, relationshipType.toString());
+						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+					}
 				}
 			}
 			tx.success();

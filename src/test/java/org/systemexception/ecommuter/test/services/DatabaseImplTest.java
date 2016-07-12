@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author leo
@@ -81,5 +82,12 @@ public class DatabaseImplTest {
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().get(0), person);
+	}
+
+	@Test
+	public void find_person_nonexisting_node() {
+		Persons nullPersons = sut.findPersonsLivesIn("XXXX");
+
+		assertTrue(0 == nullPersons.getPersons().size());
 	}
 }

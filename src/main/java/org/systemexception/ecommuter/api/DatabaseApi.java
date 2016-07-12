@@ -27,7 +27,7 @@ public interface DatabaseApi {
 	 *
 	 * @param person
 	 */
-	Person addPerson(Person person);
+	Person addPerson(Person person) throws TerritoriesException;
 
 	/**
 	 * Updates a person

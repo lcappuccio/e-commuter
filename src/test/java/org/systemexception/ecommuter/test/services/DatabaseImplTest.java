@@ -20,6 +20,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.StorageImpl;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,5 +90,18 @@ public class DatabaseImplTest {
 		Persons nullPersons = sut.findPersonsLivesIn("XXXX");
 
 		assertTrue(0 == nullPersons.getPersons().size());
+	}
+
+	@Test(expected = TerritoriesException.class)
+	public void add_person_nonexisting_node() throws TerritoriesException {
+		Address missingAddress = person.getHomeAddress();
+		missingAddress.setPostalCode("XXXX");
+		person.setHomeAddress(missingAddress);
+		sut.addPerson(person);
+	}
+
+	@Test(expected = NotImplementedException.class)
+	public void update_person() {
+		Person person = sut.updatePerson(this.person);
 	}
 }

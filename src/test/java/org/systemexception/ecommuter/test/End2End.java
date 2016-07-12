@@ -61,7 +61,7 @@ public class End2End {
 	}
 
 	@Test
-	public void end2End() throws LocationException {
+	public void end2End() throws LocationException, TerritoriesException {
 		Person personA = new Person();
 		Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
 		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);

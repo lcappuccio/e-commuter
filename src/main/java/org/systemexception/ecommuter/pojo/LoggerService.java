@@ -74,6 +74,12 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
+	public void addedNotPerson(Person person) {
+		logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
+		person.getSurname() + " not added because one node is missing");
+	}
+
+	@Override
 	public void updatePerson(Person person) {
 		logger.info("updatePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
 				person.getSurname());

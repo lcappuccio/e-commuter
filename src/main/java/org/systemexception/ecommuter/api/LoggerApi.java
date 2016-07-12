@@ -26,6 +26,8 @@ public interface LoggerApi {
 
 	void addedPerson(Person person);
 
+	void addedNotPerson(Person person);
+
 	void updatePerson(Person person);
 
 	void updatedPerson(Person person);

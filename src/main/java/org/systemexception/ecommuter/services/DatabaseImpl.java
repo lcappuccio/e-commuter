@@ -81,27 +81,31 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Person addPerson(final Person person) {
+	public Person addPerson(final Person person) throws TerritoriesException {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.addPerson(person);
 		// Get vertices for addresses
-		// TODO LC Strategy for non existing nodes. Now will throw java.util.NoSuchElementException
 		try (Transaction tx = graphDb.beginTx()) {
-			Node homeNode = getNodeByPostalCode(homeAddress.getPostalCode()).get();
-			Node workNode = getNodeByPostalCode(workAddress.getPostalCode()).get();
-			Node personNode = graphDb.createNode();
-			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
-			indexPerson.add(personNode, PERSON.toString(), person);
-			// Add LIVES_IN edge
-			logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
-			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
-			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
-			// Add WORKS_IN edge
-			logger.addPersonRelation(person, workAddress, WORKS_IN.toString());
-			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
-			indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
-			logger.addedPerson(person);
+			Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
+			Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
+			if (homeNode.isPresent() && workNode.isPresent()) {
+				Node personNode = graphDb.createNode();
+				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
+				indexPerson.add(personNode, PERSON.toString(), person);
+				// Add LIVES_IN edge
+				logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
+				Relationship livesIn = personNode.createRelationshipTo(homeNode.get(), livesInRelation);
+				indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
+				// Add WORKS_IN edge
+				logger.addPersonRelation(person, workAddress, WORKS_IN.toString());
+				Relationship worksIn = personNode.createRelationshipTo(workNode.get(), worksInRelation);
+				indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
+				logger.addedPerson(person);
+			} else {
+				logger.addedNotPerson(person);
+				throw new TerritoriesException("Non existing territory");
+			}
 			tx.success();
 		}
 		return person;
@@ -186,10 +190,9 @@ public class DatabaseImpl implements DatabaseApi {
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
-			Optional<Node> optionalNodeByPostalCode = getNodeByPostalCode(postalCode);
+			Optional<Node> nodeByPostalCode = getNodeByPostalCode(postalCode);
 			if (getNodeByPostalCode(postalCode).isPresent()) {
-				Node node1 = optionalNodeByPostalCode.get();
-				for (Relationship relationship : node1.getRelationships(relationshipType)) {
+				for (Relationship relationship : nodeByPostalCode.get().getRelationships(relationshipType)) {
 					foundNode.add(relationship.getStartNode());
 				}
 				for (Node node : foundNode) {

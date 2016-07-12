@@ -62,7 +62,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_ADD, method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) {
+	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) throws TerritoriesException {
 
 		logger.addPerson(person);
 		Person personSaved = databaseService.addPerson(person);

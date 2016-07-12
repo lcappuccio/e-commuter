@@ -7,7 +7,6 @@ import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
 
 import java.io.File;

@@ -146,8 +146,7 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Persons findPersonsLivesIn(final String postalCode) {
 		logger.findPersonsLivingIn(postalCode);
-		Persons foundPersons = getPersons(postalCode, livesInRelation);
-		return foundPersons;
+		return getPersons(postalCode, livesInRelation);
 	}
 
 	/**
@@ -156,8 +155,7 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Persons findPersonsWorksIn(final String postalCode) {
 		logger.findPersonsWorkingIn(postalCode);
-		Persons foundPersons = getPersons(postalCode, worksInRelation);
-		return foundPersons;
+		return getPersons(postalCode, worksInRelation);
 	}
 
 	/**

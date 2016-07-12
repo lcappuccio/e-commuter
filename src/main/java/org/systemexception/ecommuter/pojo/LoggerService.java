@@ -187,7 +187,7 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
-	public void findNearbyPersons(Person person, Persons persons, double radius) {
+	public void findNearbyPersons(Person person, double radius) {
 		logger.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
 				Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
 				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +

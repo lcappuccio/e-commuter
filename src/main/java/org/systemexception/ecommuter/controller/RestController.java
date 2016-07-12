@@ -119,7 +119,7 @@ public class RestController {
 				fullPersonList.addPerson(personWorking);
 			}
 		}
-		logger.findNearbyPersons(person, personsLivesIn, distance);
+		logger.findNearbyPersons(person, distance);
 		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		ResponseEntity<Persons> personsResponseEntity = new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 		return personsResponseEntity;

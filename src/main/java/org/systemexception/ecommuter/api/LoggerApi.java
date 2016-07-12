@@ -3,7 +3,6 @@ package org.systemexception.ecommuter.api;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
 
 import java.io.File;
@@ -66,7 +65,7 @@ public interface LoggerApi {
 
 	void distanceBetween(Address addressA, Address addressB);
 
-	void findNearbyPersons(Person person, Persons persons, double radius);
+	void findNearbyPersons(Person person, double radius);
 
 	void findNearbyPersonsRemoveSelf(Person person);
 

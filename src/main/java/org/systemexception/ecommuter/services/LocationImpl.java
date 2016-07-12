@@ -76,7 +76,7 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		logger.findNearbyPersons(person, persons, radius);
+		logger.findNearbyPersons(person, radius);
 		Persons nearbyPersons = new Persons();
 		if (persons.getPersons().contains(person)) {
 			persons.getPersons().remove(person);

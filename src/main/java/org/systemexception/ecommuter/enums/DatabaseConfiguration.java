@@ -13,7 +13,6 @@ public enum DatabaseConfiguration {
 	PERSON("person"),
 	PERSON_DATA("personData"),
 	// EDGE
-	EDGE_TYPE("edgeType"),
 	LIVES_IN("livesIn"),
 	WORKS_IN("worksIn");
 

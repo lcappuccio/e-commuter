@@ -34,11 +34,11 @@ import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
 public class DatabaseImpl implements DatabaseApi {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
-	private String dbFolder;
+	private final String dbFolder;
 	private GraphDatabaseService graphDb;
 	private Index<Node> indexPostalCode, indexPerson;
-	private RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString()),
-			worksInRelation = RelationshipType.withName(WORKS_IN.toString());
+	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
+	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private Territories territories;
 
@@ -164,7 +164,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * Returns a node given the postalCode
 	 *
 	 * @param postalCode
-	 * @return
+	 * @return an optional with the node of the postal code
 	 */
 	// TODO LC This can return more than one node
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
@@ -182,8 +182,8 @@ public class DatabaseImpl implements DatabaseApi {
 	 * Returns Persons for the given postal code and territory relation
 	 *
 	 * @param postalCode
-	 * @param relationshipType
-	 * @return
+	 * @param relationshipType is the relationship type to seek after (works in, lives in)
+	 * @return the list of persons with the given relationship to this node
 	 */
 	private Persons getPersons(String postalCode, RelationshipType relationshipType) {
 		logger.getPersonsByPostalCodeRelation(postalCode, relationshipType.toString());
@@ -191,7 +191,7 @@ public class DatabaseImpl implements DatabaseApi {
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(postalCode);
-			if (getNodeByPostalCode(postalCode).isPresent()) {
+			if (nodeByPostalCode.isPresent()) {
 				for (Relationship relationship : nodeByPostalCode.get().getRelationships(relationshipType)) {
 					foundNode.add(relationship.getStartNode());
 				}

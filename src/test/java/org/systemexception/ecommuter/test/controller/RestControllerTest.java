@@ -56,7 +56,7 @@ public class RestControllerTest {
 		databaseApi = mock(DatabaseApi.class);
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
-		restController = new RestController();
+		restController = new RestController(databaseApi, locationApi, storageApi);
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
 	}

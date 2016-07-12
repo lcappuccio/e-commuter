@@ -40,13 +40,16 @@ import java.io.IOException;
 public class RestController {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
+	private final DatabaseApi databaseService;
+	private final LocationApi locationService;
+	private final StorageApi storageService;
 
 	@Autowired
-	private DatabaseApi databaseService;
-	@Autowired
-	private LocationApi locationService;
-	@Autowired
-	private StorageApi storageService;
+	public RestController(DatabaseApi databaseService, LocationApi locationService, StorageApi storageService) {
+		this.databaseService = databaseService;
+		this.locationService = locationService;
+		this.storageService = storageService;
+	}
 
 	@RequestMapping(value = Endpoints.ADD_TERRITORIES, method = RequestMethod.POST,
 			produces = MediaType.TEXT_PLAIN_VALUE)

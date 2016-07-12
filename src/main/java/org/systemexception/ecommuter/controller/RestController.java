@@ -66,8 +66,7 @@ public class RestController {
 
 		logger.addPerson(person);
 		Person personSaved = databaseService.addPerson(person);
-		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(personSaved, HttpStatus.CREATED);
-		return personResponseEntity;
+		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_DELETE, method = RequestMethod.DELETE,
@@ -76,8 +75,7 @@ public class RestController {
 
 		logger.deletePerson(person);
 		databaseService.deletePerson(person);
-		ResponseEntity<Person> personResponseEntity = new ResponseEntity<>(person, HttpStatus.OK);
-		return personResponseEntity;
+		return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.PUT,
@@ -88,8 +86,7 @@ public class RestController {
 
 		logger.geoToAddress(latitude, longitude);
 		Address address = locationService.geoToAddress(latitude, longitude);
-		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(address, HttpStatus.OK);
-		return addressResponseEntity;
+		return new ResponseEntity<>(address, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.PUT,
@@ -98,8 +95,7 @@ public class RestController {
 
 		logger.addressToGeo(address.getFormattedAddress());
 		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
-		ResponseEntity<Address> addressResponseEntity = new ResponseEntity<>(responseAddress, HttpStatus.OK);
-		return addressResponseEntity;
+		return new ResponseEntity<>(responseAddress, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.PUT,
@@ -121,8 +117,7 @@ public class RestController {
 		}
 		logger.findNearbyPersons(person, distance);
 		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
-		ResponseEntity<Persons> personsResponseEntity = new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
-		return personsResponseEntity;
+		return new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 	}
 
 }

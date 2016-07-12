@@ -67,12 +67,9 @@ In sparse order:
 
 - Add google api key in properties file if needed, otherwise fetch key from environment variable
 - Update person
-- Add Swagger
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
 - Pending `spring-boot-starter-data-neo4j` release for refactor
-- Refactor logging to avoid code duplication
-- Strategy for non existing territory nodes when adding a person. Now will throw java.util.NoSuchElementException
 
 ## Credits
 

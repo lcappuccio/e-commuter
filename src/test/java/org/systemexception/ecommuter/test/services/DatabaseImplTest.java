@@ -1,6 +1,9 @@
 package org.systemexception.ecommuter.test.services;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -16,7 +19,8 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
-import org.systemexception.ecommuter.pojo.FileUtils;
+import org.systemexception.ecommuter.services.StorageImpl;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +28,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author leo
@@ -44,7 +49,7 @@ public class DatabaseImplTest {
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		FileUtils.removeFolder(DATABASE_FOLDER);
+		StorageImpl.removeFolder(DATABASE_FOLDER);
 	}
 
 	@Before
@@ -78,5 +83,25 @@ public class DatabaseImplTest {
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().get(0), person);
+	}
+
+	@Test
+	public void find_person_nonexisting_node() {
+		Persons nullPersons = sut.findPersonsLivesIn("XXXX");
+
+		assertTrue(0 == nullPersons.getPersons().size());
+	}
+
+	@Test(expected = TerritoriesException.class)
+	public void add_person_nonexisting_node() throws TerritoriesException {
+		Address missingAddress = person.getHomeAddress();
+		missingAddress.setPostalCode("XXXX");
+		person.setHomeAddress(missingAddress);
+		sut.addPerson(person);
+	}
+
+	@Test(expected = NotImplementedException.class)
+	public void update_person() {
+		Person person = sut.updatePerson(this.person);
 	}
 }

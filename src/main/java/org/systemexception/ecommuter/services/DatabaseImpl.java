@@ -52,7 +52,7 @@ public class DatabaseImpl implements DatabaseApi {
 			tx.success();
 		}
 	}
-	
+
 	@Override
 	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
 		readCsvTerritories(territoriesFile);

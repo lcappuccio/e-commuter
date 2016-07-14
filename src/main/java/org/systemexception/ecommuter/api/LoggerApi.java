@@ -85,5 +85,9 @@ public interface LoggerApi {
 
 	void removeFolderKo(String folderName);
 
+	void csvLoaded(File file);
+
+	void csvLoadError(File file, String message);
+
 	void closeDatabase();
 }

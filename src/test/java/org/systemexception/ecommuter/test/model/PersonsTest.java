@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 public class PersonsTest {
 
 	private Persons sut;
-	private Person personA, personB;
 
 	@Before
 	public void setSut() {
@@ -24,8 +23,8 @@ public class PersonsTest {
 		homeAddress.setPostalCode("123");
 		Address workAddress = new Address();
 		workAddress.setPostalCode("456");
-		personA = new Person("NAME", "SURNAME", homeAddress, workAddress);
-		personB = new Person("NAME2", "SURNAME2", homeAddress, workAddress);
+		Person personA = new Person("NAME", "SURNAME", homeAddress, workAddress);
+		Person personB = new Person("NAME2", "SURNAME2", homeAddress, workAddress);
 		sut.addPerson(personA);
 		sut.addPerson(personB);
 	}

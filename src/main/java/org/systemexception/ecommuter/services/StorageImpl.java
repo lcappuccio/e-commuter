@@ -13,6 +13,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author leo
@@ -79,7 +80,8 @@ public class StorageImpl implements StorageApi {
 
 	private String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("yyyyMMddHHmmss");
+
+		Format format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
 		return format.format(date);
 	}
 }

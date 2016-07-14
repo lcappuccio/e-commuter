@@ -246,6 +246,16 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
+	public void csvLoaded(File file) {
+		logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + file.getName());
+	}
+
+	@Override
+	public void csvLoadError(File file, String message) {
+		logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + file.getName() + Constants.LOG_ITEM_SEPARATOR + message);
+	}
+
+	@Override
 	public void closeDatabase() {
 		logger.info("closeDatabase");
 	}

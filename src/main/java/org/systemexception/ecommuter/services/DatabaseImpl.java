@@ -34,20 +34,14 @@ import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
 public class DatabaseImpl implements DatabaseApi {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
-	private final String dbFolder;
-	private GraphDatabaseService graphDb;
-	private Index<Node> indexPostalCode, indexPerson;
+	private final GraphDatabaseService graphDb;
+	private final Index<Node> indexPostalCode, indexPerson;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
-	private RelationshipIndex indexLivesIn, indexWorksIn;
+	private final RelationshipIndex indexLivesIn, indexWorksIn;
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {
-		this.dbFolder = dbFolder;
-		initialSetup();
-	}
-
-	private void initialSetup() {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		IndexManager indexManager = graphDb.index();
 		try (Transaction tx = graphDb.beginTx()) {
@@ -64,15 +58,15 @@ public class DatabaseImpl implements DatabaseApi {
 		readCsvTerritories(territoriesFile);
 		logger.addTerritories(territoriesFile.getName());
 		// Create all nodes
-		for (Territory territory : territories.getTerritories()) {
-			try (Transaction tx = graphDb.beginTx()) {
+		try (Transaction tx = graphDb.beginTx()) {
+			for (Territory territory : territories.getTerritories()) {
 				Node territoryNode = graphDb.createNode();
 				territoryNode.setProperty(POSTAL_CODE.toString(), territory.getPostalCode());
 				territoryNode.setProperty(PLACE_NAME.toString(), territory.getPlaceName());
 				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(), territory.getPostalCode());
-				tx.success();
+				logger.addedTerritory(territory);
 			}
-			logger.addedTerritory(territory);
+			tx.success();
 		}
 		logger.loadedTerritories(territoriesFile);
 	}

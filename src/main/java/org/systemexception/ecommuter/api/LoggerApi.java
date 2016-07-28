@@ -31,7 +31,7 @@ public interface LoggerApi {
 
 	void addedPerson(Person person);
 
-	void addedNotPerson(Person person);
+	void addedNotPerson(Person person, String reason);
 
 	void updatePerson(Person person);
 

@@ -51,10 +51,10 @@ public class LoggerService implements LoggerApi {
 
 	@Override
 	public void addPerson(Person person) {
-		logger.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
-				person.getSurname() + Constants.LOG_ITEM_SEPARATOR + "lives in " +
-				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR + "works in " +
-				person.getWorkAddress().getPostalCode());
+		logger.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
+				"lives in " + person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
+				"works in " + person.getWorkAddress().getPostalCode());
 	}
 
 	@Override
@@ -66,16 +66,17 @@ public class LoggerService implements LoggerApi {
 
 	@Override
 	public void addedPerson(Person person) {
-		logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
-				person.getSurname() + Constants.LOG_ITEM_SEPARATOR + "lives in " +
-				person.getHomeAddress().getFormattedAddress() + Constants.LOG_ITEM_SEPARATOR + "works in " +
-				person.getWorkAddress().getFormattedAddress());
+		logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
+				"lives in " + person.getHomeAddress().getFormattedAddress() + Constants.LOG_ITEM_SEPARATOR +
+				"works in " + person.getWorkAddress().getFormattedAddress());
 	}
 
 	@Override
-	public void addedNotPerson(Person person) {
-		logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
-		person.getSurname() + " not added because one node is missing");
+	public void addedNotPerson(Person person, final String reason) {
+		logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname() +
+				Constants.LOG_ITEM_SEPARATOR + reason);
 	}
 
 	@Override
@@ -258,7 +259,8 @@ public class LoggerService implements LoggerApi {
 
 	@Override
 	public void csvLoadError(File file, String message) {
-		logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + file.getName() + Constants.LOG_ITEM_SEPARATOR + message);
+		logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + file.getName() + Constants.LOG_ITEM_SEPARATOR +
+				message);
 	}
 
 	@Override

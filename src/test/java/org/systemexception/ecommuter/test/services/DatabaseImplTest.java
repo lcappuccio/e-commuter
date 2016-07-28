@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.InvalidParameterException;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -71,6 +72,13 @@ public class DatabaseImplTest {
 	@After
 	public void tearDown() {
 		sut.deletePerson(person);
+	}
+
+	@Test(expected = InvalidParameterException.class)
+	public void add_person_twice() throws TerritoriesException {
+		Person personAdded = sut.addPerson(this.person);
+
+		assertEquals(person, personAdded);
 	}
 
 	@Test

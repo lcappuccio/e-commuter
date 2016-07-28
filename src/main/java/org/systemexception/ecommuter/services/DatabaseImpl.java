@@ -8,7 +8,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.graphdb.schema.ConstraintCreator;
-import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.enums.CsvHeaders;
@@ -57,7 +56,8 @@ public class DatabaseImpl implements DatabaseApi {
 			tx.success();
 		}
 		try (Transaction tx = graphDb.beginTx()) {
-			ConstraintDefinition constraintDefinition = constraintCreator.create();
+			constraintCreator.create();
+			logger.createdDatabase(dbFolder);
 			tx.success();
 		}
 	}
@@ -98,7 +98,7 @@ public class DatabaseImpl implements DatabaseApi {
 				personNode.setProperty(PERSON_ID.toString(), person.getId());
 				try {
 					personNode.addLabel(Label.label(PERSON_ID.toString()));
-				} catch (org.neo4j.graphdb.ConstraintViolationException ex) {
+				} catch (ConstraintViolationException ex) {
 					String message = ex.getMessage();
 					tx.failure();
 					logger.addedNotPerson(person, message);

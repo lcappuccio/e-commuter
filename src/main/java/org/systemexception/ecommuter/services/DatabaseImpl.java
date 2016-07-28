@@ -35,7 +35,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private final Index<Node> indexPostalCode, indexPerson;
+	private final Index<Node> indexPostalCode, indexPerson, indexPersonId;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private final RelationshipIndex indexLivesIn, indexWorksIn;
@@ -47,6 +47,7 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPerson = indexManager.forNodes(PERSON.toString());
+			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();
@@ -79,7 +80,7 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.addPerson(person);
-		// Get vertices for addresses
+		// Get nodes for addresses
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
 			Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
@@ -87,6 +88,8 @@ public class DatabaseImpl implements DatabaseApi {
 				Node personNode = graphDb.createNode();
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				indexPerson.add(personNode, PERSON.toString(), person);
+				personNode.setProperty(PERSON_ID.toString(), person.getId());
+				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge
 				logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
 				Relationship livesIn = personNode.createRelationshipTo(homeNode.get(), livesInRelation);

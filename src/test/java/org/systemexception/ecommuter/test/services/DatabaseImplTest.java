@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -58,7 +59,7 @@ public class DatabaseImplTest {
 		File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
-		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
+		person = new Person(UUID.randomUUID().toString(), "TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
 		sut.addPerson(person);

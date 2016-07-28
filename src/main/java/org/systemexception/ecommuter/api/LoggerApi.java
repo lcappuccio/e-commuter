@@ -80,6 +80,8 @@ public interface LoggerApi {
 	void distanceBetween(Address addressA, Address addressB);
 
 	// Utilities
+	void createdDatabase(String databaseName);
+
 	void saveFile(MultipartFile multipartFile);
 
 	void createStorageFolder(File folder);

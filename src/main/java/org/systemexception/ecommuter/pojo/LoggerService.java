@@ -34,6 +34,11 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
+	public void createdDatabase(final String databaseName) {
+		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + databaseName);
+	}
+
+	@Override
 	public void addTerritories(String fileName) {
 		logger.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + fileName);
 	}

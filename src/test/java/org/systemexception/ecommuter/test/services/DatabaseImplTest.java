@@ -117,4 +117,18 @@ public class DatabaseImplTest {
 		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);
 	}
+
+	@Test
+	public void update_person_bad_id() {
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getPostalCode()).getPersons().get(0);
+		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getWorkAddress());
+		personBuffer.setId("BAD_ID");
+		personBuffer.setName("UpdatedName");
+		personBuffer.setSurname("UpdatedSurname");
+		Person personAfterUpdate = sut.updatePerson(personBuffer);
+
+		assertNotEquals(personBeforeUpdate, personAfterUpdate);
+	}
 }

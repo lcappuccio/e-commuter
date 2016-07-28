@@ -114,8 +114,13 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
-			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
-			tx.success();
+			if (personNode != null) {
+				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
+				tx.success();
+			} else {
+				logger.updatedPersonNotFound(person);
+				tx.terminate();
+			}
 		}
 		logger.updatedPerson(person);
 		return person;

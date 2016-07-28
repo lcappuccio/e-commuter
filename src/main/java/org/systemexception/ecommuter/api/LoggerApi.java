@@ -37,6 +37,8 @@ public interface LoggerApi {
 
 	void updatedPerson(Person person);
 
+	void updatedPersonNotFound(Person person);
+
 	void deletePerson(Person person);
 
 	void deletedPerson(Person person);

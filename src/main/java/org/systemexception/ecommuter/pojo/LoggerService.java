@@ -91,6 +91,12 @@ public class LoggerService implements LoggerApi {
 	}
 
 	@Override
+	public void updatedPersonNotFound(Person person) {
+		logger.info("updatedPersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
+				Constants.LOG_ITEM_SEPARATOR + person.getSurname());
+	}
+
+	@Override
 	public void deletePerson(Person person) {
 		logger.info("deletePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
 				Constants.LOG_ITEM_SEPARATOR + person.getSurname());

@@ -13,23 +13,31 @@ import java.io.File;
  */
 public interface LoggerApi {
 
+	// Territories
 	void addTerritories(String fileName);
 
 	void addedTerritory(Territory territory);
 
 	void loadedTerritories(File file);
 
+	void readCsvTerritories(File file);
+
+	void finishCsvTerritories(File file);
+
+	// Person
 	void addPerson(Person person);
 
 	void addPersonRelation(Person person, Address address, String relationType);
 
 	void addedPerson(Person person);
 
-	void addedNotPerson(Person person);
+	void addedNotPerson(Person person, String reason);
 
 	void updatePerson(Person person);
 
 	void updatedPerson(Person person);
+
+	void updatedPersonNotFound(Person person);
 
 	void deletePerson(Person person);
 
@@ -39,18 +47,24 @@ public interface LoggerApi {
 
 	void findPersonsWorkingIn(String postalCode);
 
-	void getNodeByPostalCode(String postalCode);
-
-	void getNodeByPostalCodeNotExists(String postalCode);
-
 	void getPersonsByPostalCodeRelation(String postaCode, String relation);
 
 	void foundPersonByPostalCodeRelation(String postalCode, String relation);
 
-	void readCsvTerritories(File file);
+	void findNearbyPersons(Person person, double radius);
 
-	void finishCsvTerritories(File file);
+	void findNearbyPersonsRemoveSelf(Person person);
 
+	void foundNearby(Person person, double distanceHome, double distanceWork);
+
+	void excludedNearby(Person person, double distanceHome, double distanceWork);
+
+	// Nodes
+	void getNodeByPostalCode(String postalCode);
+
+	void getNodeByPostalCodeNotExists(String postalCode);
+
+	// Address and Geocodes
 	void geoToAddress(double latitude, double longitude);
 
 	void geoToAddressError(double latitude, double longitude);
@@ -65,13 +79,8 @@ public interface LoggerApi {
 
 	void distanceBetween(Address addressA, Address addressB);
 
-	void findNearbyPersons(Person person, double radius);
-
-	void findNearbyPersonsRemoveSelf(Person person);
-
-	void foundNearby(Person person, double distanceHome, double distanceWork);
-
-	void excludedNearby(Person person, double distanceHome, double distanceWork);
+	// Utilities
+	void createdDatabase(String databaseName);
 
 	void saveFile(MultipartFile multipartFile);
 

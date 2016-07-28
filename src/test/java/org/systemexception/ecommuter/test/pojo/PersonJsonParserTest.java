@@ -18,6 +18,8 @@ import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
+import java.util.UUID;
+
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -32,11 +34,13 @@ public class PersonJsonParserTest {
 
 	private final LocationApi locationService = new LocationImpl();
 	private Person person;
+	private String personId;
 
 	@Before
 	public void setSut() throws LocationException {
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
-		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo ,addressFromGeo);
+		personId = UUID.randomUUID().toString();
+		person = new Person(personId, "TEST_NAME", "TEST_SURNAME", addressFromGeo ,addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 	}
 
@@ -62,8 +66,9 @@ public class PersonJsonParserTest {
 		assertEquals(person, pesonFromString);
 	}
 
-	public static String getPersonJson() {
-		return "{\"name\":\"TEST_NAME\",\"surname\":\"TEST_SURNAME\",\"homeAddress\":{\"streetNumber\":\"6\"," +
+	public String getPersonJson() {
+		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME\",\"surname\":\"TEST_SURNAME\"," +
+				"\"homeAddress\":{\"streetNumber\":\"6\"," +
 				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"Città " +
 				"Metropolitana di Milano\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\"," +
 				"\"postalCode\":\"20122\",\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\"," +

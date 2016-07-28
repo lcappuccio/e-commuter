@@ -67,7 +67,6 @@ logging, add the necessary configuration annotations to every impacted test or c
 In sparse order:
 
 - Add google api key in properties file if needed, otherwise fetch key from environment variable
-- Update person
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
 - Pending `spring-boot-starter-data-neo4j` release for refactor

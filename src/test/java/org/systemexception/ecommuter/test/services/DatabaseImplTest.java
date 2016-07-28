@@ -20,14 +20,16 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.StorageImpl;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.InvalidParameterException;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -46,6 +48,8 @@ public class DatabaseImplTest {
 	@Autowired
 	private LocationApi locationService;
 	private Person person;
+	private String personId;
+	private Address addressFromGeo;
 
 	@BeforeClass
 	public static void setSut() throws IOException {
@@ -57,8 +61,9 @@ public class DatabaseImplTest {
 		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
 		File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);
-		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
-		person = new Person("TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
+		addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
+		personId = UUID.randomUUID().toString();
+		person = new Person(personId, "TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
 		sut.addPerson(person);
@@ -67,6 +72,11 @@ public class DatabaseImplTest {
 	@After
 	public void tearDown() {
 		sut.deletePerson(person);
+	}
+
+	@Test(expected = InvalidParameterException.class)
+	public void add_person_twice() throws TerritoriesException {
+		sut.addPerson(person);
 	}
 
 	@Test
@@ -100,8 +110,31 @@ public class DatabaseImplTest {
 		sut.addPerson(person);
 	}
 
-	@Test(expected = NotImplementedException.class)
+	@Test
 	public void update_person() {
-		Person person = sut.updatePerson(this.person);
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getPostalCode()).getPersons().get(0);
+		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getWorkAddress());
+		personBuffer.setName("UpdatedName");
+		personBuffer.setSurname("UpdatedSurname");
+		Person personAfterUpdate = sut.updatePerson(personBuffer);
+
+		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
+		assertNotEquals(personBeforeUpdate, personAfterUpdate);
+	}
+
+	@Test
+	public void update_person_bad_id() {
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getPostalCode()).getPersons().get(0);
+		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getWorkAddress());
+		personBuffer.setId("BAD_ID");
+		personBuffer.setName("UpdatedName");
+		personBuffer.setSurname("UpdatedSurname");
+		Person personAfterUpdate = sut.updatePerson(personBuffer);
+
+		assertNotEquals(personBeforeUpdate, personAfterUpdate);
 	}
 }

@@ -80,32 +80,32 @@ public class LoggerService implements LoggerApi {
 
 	@Override
 	public void updatePerson(Person person) {
-		logger.info("updatePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
-				person.getSurname());
+		logger.info("updatePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 	}
 
 	@Override
 	public void updatedPerson(Person person) {
-		logger.info("updatedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname());
+		logger.info("updatedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 	}
 
 	@Override
 	public void updatedPersonNotFound(Person person) {
-		logger.info("updatedPersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname());
+		logger.info("updatedPersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+				Constants.LOG_ITEM_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 	}
 
 	@Override
 	public void deletePerson(Person person) {
-		logger.info("deletePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname());
+		logger.info("deletePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 	}
 
 	@Override
 	public void deletedPerson(Person person) {
-		logger.info("deletedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname());
+		logger.info("deletedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
+				person.getName() + Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 	}
 
 	@Override

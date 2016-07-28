@@ -16,7 +16,6 @@ import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
 import org.systemexception.ecommuter.pojo.LoggerService;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -35,7 +34,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private final Index<Node> indexPostalCode, indexPerson;
+	private final Index<Node> indexPostalCode, indexPersonId;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private final RelationshipIndex indexLivesIn, indexWorksIn;
@@ -46,7 +45,7 @@ public class DatabaseImpl implements DatabaseApi {
 		IndexManager indexManager = graphDb.index();
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
-			indexPerson = indexManager.forNodes(PERSON.toString());
+			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();
@@ -79,14 +78,15 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.addPerson(person);
-		// Get vertices for addresses
+		// Get nodes for addresses
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
 			Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
 			if (homeNode.isPresent() && workNode.isPresent()) {
 				Node personNode = graphDb.createNode();
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
-				indexPerson.add(personNode, PERSON.toString(), person);
+				personNode.setProperty(PERSON_ID.toString(), person.getId());
+				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge
 				logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
 				Relationship livesIn = personNode.createRelationshipTo(homeNode.get(), livesInRelation);
@@ -111,9 +111,14 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Person updatePerson(Person person) {
 		logger.updatePerson(person);
+		try (Transaction tx = graphDb.beginTx()) {
+			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
+			Node personNode = nodes.getSingle();
+			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
+			tx.success();
+		}
 		logger.updatedPerson(person);
-		// TODO LC implement
-		throw new NotImplementedException();
+		return person;
 	}
 
 	/**
@@ -123,7 +128,7 @@ public class DatabaseImpl implements DatabaseApi {
 	public void deletePerson(Person person) {
 		logger.deletePerson(person);
 		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> nodes = indexPerson.get(PERSON.toString(), person);
+			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
 			while (personNode.getRelationships().iterator().hasNext()) {
 				personNode.getRelationships().iterator().next().delete();

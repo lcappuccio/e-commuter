@@ -10,7 +10,7 @@ public enum DatabaseConfiguration {
 	POSTAL_CODE("postalCode"),
 	PLACE_NAME("placeName"),
 	// PERSON
-	PERSON("person"),
+	PERSON_ID("id"),
 	PERSON_DATA("personData"),
 	// EDGE
 	LIVES_IN("livesIn"),

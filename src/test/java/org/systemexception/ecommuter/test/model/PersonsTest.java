@@ -6,6 +6,8 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -23,8 +25,8 @@ public class PersonsTest {
 		homeAddress.setPostalCode("123");
 		Address workAddress = new Address();
 		workAddress.setPostalCode("456");
-		Person personA = new Person("NAME", "SURNAME", homeAddress, workAddress);
-		Person personB = new Person("NAME2", "SURNAME2", homeAddress, workAddress);
+		Person personA = new Person(UUID.randomUUID().toString(), "NAME", "SURNAME", homeAddress, workAddress);
+		Person personB = new Person(UUID.randomUUID().toString(), "NAME2", "SURNAME2", homeAddress, workAddress);
 		sut.addPerson(personA);
 		sut.addPerson(personB);
 	}

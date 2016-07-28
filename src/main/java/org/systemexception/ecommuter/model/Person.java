@@ -6,16 +6,26 @@ package org.systemexception.ecommuter.model;
  */
 public class Person {
 
-	private String name, surname;
+	private String id, name, surname;
 	private Address homeAddress, workAddress;
 
 	public Person() {}
 
-	public Person (final String name, final String surname, final Address homeAddress, final Address workAddress) {
+	public Person (final String personId, final String name, final String surname, final Address homeAddress, final
+	Address workAddress) {
+		this.id = personId;
 		this.name = name;
 		this.surname = surname;
 		this.homeAddress = homeAddress;
 		this.workAddress = workAddress;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -57,6 +67,7 @@ public class Person {
 
 		Person person = (Person) o;
 
+		if (id != null ? !id.equals(person.id) : person.id != null) return false;
 		if (name != null ? !name.equals(person.name) : person.name != null) return false;
 		if (surname != null ? !surname.equals(person.surname) : person.surname != null) return false;
 		if (homeAddress != null ? !homeAddress.equals(person.homeAddress) : person.homeAddress != null) return false;
@@ -66,7 +77,8 @@ public class Person {
 
 	@Override
 	public int hashCode() {
-		int result = name != null ? name.hashCode() : 0;
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (surname != null ? surname.hashCode() : 0);
 		result = 31 * result + (homeAddress != null ? homeAddress.hashCode() : 0);
 		result = 31 * result + (workAddress != null ? workAddress.hashCode() : 0);

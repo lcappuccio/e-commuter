@@ -23,6 +23,7 @@ import org.systemexception.ecommuter.services.StorageImpl;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.UUID;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -65,6 +66,7 @@ public class End2End {
 		Person personA = new Person();
 		Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
 		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);
+		personA.setId(UUID.randomUUID().toString());
 		personA.setName("TEST_NAME_A");
 		personA.setSurname("TEST_SURNAME_A");
 		personA.setHomeAddress(addressHomeA);
@@ -73,6 +75,7 @@ public class End2End {
 		Person personB = new Person();
 		Address addressWorkB = locationService.geoToAddress(46.002834, 8.742499);
 		Address addressHomeB = locationService.geoToAddress(45.999950, 8.740594);
+		personB.setId(UUID.randomUUID().toString());
 		personB.setName("TEST_NAME_B");
 		personB.setSurname("TEST_SURNAME_B");
 		personB.setHomeAddress(addressHomeB);
@@ -81,6 +84,7 @@ public class End2End {
 		Person personC = new Person();
 		Address addressWorkC = locationService.geoToAddress(45.996015, 8.732703);
 		Address addressHomeC = locationService.geoToAddress(45.999659, 8.737842);
+		personC.setId(UUID.randomUUID().toString());
 		personC.setName("TEST_NAME_C");
 		personC.setSurname("TEST_SURNAME_C");
 		personC.setHomeAddress(addressHomeC);

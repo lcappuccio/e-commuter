@@ -35,7 +35,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final LoggerApi logger = LoggerService.getFor(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private final Index<Node> indexPostalCode, indexPerson, indexPersonId;
+	private final Index<Node> indexPostalCode, indexPersonId;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private final RelationshipIndex indexLivesIn, indexWorksIn;
@@ -46,7 +46,6 @@ public class DatabaseImpl implements DatabaseApi {
 		IndexManager indexManager = graphDb.index();
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
-			indexPerson = indexManager.forNodes(PERSON.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
@@ -87,7 +86,6 @@ public class DatabaseImpl implements DatabaseApi {
 			if (homeNode.isPresent() && workNode.isPresent()) {
 				Node personNode = graphDb.createNode();
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
-				indexPerson.add(personNode, PERSON.toString(), person);
 				personNode.setProperty(PERSON_ID.toString(), person.getId());
 				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge
@@ -126,7 +124,7 @@ public class DatabaseImpl implements DatabaseApi {
 	public void deletePerson(Person person) {
 		logger.deletePerson(person);
 		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> nodes = indexPerson.get(PERSON.toString(), person);
+			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
 			while (personNode.getRelationships().iterator().hasNext()) {
 				personNode.getRelationships().iterator().next().delete();

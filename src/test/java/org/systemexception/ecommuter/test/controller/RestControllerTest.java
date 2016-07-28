@@ -84,6 +84,20 @@ public class RestControllerTest {
 	}
 
 	@Test
+	public void update_person() throws Exception {
+		Person person = PersonJsonParser.fromString(getPerson());
+		Person updatedPerson = new Person(person.getId(), "UPDATED_NAME", "UPDATED_SURNAME", person.getHomeAddress(),
+				person.getWorkAddress());
+
+		when(databaseApi.updatePerson(person)).thenReturn(updatedPerson);
+		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON +
+				Endpoints.PERSON_UPDATE).contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(databaseApi).updatePerson(person);
+	}
+
+	@Test
 	public void delete_person() throws Exception {
 		Person person = PersonJsonParser.fromString(getPerson());
 		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)

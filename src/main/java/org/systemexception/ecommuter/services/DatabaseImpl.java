@@ -7,6 +7,8 @@ import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
+import org.neo4j.graphdb.schema.ConstraintCreator;
+import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.enums.CsvHeaders;
@@ -19,6 +21,7 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,12 +45,19 @@ public class DatabaseImpl implements DatabaseApi {
 
 	public DatabaseImpl(final String dbFolder) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
+		ConstraintCreator constraintCreator;
 		IndexManager indexManager = graphDb.index();
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
+			constraintCreator = graphDb.schema().constraintFor(Label.label(PERSON_ID.toString()))
+					.assertPropertyIsUnique(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
+			tx.success();
+		}
+		try (Transaction tx = graphDb.beginTx()) {
+			ConstraintDefinition constraintDefinition = constraintCreator.create();
 			tx.success();
 		}
 	}
@@ -86,6 +96,15 @@ public class DatabaseImpl implements DatabaseApi {
 				Node personNode = graphDb.createNode();
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				personNode.setProperty(PERSON_ID.toString(), person.getId());
+				try {
+					personNode.addLabel(Label.label(PERSON_ID.toString()));
+				} catch (org.neo4j.graphdb.ConstraintViolationException ex) {
+					String message = ex.getMessage();
+					tx.failure();
+					logger.addedNotPerson(person, message);
+					throw new InvalidParameterException();
+				}
+
 				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge
 				logger.addPersonRelation(person, homeAddress, LIVES_IN.toString());
@@ -97,7 +116,7 @@ public class DatabaseImpl implements DatabaseApi {
 				indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 				logger.addedPerson(person);
 			} else {
-				logger.addedNotPerson(person);
+				logger.addedNotPerson(person, "Node missing");
 				throw new TerritoriesException("Non existing territory");
 			}
 			tx.success();

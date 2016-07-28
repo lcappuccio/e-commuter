@@ -72,6 +72,15 @@ public class RestController {
 		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_UPDATE, method = RequestMethod.PUT,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) throws TerritoriesException {
+
+		logger.updatePerson(person);
+		Person personUpdated = databaseService.updatePerson(person);
+		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_DELETE, method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {

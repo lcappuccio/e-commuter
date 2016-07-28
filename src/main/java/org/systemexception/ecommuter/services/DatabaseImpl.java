@@ -16,7 +16,6 @@ import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.CsvParser;
 import org.systemexception.ecommuter.pojo.LoggerService;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -112,9 +111,14 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Person updatePerson(Person person) {
 		logger.updatePerson(person);
+		try (Transaction tx = graphDb.beginTx()) {
+			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
+			Node personNode = nodes.getSingle();
+			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
+			tx.success();
+		}
 		logger.updatedPerson(person);
-		// TODO LC implement
-		throw new NotImplementedException();
+		return person;
 	}
 
 	/**

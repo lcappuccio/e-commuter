@@ -76,9 +76,7 @@ public class DatabaseImplTest {
 
 	@Test(expected = InvalidParameterException.class)
 	public void add_person_twice() throws TerritoriesException {
-		Person personAdded = sut.addPerson(this.person);
-
-		assertEquals(person, personAdded);
+		sut.addPerson(person);
 	}
 
 	@Test

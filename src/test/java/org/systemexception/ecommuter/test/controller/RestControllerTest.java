@@ -133,7 +133,6 @@ public class RestControllerTest {
 	@Test
 	public void nearby_persons() throws Exception {
 		Person person = mock(Person.class);
-		// TODO LC create list of person mocks to be returned by these two guys
 		Persons personsLiving = mock(Persons.class);
 		Persons personsWorking = mock(Persons.class);
 		double distance = 0.5;

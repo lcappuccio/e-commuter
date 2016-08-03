@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.neo4j.graphdb.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -25,12 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.InvalidParameterException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author leo
@@ -74,7 +72,7 @@ public class DatabaseImplTest {
 		sut.deletePerson(person);
 	}
 
-	@Test(expected = InvalidParameterException.class)
+	@Test(expected = ConstraintViolationException.class)
 	public void add_person_twice() throws TerritoriesException {
 		sut.addPerson(person);
 	}

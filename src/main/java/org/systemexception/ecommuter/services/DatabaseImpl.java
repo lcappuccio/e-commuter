@@ -21,7 +21,6 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -109,7 +108,7 @@ public class DatabaseImpl implements DatabaseApi {
 					logger.error("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants
 							.LOG_ITEM_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
 							person.getSurname() + Constants.LOG_ITEM_SEPARATOR + message);
-					throw new InvalidParameterException();
+					throw new ConstraintViolationException(message);
 				}
 				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge

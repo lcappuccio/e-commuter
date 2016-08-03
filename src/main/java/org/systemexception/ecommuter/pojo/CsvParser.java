@@ -3,7 +3,9 @@ package org.systemexception.ecommuter.pojo;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.systemexception.ecommuter.api.LoggerApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 
@@ -20,7 +22,7 @@ import java.util.List;
  */
 public class CsvParser {
 
-	private final LoggerApi logger = LoggerService.getFor(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private List<CSVRecord> records;
 
 	public CsvParser(File csvFile) throws CsvParserException {
@@ -36,10 +38,11 @@ public class CsvParser {
 			Reader csvReader = new InputStreamReader(csvUrl.openStream(), "UTF-8");
 			CSVParser csvParser = new CSVParser(csvReader, csvFormat);
 			records = csvParser.getRecords();
-			logger.csvLoaded(csvFile);
+			logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {
 			String errorMessage = ex.getMessage();
-			logger.csvLoadError(csvFile, errorMessage);
+			logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName() +
+					Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new CsvParserException(errorMessage);
 		}
 	}

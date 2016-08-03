@@ -111,18 +111,11 @@ public class DatabaseImpl implements DatabaseApi {
 							person.getSurname() + Constants.LOG_ITEM_SEPARATOR + message);
 					throw new InvalidParameterException();
 				}
-
 				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge
-				logger.info("addPersonRelation" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						LIVES_IN.toString() + Constants.LOG_ITEM_SEPARATOR + homeAddress.getFormattedAddress());
 				Relationship livesIn = personNode.createRelationshipTo(homeNode.get(), livesInRelation);
 				indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
 				// Add WORKS_IN edge
-				logger.info("addPersonRelation" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						WORKS_IN.toString() + Constants.LOG_ITEM_SEPARATOR + workAddress.getFormattedAddress());
 				Relationship worksIn = personNode.createRelationshipTo(workNode.get(), worksInRelation);
 				indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 				logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +

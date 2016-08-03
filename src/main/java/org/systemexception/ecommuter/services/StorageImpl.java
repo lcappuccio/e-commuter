@@ -1,9 +1,10 @@
 package org.systemexception.ecommuter.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.api.LoggerApi;
 import org.systemexception.ecommuter.api.StorageApi;
-import org.systemexception.ecommuter.pojo.LoggerService;
+import org.systemexception.ecommuter.enums.Constants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +22,7 @@ import java.util.Locale;
  */
 public class StorageImpl implements StorageApi {
 
-	private final static LoggerApi logger = LoggerService.getFor(StorageImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(StorageImpl.class);
 	private final String storageFolder;
 
 	public StorageImpl(final String storageFolder) throws IOException {
@@ -38,7 +39,7 @@ public class StorageImpl implements StorageApi {
 		FileOutputStream fos = new FileOutputStream(dataFile);
 		fos.write(receivedFile.getBytes());
 		fos.close();
-		logger.saveFile(receivedFile);
+		logger.info("saveFile" + Constants.LOG_OBJECT_SEPARATOR + receivedFile.getName());
 		return dataFile;
 	}
 
@@ -50,12 +51,12 @@ public class StorageImpl implements StorageApi {
 				new File(folderToRemove + File.separator + file).delete();
 			}
 		}
-		logger.deleteFile(toRemove);
+		logger.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + toRemove.getName());
 		boolean deleted = toRemove.delete();
 		if (deleted) {
-			logger.removeFolderOk(folderToRemove);
+			logger.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderToRemove);
 		} else {
-			logger.removeFolderKo(folderToRemove);
+			logger.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderToRemove);
 		}
 	}
 
@@ -63,7 +64,7 @@ public class StorageImpl implements StorageApi {
 		File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {
 			Files.createDirectory(storageFolderFile.toPath());
-			logger.createStorageFolder(storageFolderFile);
+			logger.info("createStorageFolder" + Constants.LOG_OBJECT_SEPARATOR + storageFolderFile.getName());
 		}
 	}
 
@@ -74,7 +75,8 @@ public class StorageImpl implements StorageApi {
 			long fileTime = attrs.creationTime().toMillis();
 			String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
 			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
-			logger.historiFyFile(file, historifiedFilename);
+			logger.info("historiFyFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName() +
+					Constants.LOG_ITEM_SEPARATOR + historifiedFilename);
 		}
 	}
 

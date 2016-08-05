@@ -19,6 +19,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.StorageImpl;
+import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -38,7 +39,12 @@ import static org.junit.Assert.assertTrue;
 @TestPropertySource(locations = "classpath:application.properties")
 public class End2End {
 
-	private final static String DATABASE_FOLDER = "target" + File.separator + "test_database";
+	public static final String TARGET_FOLER = "target", TEST_DATABASE_FOLDER = "test_database";
+	private final static String DATABASE_FOLDER = TARGET_FOLER + File.separator + TEST_DATABASE_FOLDER;
+	public static final String PERSON_NAME_A = "TEST_NAME_A", PERSON_SURNAME_A = "TEST_SURNAME_A",
+			PERSON_NAME_B = "TEST_NAME_B", PERSON_SURNAME_B = "TEST_SURNAME_B",
+			PERSON_NAME_C = "TEST_NAME_C", PERSON_SURNAME_C = "TEST_SURNAME_AC";
+	public static final String LOCATION_LUINO_POSTCODE = "21016";
 	@Autowired
 	private DatabaseApi databaseApi;
 	@Autowired
@@ -51,7 +57,7 @@ public class End2End {
 
 	@Before
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
-		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
+		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		File myFile = new File(myTestURL.toURI());
 		databaseApi.addTerritories(myFile);
 	}
@@ -67,8 +73,8 @@ public class End2End {
 		Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
 		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);
 		personA.setId(UUID.randomUUID().toString());
-		personA.setName("TEST_NAME_A");
-		personA.setSurname("TEST_SURNAME_A");
+		personA.setName(PERSON_NAME_A);
+		personA.setSurname(PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
 		personA.setWorkAddress(addressWorkA);
 
@@ -76,8 +82,8 @@ public class End2End {
 		Address addressWorkB = locationService.geoToAddress(46.002834, 8.742499);
 		Address addressHomeB = locationService.geoToAddress(45.999950, 8.740594);
 		personB.setId(UUID.randomUUID().toString());
-		personB.setName("TEST_NAME_B");
-		personB.setSurname("TEST_SURNAME_B");
+		personB.setName(PERSON_NAME_B);
+		personB.setSurname(PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
 		personB.setWorkAddress(addressWorkB);
 
@@ -85,8 +91,8 @@ public class End2End {
 		Address addressWorkC = locationService.geoToAddress(45.996015, 8.732703);
 		Address addressHomeC = locationService.geoToAddress(45.999659, 8.737842);
 		personC.setId(UUID.randomUUID().toString());
-		personC.setName("TEST_NAME_C");
-		personC.setSurname("TEST_SURNAME_C");
+		personC.setName(PERSON_NAME_C);
+		personC.setSurname(PERSON_SURNAME_C);
 		personC.setHomeAddress(addressHomeC);
 		personC.setWorkAddress(addressWorkC);
 
@@ -95,8 +101,8 @@ public class End2End {
 		databaseApi.addPerson(personC);
 
 		Persons nearbyPersons =
-				locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn("21016"), 0.5);
-
+				locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(LOCATION_LUINO_POSTCODE),
+						0.5);
 		assertTrue(nearbyPersons.getPersons().size() == 1);
 		assertTrue(nearbyPersons.getPersons().get(0).equals(personB));
 	}

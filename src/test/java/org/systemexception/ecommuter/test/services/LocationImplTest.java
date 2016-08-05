@@ -15,6 +15,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.LocationImpl;
+import org.systemexception.ecommuter.test.End2End;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +30,11 @@ import static org.junit.Assert.*;
 public class LocationImplTest {
 
 	private final LocationApi sut = new LocationImpl();
+	private final String locationItaly = "Italy";
+	private final String locationLombardia = "Lombardia";
+	private final String locationMilanoRegion = "Città Metropolitana di Milano";
+	private final String locationMilano = "Milano";
+	private final String locationPiazzaDuomo = "Piazza del Duomo";
 
 	@Test
 	public void address_to_geo() throws LocationException {
@@ -40,12 +46,12 @@ public class LocationImplTest {
 		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.4641776, geoFromAddress.getLatitude(), 0);
 		assertEquals(9.1899885, geoFromAddress.getLongitude(), 0);
-		assertEquals("Italy", geoFromAddress.getCountry());
-		assertEquals("Lombardia", geoFromAddress.getAdministrativeAreaLevel1());
-		assertEquals("Città Metropolitana di Milano", geoFromAddress.getAdministrativeAreaLevel2());
-		assertEquals("Milano", geoFromAddress.getLocality());
-		assertEquals("Italy", geoFromAddress.getCountry());
-		assertEquals("Piazza del Duomo", geoFromAddress.getRoute());
+		assertEquals(locationItaly, geoFromAddress.getCountry());
+		assertEquals(locationLombardia, geoFromAddress.getAdministrativeAreaLevel1());
+		assertEquals(locationMilanoRegion, geoFromAddress.getAdministrativeAreaLevel2());
+		assertEquals(locationMilano, geoFromAddress.getLocality());
+		assertEquals(locationItaly, geoFromAddress.getCountry());
+		assertEquals(locationPiazzaDuomo, geoFromAddress.getRoute());
 	}
 
 	@Test
@@ -68,12 +74,12 @@ public class LocationImplTest {
 		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
 		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
-		assertEquals("Italy", addressFromGeo.getCountry());
-		assertEquals("Lombardia", addressFromGeo.getAdministrativeAreaLevel1());
-		assertEquals("Città Metropolitana di Milano", addressFromGeo.getAdministrativeAreaLevel2());
-		assertEquals("Milano", addressFromGeo.getLocality());
-		assertEquals("Italy", addressFromGeo.getCountry());
-		assertEquals("Piazza del Duomo", addressFromGeo.getRoute());
+		assertEquals(locationItaly, addressFromGeo.getCountry());
+		assertEquals(locationLombardia, addressFromGeo.getAdministrativeAreaLevel1());
+		assertEquals(locationMilanoRegion, addressFromGeo.getAdministrativeAreaLevel2());
+		assertEquals(locationMilano, addressFromGeo.getLocality());
+		assertEquals(locationItaly, addressFromGeo.getCountry());
+		assertEquals(locationPiazzaDuomo, addressFromGeo.getRoute());
 		assertEquals("20122", addressFromGeo.getPostalCode());
 	}
 
@@ -110,26 +116,26 @@ public class LocationImplTest {
 	public void find_nearby_persons() throws LocationException, CsvParserException,
 			TerritoriesException {
 		Person personA = new Person();
-		Address addressWorkA = getAddress("21016", 46.003509, 8.742917);
-		Address addressHomeA = getAddress("21016", 46.000490, 8.738347);
-		personA.setName("TEST_NAME_A");
-		personA.setSurname("TEST_SURNAME_A");
+		Address addressWorkA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);
+		Address addressHomeA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.000490, 8.738347);
+		personA.setName(End2End.PERSON_NAME_A);
+		personA.setSurname(End2End.PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
 		personA.setWorkAddress(addressWorkA);
 
 		Person personB = new Person();
-		Address addressWorkB = getAddress("21016", 46.002834, 8.742499);
-		Address addressHomeB = getAddress("21016", 45.999950, 8.740594);
-		personB.setName("TEST_NAME_B");
-		personB.setSurname("TEST_SURNAME_B");
+		Address addressWorkB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.002834, 8.742499);
+		Address addressHomeB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999950, 8.740594);
+		personB.setName(End2End.PERSON_NAME_B);
+		personB.setSurname(End2End.PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
 		personB.setWorkAddress(addressWorkB);
 
 		Person personC = new Person();
-		Address addressWorkC = getAddress("21016", 45.996015, 8.732703);
-		Address addressHomeC = getAddress("21016", 45.999659, 8.737842);
-		personC.setName("TEST_NAME_C");
-		personC.setSurname("TEST_SURNAME_C");
+		Address addressWorkC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.996015, 8.732703);
+		Address addressHomeC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999659, 8.737842);
+		personC.setName(End2End.PERSON_NAME_C);
+		personC.setSurname(End2End.PERSON_SURNAME_C);
 		personC.setHomeAddress(addressHomeC);
 		personC.setWorkAddress(addressWorkC);
 

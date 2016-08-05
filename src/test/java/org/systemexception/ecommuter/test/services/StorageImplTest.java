@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.services.StorageImpl;
+import org.systemexception.ecommuter.test.End2End;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,7 @@ import static org.systemexception.ecommuter.services.StorageImpl.removeFolder;
  */
 public class StorageImplTest {
 
-	private final static String STORAGE_FOLDER = "target" + File.separator + "test_storage";
+	private final static String STORAGE_FOLDER = End2End.TARGET_FOLER + File.separator + "test_storage";
 	private StorageApi sut;
 	private MultipartFile multipartFile;
 
@@ -80,7 +81,7 @@ public class StorageImplTest {
 
 	private String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("yyyyMMddHHmmss");
+		Format format = new SimpleDateFormat(StorageImpl.DATETIME_FORMAT);
 		return format.format(date);
 	}
 }

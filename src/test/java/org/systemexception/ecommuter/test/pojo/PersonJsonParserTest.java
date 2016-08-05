@@ -17,6 +17,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.test.End2End;
 
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class PersonJsonParserTest {
 	public void setSut() throws LocationException {
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		personId = UUID.randomUUID().toString();
-		person = new Person(personId, "TEST_NAME", "TEST_SURNAME", addressFromGeo ,addressFromGeo);
+		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_A, addressFromGeo ,addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 	}
 
@@ -67,7 +68,7 @@ public class PersonJsonParserTest {
 	}
 
 	public String getPersonJson() {
-		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME\",\"surname\":\"TEST_SURNAME\"," +
+		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"6\"," +
 				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"Città " +
 				"Metropolitana di Milano\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\"," +

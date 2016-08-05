@@ -24,6 +24,7 @@ public class StorageImpl implements StorageApi {
 
 	private final static Logger logger = LoggerFactory.getLogger(StorageImpl.class);
 	private final String storageFolder;
+	public final static String DATETIME_FORMAT = "yyyyMMddHHmmss";;
 
 	public StorageImpl(final String storageFolder) throws IOException {
 		this.storageFolder = storageFolder;
@@ -82,8 +83,7 @@ public class StorageImpl implements StorageApi {
 
 	private String convertTime(long time) {
 		Date date = new Date(time);
-
-		Format format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+		Format format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		return format.format(date);
 	}
 }

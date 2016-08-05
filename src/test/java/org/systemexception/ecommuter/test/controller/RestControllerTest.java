@@ -27,6 +27,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.test.End2End;
 
 import java.io.File;
 import java.util.UUID;
@@ -139,8 +140,8 @@ public class RestControllerTest {
 
 		when(person.getHomeAddress()).thenReturn(mock(Address.class));
 		when(person.getWorkAddress()).thenReturn(mock(Address.class));
-		when(person.getHomeAddress().getPostalCode()).thenReturn("21016");
-		when(person.getWorkAddress().getPostalCode()).thenReturn("21016");
+		when(person.getHomeAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(person.getWorkAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
 		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
 		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
 

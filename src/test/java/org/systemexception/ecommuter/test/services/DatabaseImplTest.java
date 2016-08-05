@@ -21,6 +21,8 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.services.StorageImpl;
+import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,14 +42,15 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:application.properties")
 public class DatabaseImplTest {
 
-	private final static String DATABASE_FOLDER = "target" + File.separator + "test_database";
+	private final static String DATABASE_FOLDER = End2End.TARGET_FOLER + File.separator + End2End.TEST_DATABASE_FOLDER;
 	@Autowired
 	private DatabaseApi sut;
 	@Autowired
 	private LocationApi locationService;
 	private Person person;
-	private String personId;
 	private Address addressFromGeo;
+	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
+	private String personId;
 
 	@BeforeClass
 	public static void setSut() throws IOException {
@@ -56,12 +59,12 @@ public class DatabaseImplTest {
 
 	@Before
 	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
-		URL myTestURL = ClassLoader.getSystemResource("it_data_SMALL.csv");
+		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);
 		addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		personId = UUID.randomUUID().toString();
-		person = new Person(personId, "TEST_NAME", "TEST_SURNAME", addressFromGeo, addressFromGeo);
+		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_C, addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
 		sut.addPerson(person);
@@ -114,8 +117,8 @@ public class DatabaseImplTest {
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
-		personBuffer.setName("UpdatedName");
-		personBuffer.setSurname("UpdatedSurname");
+		personBuffer.setName(updatedName);
+		personBuffer.setSurname(updatedSurname);
 		Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
@@ -129,8 +132,8 @@ public class DatabaseImplTest {
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
 		personBuffer.setId("BAD_ID");
-		personBuffer.setName("UpdatedName");
-		personBuffer.setSurname("UpdatedSurname");
+		personBuffer.setName(updatedName);
+		personBuffer.setSurname(updatedSurname);
 		Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);

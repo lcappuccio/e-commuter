@@ -3,8 +3,10 @@ package org.systemexception.ecommuter.test.pojo;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.pojo.CsvParser;
+import org.systemexception.ecommuter.test.End2End;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -21,12 +23,12 @@ import static org.junit.Assert.assertTrue;
 public class CsvParserTest {
 
 	private CsvParser sut;
-	private static final String testFile = "it_data_SMALL.csv";
+	public static final String DATABASE_TEST_CSV_FILE = "it_data_SMALL.csv";
 	private static File resourceFile;
 
 	@BeforeClass
 	public static void setUp() throws URISyntaxException {
-		URL myTestURL = ClassLoader.getSystemResource(testFile);
+		URL myTestURL = ClassLoader.getSystemResource(DATABASE_TEST_CSV_FILE);
 		resourceFile = new File(myTestURL.toURI());
 	}
 
@@ -51,10 +53,10 @@ public class CsvParserTest {
 		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
 		List<CSVRecord> records = sut.readCsvContents();
 		for (CSVRecord territory : records) {
-			if (territory.get("PLACE_NAME").toLowerCase(Locale.getDefault()).equals("luino")) {
-				assertTrue(territory.get("POSTAL_CODE").equals("21016"));
-				assertTrue(territory.get("LATITUDE").equals("46.0019"));
-				assertTrue(territory.get("LONGITUDE").equals("8.7451"));
+			if (territory.get(CsvHeaders.PLACE_NAME.toString()).toLowerCase(Locale.getDefault()).equals("luino")) {
+				assertTrue(territory.get(CsvHeaders.POSTAL_CODE.toString()).equals(End2End.LOCATION_LUINO_POSTCODE));
+				assertTrue(territory.get(CsvHeaders.LATITUDE.toString()).equals("46.0019"));
+				assertTrue(territory.get(CsvHeaders.LONGITUDE.toString()).equals("8.7451"));
 			}
 		}
 	}

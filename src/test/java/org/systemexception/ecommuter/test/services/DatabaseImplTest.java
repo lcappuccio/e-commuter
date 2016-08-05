@@ -50,7 +50,6 @@ public class DatabaseImplTest {
 	private Person person;
 	private Address addressFromGeo;
 	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
-	private String personId;
 
 	@BeforeClass
 	public static void setSut() throws IOException {
@@ -63,7 +62,7 @@ public class DatabaseImplTest {
 		File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);
 		addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
-		personId = UUID.randomUUID().toString();
+		String personId = UUID.randomUUID().toString();
 		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_C, addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);

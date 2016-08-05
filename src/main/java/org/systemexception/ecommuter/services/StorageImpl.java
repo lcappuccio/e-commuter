@@ -48,7 +48,7 @@ public class StorageImpl implements StorageApi {
 		File toRemove = new File(folderToRemove);
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
-			for (String file : files) {
+			for (String file : files != null ? files : new String[0]) {
 				new File(folderToRemove + File.separator + file).delete();
 			}
 		}

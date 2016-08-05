@@ -102,11 +102,6 @@ public class LocationImpl implements LocationApi {
 						"distance home " + distanceBetweenHome + Constants.LOG_ITEM_SEPARATOR +
 						"distance work " + distanceBetweenWork);
 				nearbyPersons.addPerson(innerPerson);
-			} else {
-				logger.info("excludedNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						"distance home " + distanceBetweenHome + Constants.LOG_ITEM_SEPARATOR +
-						"distance work " + distanceBetweenWork);
 			}
 		}
 		return nearbyPersons;

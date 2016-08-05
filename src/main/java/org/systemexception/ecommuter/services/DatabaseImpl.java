@@ -103,12 +103,12 @@ public class DatabaseImpl implements DatabaseApi {
 				try {
 					personNode.addLabel(Label.label(PERSON_ID.toString()));
 				} catch (ConstraintViolationException ex) {
-					String message = ex.getMessage();
+					String errorMessage = ex.getMessage();
 					tx.failure();
-					logger.error("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants
-							.LOG_ITEM_SEPARATOR + person.getName() + Constants.LOG_ITEM_SEPARATOR +
-							person.getSurname() + Constants.LOG_ITEM_SEPARATOR + message);
-					throw new ConstraintViolationException(message);
+					logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + person.getName() +
+							Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
+							errorMessage);
+					throw new ConstraintViolationException(errorMessage);
 				}
 				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
 				// Add LIVES_IN edge

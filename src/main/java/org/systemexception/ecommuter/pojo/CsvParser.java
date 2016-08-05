@@ -41,8 +41,7 @@ public class CsvParser {
 			logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {
 			String errorMessage = ex.getMessage();
-			logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName() +
-					Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			logger.error(csvFile.getName() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new CsvParserException(errorMessage);
 		}
 	}

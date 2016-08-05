@@ -37,12 +37,12 @@ public class LocationImpl implements LocationApi {
 					longitude)).await();
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
-			logger.error("geoToAddressError" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR
-					+ longitude);
+			logger.error("geoToAddressError" + latitude + Constants.LOG_ITEM_SEPARATOR + longitude +
+					Constants.LOG_OBJECT_SEPARATOR + errorMessage);
 			throw new LocationException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {
-			logger.info("geoToAddressNoResult:" + Constants.LOG_OBJECT_SEPARATOR + latitude +
+			logger.info("geoToAddressNoResult" + Constants.LOG_OBJECT_SEPARATOR + latitude +
 					Constants.LOG_ITEM_SEPARATOR + longitude);
 			return new Address();
 		}
@@ -59,7 +59,7 @@ public class LocationImpl implements LocationApi {
 			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
-			logger.info("addressToGeoError" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
+			logger.error("addressToGeoError" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 			throw new LocationException(errorMessage);
 		}
 		if (geocodingResults.length < 1) {

@@ -51,6 +51,7 @@ public class RestControllerTest {
 	@InjectMocks
 	private RestController restController;
 	private MockMvc sut;
+	public final static String TEXT_PLAIN_FILE = "text/plain";
 
 	@Before
 	public void setSut() {
@@ -65,7 +66,7 @@ public class RestControllerTest {
 	@Test
 	public void add_territories() throws Exception {
 		MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
-				UUID.randomUUID().toString(), "text/plain", "some data".getBytes());
+				UUID.randomUUID().toString(), TEXT_PLAIN_FILE, "some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		File receivedFile = storageApi.saveFile(dataFile);

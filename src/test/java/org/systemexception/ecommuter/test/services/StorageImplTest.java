@@ -10,6 +10,7 @@ import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.services.StorageImpl;
 import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.test.controller.RestControllerTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class StorageImplTest {
 	public void setUp() throws IOException, URISyntaxException {
 		sut = new StorageImpl(STORAGE_FOLDER);
 		multipartFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD, UUID.randomUUID().toString(),
-				"text/plain", "some data" .getBytes());
+				RestControllerTest.TEXT_PLAIN_FILE, "some data" .getBytes());
 	}
 
 	@Test

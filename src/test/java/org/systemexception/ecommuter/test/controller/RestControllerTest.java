@@ -142,17 +142,23 @@ public class RestControllerTest {
 		when(person.getHomeAddress()).thenReturn(mock(Address.class));
 		when(person.getWorkAddress()).thenReturn(mock(Address.class));
 		when(person.getHomeAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(person.getHomeAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
 		when(person.getWorkAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
-		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
-		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
+		when(person.getWorkAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
+		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
+		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getCountry(),
+				person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
 
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
 				.param(Endpoints.DISTANCE, String.valueOf(distance))
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
-		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getPostalCode());
-		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getPostalCode());
+		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode());
+		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getCountry(),
+				person.getWorkAddress().getPostalCode());
 		// Testing only interaction
 		verify(locationApi).findNearbyPersons(any(), any(), anyDouble());
 	}

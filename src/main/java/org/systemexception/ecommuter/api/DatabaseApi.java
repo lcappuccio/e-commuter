@@ -46,11 +46,11 @@ public interface DatabaseApi {
 	/**
 	 * Finds all persons living in your postal code
 	 */
-	Persons findPersonsLivesIn(String postalCode);
+	Persons findPersonsLivesIn(String country, String postalCode);
 
 	/**
 	 * Finds all persons working in your postal code
 	 */
-	Persons findPersonsWorksIn(String postalCode);
+	Persons findPersonsWorksIn(String country, String postalCode);
 
 }

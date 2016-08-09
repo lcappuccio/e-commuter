@@ -78,7 +78,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_lives_in() {
-		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getPostalCode());
+		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().get(0), person);
@@ -86,7 +87,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_works_in() {
-		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getPostalCode());
+		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().get(0), person);
@@ -94,7 +96,7 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_nonexisting_node() {
-		Persons nullPersons = sut.findPersonsLivesIn("XXXX");
+		Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
 
 		assertTrue(0 == nullPersons.getPersons().size());
 	}
@@ -109,7 +111,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void update_person() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getPostalCode()).getPersons().get(0);
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
+				addressFromGeo.getPostalCode()).getPersons().get(0);
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
@@ -123,7 +126,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void update_person_bad_id() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getPostalCode()).getPersons().get(0);
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
+				addressFromGeo.getPostalCode()).getPersons().get(0);
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());

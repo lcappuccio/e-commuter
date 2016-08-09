@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -28,21 +27,13 @@ public class LocationImpl implements LocationApi {
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
-	public Address geoToAddress(final double latitude, final double longitude) throws LocationException {
+	public Address geoToAddress(final double latitude, final double longitude) throws Exception {
 		logger.info("geoToAddress" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR +
 				longitude);
 		GeocodingResult[] geocodingResults;
-		try {
-			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
-					longitude)).await();
-		} catch (Exception e) {
-			String errorMessage = e.getMessage();
-			logger.error("geoToAddressError" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR
-					+ longitude);
-			throw new LocationException(errorMessage);
-		}
+		geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude, longitude)).await();
 		if (geocodingResults.length < 1) {
-			logger.info("geoToAddressNoResult:" + Constants.LOG_OBJECT_SEPARATOR + latitude +
+			logger.info("geoToAddressNoResult" + Constants.LOG_OBJECT_SEPARATOR + latitude +
 					Constants.LOG_ITEM_SEPARATOR + longitude);
 			return new Address();
 		}
@@ -52,16 +43,10 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(final String stringAddress) throws LocationException {
+	public Address addressToGeo(final String stringAddress) throws Exception {
 		logger.info("addressToGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 		GeocodingResult[] geocodingResults;
-		try {
-			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
-		} catch (Exception e) {
-			String errorMessage = e.getMessage();
-			logger.info("addressToGeoError" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
-			throw new LocationException(errorMessage);
-		}
+		geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		if (geocodingResults.length < 1) {
 			logger.info("addressToGeoNoGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 			return new Address();
@@ -83,30 +68,19 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		logger.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
-				person.getWorkAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
+		logger.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+				Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
 		Persons nearbyPersons = new Persons();
 		if (persons.getPersons().contains(person)) {
 			persons.getPersons().remove(person);
-			logger.info("findNearbyPersonsRemoveSelf" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-					Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 		}
 		for (Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
 			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius) {
-				logger.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						"distance home " + distanceBetweenHome + Constants.LOG_ITEM_SEPARATOR +
-						"distance work " + distanceBetweenWork);
+				logger.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+						Constants.LOG_ITEM_SEPARATOR + innerPerson.getId());
 				nearbyPersons.addPerson(innerPerson);
-			} else {
-				logger.info("excludedNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						"distance home " + distanceBetweenHome + Constants.LOG_ITEM_SEPARATOR +
-						"distance work " + distanceBetweenWork);
 			}
 		}
 		return nearbyPersons;
@@ -121,7 +95,7 @@ public class LocationImpl implements LocationApi {
 		for (AddressComponent addressComponent : geocodingResult.addressComponents) {
 			for (AddressComponentType addressComponentType : addressComponent.types) {
 				if (addressComponentType.equals(AddressComponentType.COUNTRY)) {
-					address.setCountry(addressComponent.longName);
+					address.setCountry(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.POSTAL_CODE)) {
 					address.setPostalCode(addressComponent.longName);

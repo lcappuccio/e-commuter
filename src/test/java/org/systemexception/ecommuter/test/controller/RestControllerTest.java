@@ -27,6 +27,7 @@ import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.test.End2End;
 
 import java.io.File;
 import java.util.UUID;
@@ -50,6 +51,7 @@ public class RestControllerTest {
 	@InjectMocks
 	private RestController restController;
 	private MockMvc sut;
+	public final static String TEXT_PLAIN_FILE = "text/plain";
 
 	@Before
 	public void setSut() {
@@ -64,7 +66,7 @@ public class RestControllerTest {
 	@Test
 	public void add_territories() throws Exception {
 		MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
-				UUID.randomUUID().toString(), "text/plain", "some data".getBytes());
+				UUID.randomUUID().toString(), TEXT_PLAIN_FILE, "some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		File receivedFile = storageApi.saveFile(dataFile);
@@ -139,18 +141,24 @@ public class RestControllerTest {
 
 		when(person.getHomeAddress()).thenReturn(mock(Address.class));
 		when(person.getWorkAddress()).thenReturn(mock(Address.class));
-		when(person.getHomeAddress().getPostalCode()).thenReturn("21016");
-		when(person.getWorkAddress().getPostalCode()).thenReturn("21016");
-		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
-		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
+		when(person.getHomeAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(person.getHomeAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
+		when(person.getWorkAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(person.getWorkAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
+		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
+		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getCountry(),
+				person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
 
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
 				.param(Endpoints.DISTANCE, String.valueOf(distance))
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
-		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getPostalCode());
-		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getPostalCode());
+		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getCountry(),
+				person.getHomeAddress().getPostalCode());
+		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getCountry(),
+				person.getWorkAddress().getPostalCode());
 		// Testing only interaction
 		verify(locationApi).findNearbyPersons(any(), any(), anyDouble());
 	}
@@ -159,11 +167,11 @@ public class RestControllerTest {
 		return "{\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"streetNumber\":\"37\"," +
 				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia" +
 				" " +
-				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\"," +
+				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," +
 				"\"postalCode\":\"21016\",\"formattedAddress\":\"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\"," +
 				"\"latitude\":46.00051029999999,\"longitude\":8.7385149},\"workAddress\":{\"streetNumber\":\"9A\"," +
 				"\"route\":\"Piazza Libertà\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia di " +
-				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\",\"postalCode\":\"21016\"," +
+				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\",\"postalCode\":\"21016\"," +
 				"\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\"latitude\":46.0035187," +
 				"\"longitude\":8.7429054}}";
 	}
@@ -171,7 +179,7 @@ public class RestControllerTest {
 	private String getAddress() {
 		return "{\"streetNumber\":\"9A\",\"route\":\"Piazza Libertà\",\"locality\":\"Luino\"," +
 				"\"administrativeAreaLevel2\":\"Provincia di Varese\",\"administrativeAreaLevel1\":\"Lombardia\"," +
-				"\"country\":\"Italy\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 " +
+				"\"country\":\"IT\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 " +
 				"Luino" +
 				" VA, Italy\",\"latitude\":46.0035187,\"longitude\":8.7429054}";
 	}

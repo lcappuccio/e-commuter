@@ -109,6 +109,13 @@ public class DatabaseImplTest {
 		sut.addPerson(person);
 	}
 
+	@Test(expected = TerritoriesException.class)
+	public void add_person_bad_country_good_postalcode() throws TerritoriesException {
+		Address missingAddress = person.getHomeAddress();
+		missingAddress.setCountry("XXX");
+		sut.addPerson(person);
+	}
+
 	@Test
 	public void update_person() {
 		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),

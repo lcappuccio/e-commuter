@@ -8,8 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -37,7 +35,7 @@ public class LocationImplTest {
 	private final String locationPiazzaDuomo = "Piazza del Duomo";
 
 	@Test
-	public void address_to_geo() throws LocationException {
+	public void address_to_geo() throws Exception {
 		String stringAddress = "Piazza del Duomo Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -55,7 +53,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void address_to_geo_empty() throws LocationException {
+	public void address_to_geo_empty() throws Exception {
 		String stringAddress = "A place that really does not exist";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -67,7 +65,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void geo_to_address() throws LocationException {
+	public void geo_to_address() throws Exception {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
@@ -84,7 +82,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void geo_to_address_empty() throws LocationException {
+	public void geo_to_address_empty() throws Exception {
 		Address addressFromGeo = sut.geoToAddress(0, 0);
 
 		assertNull(addressFromGeo.getStreetNumber());
@@ -95,7 +93,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_addresses() throws LocationException {
+	public void calculate_distance_for_addresses() throws Exception {
 		Address addressLuino = sut.addressToGeo("Piazza Garibaldi, Luino, VA");
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
@@ -104,7 +102,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_coordinates() throws LocationException {
+	public void calculate_distance_for_coordinates() throws Exception {
 		Address addressLuino = sut.geoToAddress(46.0021, 8.7507);
 		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
@@ -113,7 +111,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void find_nearby_persons() throws LocationException, CsvParserException,
+	public void find_nearby_persons() throws Exception,
 			TerritoriesException {
 		Person personA = new Person();
 		Address addressWorkA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);

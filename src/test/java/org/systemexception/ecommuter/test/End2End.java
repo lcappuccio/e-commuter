@@ -13,7 +13,6 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -56,7 +55,7 @@ public class End2End {
 	}
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
+	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException {
 		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		File myFile = new File(myTestURL.toURI());
 		databaseApi.addTerritories(myFile);
@@ -68,7 +67,7 @@ public class End2End {
 	}
 
 	@Test
-	public void end2End() throws LocationException, TerritoriesException {
+	public void end2End() throws Exception {
 		Person personA = new Person();
 		Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
 		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);

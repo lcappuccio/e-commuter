@@ -12,11 +12,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.test.End2End;
 
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class PersonJsonParserTest {
 	private String personId;
 
 	@Before
-	public void setSut() throws LocationException {
+	public void setSut() throws Exception {
 		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		personId = UUID.randomUUID().toString();
 		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_A, addressFromGeo ,addressFromGeo);

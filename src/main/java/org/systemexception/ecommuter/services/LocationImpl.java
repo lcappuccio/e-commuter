@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -28,19 +27,11 @@ public class LocationImpl implements LocationApi {
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
-	public Address geoToAddress(final double latitude, final double longitude) throws LocationException {
+	public Address geoToAddress(final double latitude, final double longitude) throws Exception {
 		logger.info("geoToAddress" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR +
 				longitude);
 		GeocodingResult[] geocodingResults;
-		try {
-			geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude,
-					longitude)).await();
-		} catch (Exception e) {
-			String errorMessage = e.getMessage();
-			logger.error("geoToAddressError" + latitude + Constants.LOG_ITEM_SEPARATOR + longitude +
-					Constants.LOG_OBJECT_SEPARATOR + errorMessage);
-			throw new LocationException(errorMessage);
-		}
+		geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude, longitude)).await();
 		if (geocodingResults.length < 1) {
 			logger.info("geoToAddressNoResult" + Constants.LOG_OBJECT_SEPARATOR + latitude +
 					Constants.LOG_ITEM_SEPARATOR + longitude);
@@ -52,16 +43,10 @@ public class LocationImpl implements LocationApi {
 	}
 
 	@Override
-	public Address addressToGeo(final String stringAddress) throws LocationException {
+	public Address addressToGeo(final String stringAddress) throws Exception {
 		logger.info("addressToGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 		GeocodingResult[] geocodingResults;
-		try {
-			geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
-		} catch (Exception e) {
-			String errorMessage = e.getMessage();
-			logger.error("addressToGeoError" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
-			throw new LocationException(errorMessage);
-		}
+		geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		if (geocodingResults.length < 1) {
 			logger.info("addressToGeoNoGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 			return new Address();

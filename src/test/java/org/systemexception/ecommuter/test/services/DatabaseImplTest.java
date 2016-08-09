@@ -14,8 +14,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -26,7 +24,6 @@ import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
 
@@ -57,7 +54,7 @@ public class DatabaseImplTest {
 	}
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, LocationException {
+	public void setUp() throws Exception {
 		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);

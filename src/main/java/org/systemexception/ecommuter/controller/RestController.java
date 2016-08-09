@@ -16,7 +16,6 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.LocationException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -87,7 +86,7 @@ public class RestController {
 			params = {Endpoints.LATITUDE, Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> geoToAddress(
 			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
-			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws LocationException {
+			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws Exception {
 
 		Address address = locationService.geoToAddress(latitude, longitude);
 		return new ResponseEntity<>(address, HttpStatus.OK);
@@ -95,7 +94,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws LocationException {
+	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws Exception {
 
 		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		return new ResponseEntity<>(responseAddress, HttpStatus.OK);

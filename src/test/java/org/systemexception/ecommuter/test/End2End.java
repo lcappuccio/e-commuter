@@ -43,7 +43,7 @@ public class End2End {
 	public static final String PERSON_NAME_A = "TEST_NAME_A", PERSON_SURNAME_A = "TEST_SURNAME_A",
 			PERSON_NAME_B = "TEST_NAME_B", PERSON_SURNAME_B = "TEST_SURNAME_B",
 			PERSON_NAME_C = "TEST_NAME_C", PERSON_SURNAME_C = "TEST_SURNAME_AC";
-	public static final String LOCATION_LUINO_POSTCODE = "21016", LOCATION_ITALY = "Italy";
+	public static final String LOCATION_LUINO_POSTCODE = "21016", LOCATION_ITALY = "IT";
 	@Autowired
 	private DatabaseApi databaseApi;
 	@Autowired
@@ -99,9 +99,8 @@ public class End2End {
 		databaseApi.addPerson(personB);
 		databaseApi.addPerson(personC);
 
-		Persons nearbyPersons =
-				locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(LOCATION_ITALY,
-						LOCATION_LUINO_POSTCODE), 0.5);
+		Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
+				LOCATION_ITALY, LOCATION_LUINO_POSTCODE), 0.5);
 		assertTrue(nearbyPersons.getPersons().size() == 1);
 		assertTrue(nearbyPersons.getPersons().get(0).equals(personB));
 	}

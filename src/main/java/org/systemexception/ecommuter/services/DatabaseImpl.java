@@ -197,8 +197,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param postalCode
 	 * @return an optional with the node of the postal code
 	 */
-	// TODO LC This can return more than one node
-	// TODO LC Finish the integration with country
+	// TODO LC This could be more than one node!
 	private Optional<Node> getNodeByPostalCode(final String country, final String postalCode) {
 		logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
@@ -206,9 +205,18 @@ public class DatabaseImpl implements DatabaseApi {
 			Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
 			tx.success();
 			if (nodeIterator.hasNext()) {
-				return Optional.of(nodeIterator.next());
+				Node node = nodeIterator.next();
+				String nodeCountry = node.getProperty(COUNTRY.toString()).toString();
+				if (country.equals(nodeCountry)) {
+					return Optional.of(node);
+				} else {
+					logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country +
+							Constants.LOG_ITEM_SEPARATOR + postalCode + " does not exist");
+					return Optional.empty();
+				}
 			} else {
-				logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
+				logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country +
+						Constants.LOG_ITEM_SEPARATOR + postalCode + " node missing");
 				return Optional.empty();
 			}
 		}

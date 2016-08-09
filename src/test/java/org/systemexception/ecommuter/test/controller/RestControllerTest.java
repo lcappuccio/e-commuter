@@ -167,11 +167,11 @@ public class RestControllerTest {
 		return "{\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"streetNumber\":\"37\"," +
 				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia" +
 				" " +
-				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\"," +
+				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," +
 				"\"postalCode\":\"21016\",\"formattedAddress\":\"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\"," +
 				"\"latitude\":46.00051029999999,\"longitude\":8.7385149},\"workAddress\":{\"streetNumber\":\"9A\"," +
 				"\"route\":\"Piazza Libertà\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia di " +
-				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"Italy\",\"postalCode\":\"21016\"," +
+				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\",\"postalCode\":\"21016\"," +
 				"\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\"latitude\":46.0035187," +
 				"\"longitude\":8.7429054}}";
 	}
@@ -179,7 +179,7 @@ public class RestControllerTest {
 	private String getAddress() {
 		return "{\"streetNumber\":\"9A\",\"route\":\"Piazza Libertà\",\"locality\":\"Luino\"," +
 				"\"administrativeAreaLevel2\":\"Provincia di Varese\",\"administrativeAreaLevel1\":\"Lombardia\"," +
-				"\"country\":\"Italy\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 " +
+				"\"country\":\"IT\",\"postalCode\":\"21016\",\"formattedAddress\":\"Piazza Libertà, 9A, 21016 " +
 				"Luino" +
 				" VA, Italy\",\"latitude\":46.0035187,\"longitude\":8.7429054}";
 	}

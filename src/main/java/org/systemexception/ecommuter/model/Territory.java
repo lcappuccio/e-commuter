@@ -6,9 +6,10 @@ package org.systemexception.ecommuter.model;
  */
 public class Territory {
 
-	private final String postalCode, placeName;
+	private final String country, postalCode, placeName;
 
-	public Territory(String postalCode, String placeName) {
+	public Territory(String country, String postalCode, String placeName) {
+		this.country = country;
 		this.postalCode = postalCode;
 		this.placeName = placeName;
 	}
@@ -19,5 +20,9 @@ public class Territory {
 
 	public String getPlaceName() {
 		return placeName;
+	}
+
+	public String getCountry() {
+		return country;
 	}
 }

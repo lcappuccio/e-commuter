@@ -7,6 +7,7 @@ package org.systemexception.ecommuter.enums;
 public enum DatabaseConfiguration {
 
 	// TERRITORIES
+	COUNTRY("country"),
 	POSTAL_CODE("postalCode"),
 	PLACE_NAME("placeName"),
 	// PERSON

@@ -19,8 +19,8 @@ public class TerritoriesTest {
 
 	@Before
 	public void setUp() {
-		territoryA = new Territory("123","TEST");
-		territoryB = new Territory("456","TEST");
+		territoryA = new Territory("IT","123","TEST");
+		territoryB = new Territory("IT","456","TEST");
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class TerritoriesTest {
 	public void add_duplicate_territory() throws TerritoriesException {
 		sut = new Territories();
 		sut.addTerritory(territoryA);
-		Territory badTerritory = new Territory("123","TEST");
+		Territory badTerritory = new Territory("IT","123","TEST");
 		sut.addTerritory(badTerritory);
 	}
 }

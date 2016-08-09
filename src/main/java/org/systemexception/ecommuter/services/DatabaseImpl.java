@@ -70,11 +70,13 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			for (Territory territory : territories.getTerritories()) {
 				Node territoryNode = graphDb.createNode();
+				territoryNode.setProperty(COUNTRY.toString(), territory.getCountry());
 				territoryNode.setProperty(POSTAL_CODE.toString(), territory.getPostalCode());
 				territoryNode.setProperty(PLACE_NAME.toString(), territory.getPlaceName());
 				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(), territory.getPostalCode());
-				logger.info("addedTerritory" + Constants.LOG_OBJECT_SEPARATOR + territory.getPostalCode() +
-						Constants.LOG_ITEM_SEPARATOR + territory.getPlaceName());
+				logger.info("addedTerritory" + Constants.LOG_OBJECT_SEPARATOR + territory.getCountry() +
+						Constants.LOG_ITEM_SEPARATOR + territory.getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
+						territory.getPlaceName());
 			}
 			tx.success();
 		}
@@ -89,11 +91,13 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
-				"lives in " + person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
-				"works in " + person.getWorkAddress().getPostalCode());
+				"lives in " + person.getHomeAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
+				"works in " + person.getWorkAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getWorkAddress().getPostalCode());
 		// Get nodes for addresses
-		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
-		Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
+		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getCountry(), homeAddress.getPostalCode());
+		Optional<Node> workNode = getNodeByPostalCode(workAddress.getCountry(), workAddress.getPostalCode());
 		if (homeNode.isPresent() && workNode.isPresent()) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node personNode = graphDb.createNode();
@@ -170,36 +174,49 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsLivesIn(final String postalCode) {
-		logger.info("findPersonsLivingIn" + Constants.LOG_OBJECT_SEPARATOR + postalCode);
-		return getPersons(postalCode, livesInRelation);
+	public Persons findPersonsLivesIn(final String country, final String postalCode) {
+		logger.info("findPersonsLivingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
+				postalCode);
+		return getPersons(country, postalCode, livesInRelation);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Persons findPersonsWorksIn(final String postalCode) {
-		logger.info("findPersonsWorkingIn" + Constants.LOG_OBJECT_SEPARATOR + postalCode);
-		return getPersons(postalCode, worksInRelation);
+	public Persons findPersonsWorksIn(final String country, final String postalCode) {
+		logger.info("findPersonsWorkingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
+				postalCode);
+		return getPersons(country, postalCode, worksInRelation);
 	}
 
 	/**
 	 * Returns a node given the postalCode
 	 *
+	 * @param country
 	 * @param postalCode
 	 * @return an optional with the node of the postal code
 	 */
-	// TODO LC This can return more than one node
-	private Optional<Node> getNodeByPostalCode(final String postalCode) {
-		logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode);
+	// TODO LC This could be more than one node!
+	private Optional<Node> getNodeByPostalCode(final String country, final String postalCode) {
+		logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
+				postalCode);
 		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
 			tx.success();
 			if (nodeIterator.hasNext()) {
-				return Optional.of(nodeIterator.next());
+				Node node = nodeIterator.next();
+				String nodeCountry = node.getProperty(COUNTRY.toString()).toString();
+				if (country.equals(nodeCountry)) {
+					return Optional.of(node);
+				} else {
+					logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country +
+							Constants.LOG_ITEM_SEPARATOR + postalCode + " does not exist");
+					return Optional.empty();
+				}
 			} else {
-				logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
+				logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country +
+						Constants.LOG_ITEM_SEPARATOR + postalCode + " node missing");
 				return Optional.empty();
 			}
 		}
@@ -208,17 +225,18 @@ public class DatabaseImpl implements DatabaseApi {
 	/**
 	 * Returns Persons for the given postal code and territory relation
 	 *
+	 * @param country
 	 * @param postalCode
 	 * @param relationshipType is the relationship type to seek after (works in, lives in)
 	 * @return the list of persons with the given relationship to this node
 	 */
-	private Persons getPersons(String postalCode, RelationshipType relationshipType) {
+	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
 		logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
-				Constants.LOG_ITEM_SEPARATOR + postalCode);
+				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
 		List<Node> foundNode = new ArrayList<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
-			Optional<Node> nodeByPostalCode = getNodeByPostalCode(postalCode);
+			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
 			if (nodeByPostalCode.isPresent()) {
 				for (Relationship relationship : nodeByPostalCode.get().getRelationships(relationshipType)) {
 					foundNode.add(relationship.getStartNode());
@@ -227,7 +245,8 @@ public class DatabaseImpl implements DatabaseApi {
 					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
 					if (!foundPersons.getPersons().contains(personJson)) {
 						logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR +
-								relationshipType.toString() + Constants.LOG_ITEM_SEPARATOR + postalCode);
+								relationshipType.toString() + Constants.LOG_ITEM_SEPARATOR + country +
+								Constants.LOG_ITEM_SEPARATOR + postalCode);
 						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
 					}
 				}
@@ -243,9 +262,10 @@ public class DatabaseImpl implements DatabaseApi {
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		territories = new Territories();
 		for (CSVRecord csvRecord : csvRecords) {
+			String country = csvRecord.get(CsvHeaders.COUNTRY.toString());
 			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE.toString());
 			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME.toString());
-			Territory territory = new Territory(postalCode, placeName);
+			Territory territory = new Territory(country, postalCode, placeName);
 			territories.addTerritory(territory);
 		}
 		logger.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());

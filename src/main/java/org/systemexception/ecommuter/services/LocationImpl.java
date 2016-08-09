@@ -95,7 +95,7 @@ public class LocationImpl implements LocationApi {
 		for (AddressComponent addressComponent : geocodingResult.addressComponents) {
 			for (AddressComponentType addressComponentType : addressComponent.types) {
 				if (addressComponentType.equals(AddressComponentType.COUNTRY)) {
-					address.setCountry(addressComponent.longName);
+					address.setCountry(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.POSTAL_CODE)) {
 					address.setPostalCode(addressComponent.longName);

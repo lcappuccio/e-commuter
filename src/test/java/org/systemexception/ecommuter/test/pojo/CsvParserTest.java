@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class CsvParserTest {
 
 	private CsvParser sut;
-	public static final String DATABASE_TEST_CSV_FILE = "it_data_SMALL.csv";
+	public static final String DATABASE_TEST_CSV_FILE = "geodata_SMALL.csv";
 	private static File resourceFile;
 
 	@BeforeClass

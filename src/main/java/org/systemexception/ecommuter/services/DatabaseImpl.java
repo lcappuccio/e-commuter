@@ -92,10 +92,10 @@ public class DatabaseImpl implements DatabaseApi {
 				"lives in " + person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
 				"works in " + person.getWorkAddress().getPostalCode());
 		// Get nodes for addresses
-		try (Transaction tx = graphDb.beginTx()) {
-			Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
-			Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
-			if (homeNode.isPresent() && workNode.isPresent()) {
+		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getPostalCode());
+		Optional<Node> workNode = getNodeByPostalCode(workAddress.getPostalCode());
+		if (homeNode.isPresent() && workNode.isPresent()) {
+			try (Transaction tx = graphDb.beginTx()) {
 				Node personNode = graphDb.createNode();
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				personNode.setProperty(PERSON_ID.toString(), person.getId());
@@ -116,13 +116,13 @@ public class DatabaseImpl implements DatabaseApi {
 				Relationship worksIn = personNode.createRelationshipTo(workNode.get(), worksInRelation);
 				indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
 				logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
-			} else {
-				String errorMessage = "Non existing territory";
-				logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
-						Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR + errorMessage);
-				throw new TerritoriesException(errorMessage);
+				tx.success();
 			}
-			tx.success();
+		} else {
+			String errorMessage = "Non existing territory";
+			logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+					Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			throw new TerritoriesException(errorMessage);
 		}
 		return person;
 	}
@@ -193,12 +193,15 @@ public class DatabaseImpl implements DatabaseApi {
 	// TODO LC This can return more than one node
 	private Optional<Node> getNodeByPostalCode(final String postalCode) {
 		logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode);
-		Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
-		if (nodeIterator.hasNext()) {
-			return Optional.of(nodeIterator.next());
-		} else {
-			logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
-			return Optional.empty();
+		try (Transaction tx = graphDb.beginTx()) {
+			Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
+			tx.success();
+			if (nodeIterator.hasNext()) {
+				return Optional.of(nodeIterator.next());
+			} else {
+				logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
+				return Optional.empty();
+			}
 		}
 	}
 

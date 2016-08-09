@@ -210,7 +210,7 @@ public class DatabaseImpl implements DatabaseApi {
 		if (nodeIterator.hasNext()) {
 			return Optional.of(nodeIterator.next());
 		} else {
-			logger.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
+			logger.error("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + postalCode + " does not exist");
 			return Optional.empty();
 		}
 	}

@@ -116,6 +116,7 @@ public class LocationImplTest {
 		Person personA = new Person();
 		Address addressWorkA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);
 		Address addressHomeA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.000490, 8.738347);
+		personA.setId("ID_A");
 		personA.setName(End2End.PERSON_NAME_A);
 		personA.setSurname(End2End.PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
@@ -124,6 +125,7 @@ public class LocationImplTest {
 		Person personB = new Person();
 		Address addressWorkB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.002834, 8.742499);
 		Address addressHomeB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999950, 8.740594);
+		personB.setId("ID_B");
 		personB.setName(End2End.PERSON_NAME_B);
 		personB.setSurname(End2End.PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
@@ -132,6 +134,7 @@ public class LocationImplTest {
 		Person personC = new Person();
 		Address addressWorkC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.996015, 8.732703);
 		Address addressHomeC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999659, 8.737842);
+		personC.setId("ID_C");
 		personC.setName(End2End.PERSON_NAME_C);
 		personC.setSurname(End2End.PERSON_SURNAME_C);
 		personC.setHomeAddress(addressHomeC);

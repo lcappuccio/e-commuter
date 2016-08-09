@@ -68,24 +68,18 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		logger.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-				Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
-				person.getWorkAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
+		logger.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+				Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
 		Persons nearbyPersons = new Persons();
 		if (persons.getPersons().contains(person)) {
 			persons.getPersons().remove(person);
-			logger.info("findNearbyPersonsRemoveSelf" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-					Constants.LOG_ITEM_SEPARATOR + person.getSurname());
 		}
 		for (Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
 			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius) {
-				logger.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getName() +
-						Constants.LOG_ITEM_SEPARATOR + person.getSurname() + Constants.LOG_ITEM_SEPARATOR +
-						"distance home " + distanceBetweenHome + Constants.LOG_ITEM_SEPARATOR +
-						"distance work " + distanceBetweenWork);
+				logger.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+						Constants.LOG_ITEM_SEPARATOR + innerPerson.getId());
 				nearbyPersons.addPerson(innerPerson);
 			}
 		}

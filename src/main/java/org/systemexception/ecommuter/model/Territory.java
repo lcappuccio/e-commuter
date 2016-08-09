@@ -21,4 +21,8 @@ public class Territory {
 	public String getPlaceName() {
 		return placeName;
 	}
+
+	public String getCountry() {
+		return country;
+	}
 }

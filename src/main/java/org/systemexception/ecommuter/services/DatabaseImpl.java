@@ -70,6 +70,7 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			for (Territory territory : territories.getTerritories()) {
 				Node territoryNode = graphDb.createNode();
+				territoryNode.setProperty(COUNTRY.toString(), territory.getCountry());
 				territoryNode.setProperty(POSTAL_CODE.toString(), territory.getPostalCode());
 				territoryNode.setProperty(PLACE_NAME.toString(), territory.getPlaceName());
 				indexPostalCode.add(territoryNode, POSTAL_CODE.toString(), territory.getPostalCode());

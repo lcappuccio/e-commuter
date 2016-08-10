@@ -8,6 +8,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.graphdb.schema.ConstraintCreator;
+import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.api.DatabaseApi;
@@ -40,6 +41,7 @@ public class DatabaseImpl implements DatabaseApi {
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private final RelationshipIndex indexLivesIn, indexWorksIn;
+	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString());
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {
@@ -49,17 +51,22 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
-			constraintCreator = graphDb.schema().constraintFor(Label.label(PERSON_ID.toString()))
+			constraintCreator = graphDb.schema().constraintFor(constraintPersonIdLabel)
 					.assertPropertyIsUnique(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();
 		}
 		try (Transaction tx = graphDb.beginTx()) {
-			constraintCreator.create();
-			logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
-			tx.success();
+			Iterator<ConstraintDefinition> constraintDefinitionIterator =
+					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
+			if (!constraintDefinitionIterator.hasNext()) {
+				constraintCreator.create();
+				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
+				tx.success();
+			}
 		}
+		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
 
 	@Override
@@ -212,7 +219,7 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			personNode.setProperty(PERSON_ID.toString(), person.getId());
 			try {
-				personNode.addLabel(Label.label(PERSON_ID.toString()));
+				personNode.addLabel(constraintPersonIdLabel);
 			} catch (ConstraintViolationException ex) {
 				String errorMessage = ex.getMessage();
 				tx.failure();

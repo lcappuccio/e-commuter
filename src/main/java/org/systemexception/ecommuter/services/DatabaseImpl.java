@@ -95,33 +95,10 @@ public class DatabaseImpl implements DatabaseApi {
 				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
 				"works in " + person.getWorkAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
 				person.getWorkAddress().getPostalCode());
-		// Get nodes for addresses
 		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getCountry(), homeAddress.getPostalCode());
 		Optional<Node> workNode = getNodeByPostalCode(workAddress.getCountry(), workAddress.getPostalCode());
 		if (homeNode.isPresent() && workNode.isPresent()) {
-			try (Transaction tx = graphDb.beginTx()) {
-				Node personNode = graphDb.createNode();
-				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
-				personNode.setProperty(PERSON_ID.toString(), person.getId());
-				try {
-					personNode.addLabel(Label.label(PERSON_ID.toString()));
-				} catch (ConstraintViolationException ex) {
-					String errorMessage = ex.getMessage();
-					tx.failure();
-					logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR +
-							errorMessage);
-					throw new ConstraintViolationException(errorMessage);
-				}
-				indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
-				// Add LIVES_IN edge
-				Relationship livesIn = personNode.createRelationshipTo(homeNode.get(), livesInRelation);
-				indexLivesIn.add(livesIn, LIVES_IN.toString(), homeAddress.getPostalCode());
-				// Add WORKS_IN edge
-				Relationship worksIn = personNode.createRelationshipTo(workNode.get(), worksInRelation);
-				indexWorksIn.add(worksIn, WORKS_IN.toString(), workAddress.getPostalCode());
-				logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
-				tx.success();
-			}
+			insertPerson(person, homeNode.get(), workNode.get());
 		} else {
 			String errorMessage = "Non existing territory";
 			logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
@@ -219,6 +196,39 @@ public class DatabaseImpl implements DatabaseApi {
 						Constants.LOG_ITEM_SEPARATOR + postalCode + " node missing");
 				return Optional.empty();
 			}
+		}
+	}
+
+	/**
+	 * Insert person to the database
+	 *
+	 * @param person
+	 * @param homeNode
+	 * @param workNode
+	 */
+	private void insertPerson(final Person person, final Node homeNode, final Node workNode) {
+		try (Transaction tx = graphDb.beginTx()) {
+			Node personNode = graphDb.createNode();
+			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
+			personNode.setProperty(PERSON_ID.toString(), person.getId());
+			try {
+				personNode.addLabel(Label.label(PERSON_ID.toString()));
+			} catch (ConstraintViolationException ex) {
+				String errorMessage = ex.getMessage();
+				tx.failure();
+				logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR +
+						errorMessage);
+				throw new ConstraintViolationException(errorMessage);
+			}
+			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
+			// Add LIVES_IN edge
+			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
+			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeNode.getProperty(POSTAL_CODE.toString()));
+			// Add WORKS_IN edge
+			Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
+			indexWorksIn.add(worksIn, WORKS_IN.toString(), workNode.getProperty(POSTAL_CODE.toString()));
+			logger.info("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
+			tx.success();
 		}
 	}
 

@@ -98,22 +98,22 @@ public class LocationImpl implements LocationApi {
 					address.setCountry(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.POSTAL_CODE)) {
-					address.setPostalCode(addressComponent.longName);
+					address.setPostalCode(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1)) {
-					address.setAdministrativeAreaLevel1(addressComponent.longName);
+					address.setAdministrativeAreaLevel1(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_2)) {
-					address.setAdministrativeAreaLevel2(addressComponent.longName);
+					address.setAdministrativeAreaLevel2(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.LOCALITY)) {
-					address.setLocality(addressComponent.longName);
+					address.setLocality(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.ROUTE)) {
-					address.setRoute(addressComponent.longName);
+					address.setRoute(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.STREET_NUMBER)) {
-					address.setStreetNumber(addressComponent.longName);
+					address.setStreetNumber(addressComponent.shortName);
 				}
 			}
 		}

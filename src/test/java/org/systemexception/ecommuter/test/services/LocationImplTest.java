@@ -30,7 +30,7 @@ public class LocationImplTest {
 	private final LocationApi sut = new LocationImpl();
 	private final String locationItaly = End2End.LOCATION_ITALY;
 	private final String locationLombardia = "Lombardia";
-	private final String locationMilanoRegion = "Città Metropolitana di Milano";
+	private final String locationMilanoRegion = "MI";
 	private final String locationMilano = "Milano";
 	private final String locationPiazzaDuomo = "Piazza del Duomo";
 

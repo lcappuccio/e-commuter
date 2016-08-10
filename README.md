@@ -43,6 +43,14 @@ Launch the application and use the included Postman collection to interact with 
 
 Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
 
+## Monitoring
+
+Spring Boot actuators are deployed, set the `management.port` parameter in `application.properties`:
+
+* http://your_ip:management.port/beans
+* http://your_ip:management.port/metrics
+* http://your_ip:management.port/autoconfig
+
 ## WARNING
 
 Any class that references `org.systemexception.ecommuter.services.LocationImpl` will produce logs with your google

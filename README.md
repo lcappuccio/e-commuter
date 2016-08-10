@@ -73,4 +73,4 @@ In sparse order:
 
 ## Credits
 
-- [Geonames](http://www.geonames.org) for the Italian Postal Code Database
+- [Geonames](http://www.geonames.org) for the Postal Code Database

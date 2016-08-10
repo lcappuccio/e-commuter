@@ -88,6 +88,8 @@ In sparse order:
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
 - Pending `spring-boot-starter-data-neo4j` release for refactor
+- Add export functionality
+- Add endpoints to query database data
 
 ## Credits
 

@@ -7,8 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
@@ -26,9 +28,8 @@ import static junit.framework.TestCase.assertEquals;
  * @author leo
  * @date 02/07/16 16:25
  */
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {Application.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class PersonJsonParserTest {
 

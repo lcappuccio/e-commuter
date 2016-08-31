@@ -5,8 +5,6 @@ import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,7 +44,6 @@ public class RestControllerTest {
 	private DatabaseApi databaseApi;
 	private LocationApi locationApi;
 	private StorageApi storageApi;
-	@InjectMocks
 	private RestController restController;
 	private MockMvc sut;
 	public final static String TEXT_PLAIN_FILE = "text/plain";
@@ -57,7 +54,6 @@ public class RestControllerTest {
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
 		restController = new RestController(databaseApi, locationApi, storageApi);
-		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
 	}
 

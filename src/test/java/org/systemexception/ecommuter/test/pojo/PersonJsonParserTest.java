@@ -6,10 +6,9 @@ import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.model.Address;
@@ -26,9 +25,8 @@ import static junit.framework.TestCase.assertEquals;
  * @author leo
  * @date 02/07/16 16:25
  */
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {Application.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class PersonJsonParserTest {
 
@@ -69,13 +67,13 @@ public class PersonJsonParserTest {
 	public String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"6\"," +
-				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"Città " +
-				"Metropolitana di Milano\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," +
-				"\"postalCode\":\"20122\",\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\"," +
-				"\"latitude\":45.4635507,\"longitude\":9.1903881},\"workAddress\":{\"streetNumber\":\"6\"," +
-				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"Città " +
-				"Metropolitana di Milano\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," +
-				"\"postalCode\":\"20122\",\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\"," +
+				"\"route\":\"Piazza del Duomo\",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"MI\"," +
+				"\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\",\"postalCode\":\"20122\"," +
+				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
+				"\"longitude\":9.1903881},\"workAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"" +
+				",\"locality\":\"Milano\",\"administrativeAreaLevel2\":\"MI\"," +
+				"\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," + "\"postalCode\":\"20122\"," +
+				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\"," +
 				"\"latitude\":45.4635507,\"longitude\":9.1903881}}";
 	}
 

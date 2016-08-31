@@ -27,21 +27,39 @@ See `e-commuter.pdf` for more details.
 Download a Postal Code collection from [Geonames](http://www.geonames.org) and use it as you please. Please keep in
 mind that duplicates will generate an exception. I've used a SQL database to clean down the Italian file.
 
-## Usage
+## Configuration
 
 Set `API_KEY` environment variable with your Google Maps API Key.
 
 ### Application
 
 Launch the application and use the included Postman collection to interact with the API.
-- Load a territories set (or use the included ones)
-- Add the persons included in `persons.txt`
-- Locate nearby persons
-- Play with addresses and geo coordinates to fetch addresses from Google Geocode API
+1. Load a territories set (or use the included `geo_data.csv`)
+2. Add the persons included in `persons.txt`
+3. Locate nearby persons
+4. Play with addresses and geo coordinates to fetch addresses from Google Geocode API
+
+### Adding data
+
+1. Create a work address invoking endpoint `addressToGeo`, in the JSON specify the formatted address string, the 
+other parameters are not necessary
+2. Create a home address as above
+3. Paste the above addresses into the fields workAddress and homeAddress of a Person object and send to endpoint `addPerson` 
+4. Repeat previous steps for various persons living and working nearby
+5. Send one of the created persons to `nearbyPersons` with the desired radius to extract a list of Persons living and
+ working nearby
 
 ## Endpoints
 
 Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
+
+## Monitoring
+
+Spring Boot actuators are deployed, set the `management.port` parameter in `application.properties`:
+
+* http://your_ip:management.port/beans
+* http://your_ip:management.port/metrics
+* http://your_ip:management.port/autoconfig
 
 ## WARNING
 
@@ -70,7 +88,9 @@ In sparse order:
 - Frontend
 - Investigate Google Directions API to calculate distance with different travel types (foot, bike, transport)
 - Pending `spring-boot-starter-data-neo4j` release for refactor
+- Add export functionality
+- Add endpoints to query database data
 
 ## Credits
 
-- [Geonames](http://www.geonames.org) for the Italian Postal Code Database
+- [Geonames](http://www.geonames.org) for the Postal Code Database

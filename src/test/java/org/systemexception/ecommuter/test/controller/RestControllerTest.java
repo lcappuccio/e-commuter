@@ -5,15 +5,12 @@ import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -39,16 +36,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author leo
  * @date 03/07/16 22:46
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {Application.class})
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class RestControllerTest {
 
 	private DatabaseApi databaseApi;
 	private LocationApi locationApi;
 	private StorageApi storageApi;
-	@InjectMocks
 	private RestController restController;
 	private MockMvc sut;
 	public final static String TEXT_PLAIN_FILE = "text/plain";
@@ -59,7 +54,6 @@ public class RestControllerTest {
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
 		restController = new RestController(databaseApi, locationApi, storageApi);
-		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
 	}
 

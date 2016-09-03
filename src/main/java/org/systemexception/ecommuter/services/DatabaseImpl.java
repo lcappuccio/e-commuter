@@ -37,10 +37,10 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private final Index<Node> indexPostalCode, indexPersonId;
+	private Index<Node> indexPostalCode, indexPersonId;
+	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
-	private final RelationshipIndex indexLivesIn, indexWorksIn;
 	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString());
 	private Territories territories;
 
@@ -48,24 +48,8 @@ public class DatabaseImpl implements DatabaseApi {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		ConstraintCreator constraintCreator;
 		IndexManager indexManager = graphDb.index();
-		try (Transaction tx = graphDb.beginTx()) {
-			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
-			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
-			constraintCreator = graphDb.schema().constraintFor(constraintPersonIdLabel)
-					.assertPropertyIsUnique(PERSON_ID.toString());
-			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
-			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
-			tx.success();
-		}
-		try (Transaction tx = graphDb.beginTx()) {
-			Iterator<ConstraintDefinition> constraintDefinitionIterator =
-					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
-			if (!constraintDefinitionIterator.hasNext()) {
-				constraintCreator.create();
-				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
-				tx.success();
-			}
-		}
+		constraintCreator = createIndexesAndConstraintCreator(indexManager);
+		createSchema(constraintCreator);
 		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
 
@@ -286,6 +270,43 @@ public class DatabaseImpl implements DatabaseApi {
 			territories.addTerritory(territory);
 		}
 		logger.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+	}
+
+	/**
+	 * Creates indexes and returns a ConstraintCreator
+	 *
+	 * @param indexManager
+	 * @return
+	 */
+	private ConstraintCreator createIndexesAndConstraintCreator(IndexManager indexManager) {
+		ConstraintCreator constraintCreator;
+		try (Transaction tx = graphDb.beginTx()) {
+			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
+			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
+			constraintCreator = graphDb.schema().constraintFor(constraintPersonIdLabel)
+					.assertPropertyIsUnique(PERSON_ID.toString());
+			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
+			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
+			tx.success();
+		}
+		return constraintCreator;
+	}
+
+	/**
+	 * Creates the database schema
+	 *
+	 * @param constraintCreator
+	 */
+	private void createSchema(ConstraintCreator constraintCreator) {
+		try (Transaction tx = graphDb.beginTx()) {
+			Iterator<ConstraintDefinition> constraintDefinitionIterator =
+					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
+			if (!constraintDefinitionIterator.hasNext()) {
+				constraintCreator.create();
+				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
+				tx.success();
+			}
+		}
 	}
 
 	@PreDestroy

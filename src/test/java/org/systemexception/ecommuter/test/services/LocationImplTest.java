@@ -7,7 +7,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -109,8 +108,8 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void find_nearby_persons() throws Exception,
-			TerritoriesException {
+	public void find_nearby_persons() {
+
 		Person personA = new Person();
 		Address addressWorkA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);
 		Address addressHomeA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.000490, 8.738347);

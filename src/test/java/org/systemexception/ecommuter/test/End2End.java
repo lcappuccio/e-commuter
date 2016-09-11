@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
@@ -20,6 +21,7 @@ import org.systemexception.ecommuter.services.StorageImpl;
 import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
@@ -46,10 +48,12 @@ public class End2End {
 	private DatabaseApi databaseApi;
 	@Autowired
 	private LocationApi locationService;
+	private static StorageApi storageApi;
 
 	@BeforeClass
-	public static void setSut() {
-		StorageImpl.removeFolder(DATABASE_FOLDER);
+	public static void setSut() throws IOException {
+		storageApi = new StorageImpl(TARGET_FOLER);
+		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 
 	@Before

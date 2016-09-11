@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.systemexception.ecommuter.services.StorageImpl.removeFolder;
 
 /**
  * @author leo
@@ -35,17 +34,20 @@ public class StorageImplTest {
 	private final static String STORAGE_FOLDER = End2End.TARGET_FOLER + File.separator + "test_storage";
 	private StorageApi sut;
 	private MultipartFile multipartFile;
+	private static StorageApi storageApi;
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		removeFolder(STORAGE_FOLDER);
+		storageApi = new StorageImpl(STORAGE_FOLDER);
+
+		storageApi.removeFolder(STORAGE_FOLDER);
 
 		assertFalse(new File(STORAGE_FOLDER).exists());
 	}
 
 	@AfterClass
 	public static void tearDownSut() throws IOException {
-		removeFolder(STORAGE_FOLDER);
+		storageApi.removeFolder(STORAGE_FOLDER);
 
 		assertFalse(new File(STORAGE_FOLDER).exists());
 	}

@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.api.StorageApi;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -42,13 +43,15 @@ public class DatabaseImplTest {
 	private DatabaseApi sut;
 	@Autowired
 	private LocationApi locationService;
+	private static StorageApi storageApi;
 	private Person person;
 	private Address addressFromGeo;
 	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		StorageImpl.removeFolder(DATABASE_FOLDER);
+		storageApi = new StorageImpl(DATABASE_FOLDER);
+		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 
 	@Before

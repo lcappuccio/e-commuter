@@ -104,6 +104,6 @@ public class End2End {
 		Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
 				LOCATION_ITALY, LOCATION_LUINO_POSTCODE), 0.5);
 		assertTrue(nearbyPersons.getPersons().size() == 1);
-		assertTrue(nearbyPersons.getPersons().get(0).equals(personB));
+		assertTrue(nearbyPersons.getPersons().iterator().next().equals(personB));
 	}
 }

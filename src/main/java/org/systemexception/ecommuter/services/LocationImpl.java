@@ -77,7 +77,7 @@ public class LocationImpl implements LocationApi {
 		for (Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
-			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius) {
+			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius && !person.equals(innerPerson)) {
 				logger.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
 						Constants.LOG_ITEM_SEPARATOR + innerPerson.getId());
 				nearbyPersons.addPerson(innerPerson);

@@ -43,14 +43,13 @@ public class DatabaseImplTest {
 	private DatabaseApi sut;
 	@Autowired
 	private LocationApi locationService;
-	private static StorageApi storageApi;
 	private Person person;
 	private Address addressFromGeo;
 	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		storageApi = new StorageImpl(DATABASE_FOLDER);
+		StorageApi storageApi = new StorageImpl(DATABASE_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 
@@ -83,7 +82,7 @@ public class DatabaseImplTest {
 				person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
-		assertEquals(personsLivesIn.getPersons().get(0), person);
+		assertEquals(personsLivesIn.getPersons().iterator().next(), person);
 	}
 
 	@Test
@@ -92,7 +91,7 @@ public class DatabaseImplTest {
 				person.getHomeAddress().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
-		assertEquals(personsLivesIn.getPersons().get(0), person);
+		assertEquals(personsLivesIn.getPersons().iterator().next(), person);
 	}
 
 	@Test
@@ -120,7 +119,7 @@ public class DatabaseImplTest {
 	@Test
 	public void update_person() {
 		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
-				addressFromGeo.getPostalCode()).getPersons().get(0);
+				addressFromGeo.getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
@@ -135,7 +134,7 @@ public class DatabaseImplTest {
 	@Test
 	public void update_person_bad_id() {
 		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
-				addressFromGeo.getPostalCode()).getPersons().get(0);
+				addressFromGeo.getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());

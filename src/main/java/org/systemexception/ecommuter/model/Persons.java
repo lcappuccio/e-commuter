@@ -1,7 +1,6 @@
 package org.systemexception.ecommuter.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * @author leo
@@ -9,17 +8,17 @@ import java.util.List;
  */
 public class Persons {
 
-	private final List<Person> persons;
+	private final HashSet<Person> persons;
 
 	public Persons() {
-		persons = new ArrayList();
+		persons = new HashSet<>();
 	}
 
 	public void addPerson(Person person) {
 		persons.add(person);
 	}
 
-	public List<Person> getPersons() {
+	public HashSet<Person> getPersons() {
 		return persons;
 	}
 }

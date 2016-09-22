@@ -22,10 +22,7 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
 
@@ -54,7 +51,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	@Override
-	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
+	public void addTerritories(final File territoriesFile) throws CsvParserException {
 		readCsvTerritories(territoriesFile);
 		logger.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		// Create all nodes
@@ -234,7 +231,7 @@ public class DatabaseImpl implements DatabaseApi {
 	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
 		logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
 				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
-		List<Node> foundNode = new ArrayList<>();
+		HashSet<Node> foundNode = new HashSet<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
@@ -257,7 +254,7 @@ public class DatabaseImpl implements DatabaseApi {
 		return foundPersons;
 	}
 
-	private void readCsvTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
+	private void readCsvTerritories(final File territoriesFile) throws CsvParserException {
 		logger.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		CsvParser csvParser = new CsvParser(territoriesFile);
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();

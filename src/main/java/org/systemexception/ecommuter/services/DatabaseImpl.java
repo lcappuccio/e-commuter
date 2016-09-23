@@ -260,9 +260,9 @@ public class DatabaseImpl implements DatabaseApi {
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		territories = new Territories();
 		for (CSVRecord csvRecord : csvRecords) {
-			String country = csvRecord.get(CsvHeaders.COUNTRY.toString());
-			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE.toString());
-			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME.toString());
+			String country = csvRecord.get(CsvHeaders.COUNTRY);
+			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
+			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
 			Territory territory = new Territory(country, postalCode, placeName);
 			territories.addTerritory(territory);
 		}

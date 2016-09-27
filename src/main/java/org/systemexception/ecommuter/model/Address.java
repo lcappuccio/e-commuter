@@ -119,4 +119,23 @@ public class Address {
 				== null;
 
 	}
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		result = streetNumber != null ? streetNumber.hashCode() : 0;
+		result = 31 * result + (route != null ? route.hashCode() : 0);
+		result = 31 * result + (locality != null ? locality.hashCode() : 0);
+		result = 31 * result + (administrativeAreaLevel2 != null ? administrativeAreaLevel2.hashCode() : 0);
+		result = 31 * result + (administrativeAreaLevel1 != null ? administrativeAreaLevel1.hashCode() : 0);
+		result = 31 * result + (country != null ? country.hashCode() : 0);
+		result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
+		result = 31 * result + (formattedAddress != null ? formattedAddress.hashCode() : 0);
+		temp = Double.doubleToLongBits(latitude);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(longitude);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
 }

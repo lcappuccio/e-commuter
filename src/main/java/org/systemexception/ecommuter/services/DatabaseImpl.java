@@ -22,7 +22,10 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
 
@@ -38,15 +41,16 @@ public class DatabaseImpl implements DatabaseApi {
 	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
-	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString());
+	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString()),
+			postalCodeLabel = Label.label(POSTAL_CODE.toString());
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		ConstraintCreator constraintCreator;
 		IndexManager indexManager = graphDb.index();
-		constraintCreator = createIndexesAndConstraintCreator(indexManager);
-		createSchema(constraintCreator);
+		createIndexesAndConstraintCreator(indexManager);
+		createSchema();
 		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
 
@@ -275,34 +279,31 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param indexManager
 	 * @return
 	 */
-	private ConstraintCreator createIndexesAndConstraintCreator(IndexManager indexManager) {
-		ConstraintCreator constraintCreator;
+	private void createIndexesAndConstraintCreator(IndexManager indexManager) {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
-			constraintCreator = graphDb.schema().constraintFor(constraintPersonIdLabel)
-					.assertPropertyIsUnique(PERSON_ID.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();
 		}
-		return constraintCreator;
 	}
 
 	/**
 	 * Creates the database schema
-	 *
-	 * @param constraintCreator
 	 */
-	private void createSchema(ConstraintCreator constraintCreator) {
+	private void createSchema() {
 		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<ConstraintDefinition> constraintDefinitionIterator =
 					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
 			if (!constraintDefinitionIterator.hasNext()) {
-				constraintCreator.create();
+				graphDb.schema().constraintFor(constraintPersonIdLabel).assertPropertyIsUnique(PERSON_ID.toString())
+						.create();
+				graphDb.schema().constraintFor(postalCodeLabel).assertPropertyIsUnique(POSTAL_CODE.toString())
+						.create();
 				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
-				tx.success();
 			}
+			tx.success();
 		}
 	}
 

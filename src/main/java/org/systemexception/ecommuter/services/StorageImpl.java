@@ -44,20 +44,20 @@ public class StorageImpl implements StorageApi {
 		return dataFile;
 	}
 
-	public static void removeFolder(String folderToRemove) {
-		File toRemove = new File(folderToRemove);
+	public void removeFolder(String folderPath) {
+		File toRemove = new File(folderPath);
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
 			for (String file : files != null ? files : new String[0]) {
-				new File(folderToRemove + File.separator + file).delete();
+				new File(folderPath + File.separator + file).delete();
 			}
 		}
 		logger.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + toRemove.getName());
 		boolean deleted = toRemove.delete();
 		if (deleted) {
-			logger.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderToRemove);
+			logger.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
 		} else {
-			logger.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderToRemove);
+			logger.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
 		}
 	}
 

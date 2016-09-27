@@ -6,6 +6,7 @@ import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Territories;
 import org.systemexception.ecommuter.model.Territory;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -31,11 +32,13 @@ public class TerritoriesTest {
 		assertTrue(sut.getTerritories().size() == 2);
 	}
 
-	@Test(expected = TerritoriesException.class)
+	@Test
 	public void add_duplicate_territory() throws TerritoriesException {
 		sut = new Territories();
 		sut.addTerritory(territoryA);
 		Territory badTerritory = new Territory("IT","123","TEST");
 		sut.addTerritory(badTerritory);
+
+		assertEquals(1, sut.getTerritories().size());
 	}
 }

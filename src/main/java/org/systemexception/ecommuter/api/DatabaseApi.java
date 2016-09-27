@@ -20,7 +20,7 @@ public interface DatabaseApi {
 	 *
 	 * @param territoriesFile the csv file containing the structure
 	 */
-	void addTerritories(File territoriesFile) throws CsvParserException, TerritoriesException;
+	void addTerritories(File territoriesFile) throws CsvParserException;
 
 	/**
 	 * Adds a person to the database

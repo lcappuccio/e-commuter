@@ -53,10 +53,10 @@ public class CsvParserTest {
 		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
 		List<CSVRecord> records = sut.readCsvContents();
 		for (CSVRecord territory : records) {
-			if (territory.get(CsvHeaders.PLACE_NAME.toString()).toLowerCase(Locale.getDefault()).equals("luino")) {
-				assertTrue(territory.get(CsvHeaders.POSTAL_CODE.toString()).equals(End2End.LOCATION_LUINO_POSTCODE));
-				assertTrue(territory.get(CsvHeaders.LATITUDE.toString()).equals("46.0019"));
-				assertTrue(territory.get(CsvHeaders.LONGITUDE.toString()).equals("8.7451"));
+			if (territory.get(CsvHeaders.PLACE_NAME.name()).toLowerCase(Locale.getDefault()).equals("luino")) {
+				assertTrue(territory.get(CsvHeaders.POSTAL_CODE.name()).equals(End2End.LOCATION_LUINO_POSTCODE));
+				assertTrue(territory.get(CsvHeaders.LATITUDE.name()).equals("46.0019"));
+				assertTrue(territory.get(CsvHeaders.LONGITUDE.name()).equals("8.7451"));
 			}
 		}
 	}

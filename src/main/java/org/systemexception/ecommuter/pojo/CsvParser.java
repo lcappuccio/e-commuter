@@ -27,11 +27,11 @@ public class CsvParser {
 
 	public CsvParser(File csvFile) throws CsvParserException {
 		String[] headerMapping = new String[]{
-				CsvHeaders.COUNTRY.toString(), CsvHeaders.POSTAL_CODE.toString(), CsvHeaders.PLACE_NAME.toString(),
-				CsvHeaders.ADMIN_NAME1.toString(), CsvHeaders.ADMIN_CODE1.toString(),
-				CsvHeaders.ADMIN_NAME2.toString(), CsvHeaders.ADMIN_CODE2.toString(),
-				CsvHeaders.ADMIN_NAME3.toString(), CsvHeaders.ADMIN_CODE3.toString(),
-				CsvHeaders.LATITUDE.toString(), CsvHeaders.LONGITUDE.toString(), CsvHeaders.ACCURACY.toString()};
+				CsvHeaders.COUNTRY.name(), CsvHeaders.POSTAL_CODE.name(), CsvHeaders.PLACE_NAME.name(),
+				CsvHeaders.ADMIN_NAME1.name(), CsvHeaders.ADMIN_CODE1.name(),
+				CsvHeaders.ADMIN_NAME2.name(), CsvHeaders.ADMIN_CODE2.name(),
+				CsvHeaders.ADMIN_NAME3.name(), CsvHeaders.ADMIN_CODE3.name(),
+				CsvHeaders.LATITUDE.name(), CsvHeaders.LONGITUDE.name(), CsvHeaders.ACCURACY.name()};
 		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
 		try {
 			URL csvUrl = csvFile.toURI().toURL();

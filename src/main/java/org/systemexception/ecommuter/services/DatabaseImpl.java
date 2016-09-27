@@ -22,7 +22,7 @@ import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -37,40 +37,25 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private final Index<Node> indexPostalCode, indexPersonId;
+	private Index<Node> indexPostalCode, indexPersonId;
+	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
-	private final RelationshipIndex indexLivesIn, indexWorksIn;
-	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString());
+	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString()),
+			postalCodeLabel = Label.label(POSTAL_CODE.toString());
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		ConstraintCreator constraintCreator;
 		IndexManager indexManager = graphDb.index();
-		try (Transaction tx = graphDb.beginTx()) {
-			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
-			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
-			constraintCreator = graphDb.schema().constraintFor(constraintPersonIdLabel)
-					.assertPropertyIsUnique(PERSON_ID.toString());
-			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
-			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
-			tx.success();
-		}
-		try (Transaction tx = graphDb.beginTx()) {
-			Iterator<ConstraintDefinition> constraintDefinitionIterator =
-					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
-			if (!constraintDefinitionIterator.hasNext()) {
-				constraintCreator.create();
-				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
-				tx.success();
-			}
-		}
+		createIndexesAndConstraintCreator(indexManager);
+		createSchema();
 		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
 
 	@Override
-	public void addTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
+	public void addTerritories(final File territoriesFile) throws CsvParserException {
 		readCsvTerritories(territoriesFile);
 		logger.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		// Create all nodes
@@ -250,7 +235,7 @@ public class DatabaseImpl implements DatabaseApi {
 	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
 		logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
 				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
-		List<Node> foundNode = new ArrayList<>();
+		HashSet<Node> foundNode = new HashSet<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
@@ -273,19 +258,53 @@ public class DatabaseImpl implements DatabaseApi {
 		return foundPersons;
 	}
 
-	private void readCsvTerritories(final File territoriesFile) throws CsvParserException, TerritoriesException {
+	private void readCsvTerritories(final File territoriesFile) throws CsvParserException {
 		logger.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		CsvParser csvParser = new CsvParser(territoriesFile);
 		List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		territories = new Territories();
 		for (CSVRecord csvRecord : csvRecords) {
-			String country = csvRecord.get(CsvHeaders.COUNTRY.toString());
-			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE.toString());
-			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME.toString());
+			String country = csvRecord.get(CsvHeaders.COUNTRY);
+			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
+			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
 			Territory territory = new Territory(country, postalCode, placeName);
 			territories.addTerritory(territory);
 		}
 		logger.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+	}
+
+	/**
+	 * Creates indexes and returns a ConstraintCreator
+	 *
+	 * @param indexManager
+	 * @return
+	 */
+	private void createIndexesAndConstraintCreator(IndexManager indexManager) {
+		try (Transaction tx = graphDb.beginTx()) {
+			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
+			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
+			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
+			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
+			tx.success();
+		}
+	}
+
+	/**
+	 * Creates the database schema
+	 */
+	private void createSchema() {
+		try (Transaction tx = graphDb.beginTx()) {
+			Iterator<ConstraintDefinition> constraintDefinitionIterator =
+					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
+			if (!constraintDefinitionIterator.hasNext()) {
+				graphDb.schema().constraintFor(constraintPersonIdLabel).assertPropertyIsUnique(PERSON_ID.toString())
+						.create();
+				graphDb.schema().constraintFor(postalCodeLabel).assertPropertyIsUnique(POSTAL_CODE.toString())
+						.create();
+				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
+			}
+			tx.success();
+		}
 	}
 
 	@PreDestroy

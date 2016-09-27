@@ -74,4 +74,14 @@ public class Person {
 		return workAddress != null ? workAddress.equals(person.workAddress) : person.workAddress == null;
 
 	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (surname != null ? surname.hashCode() : 0);
+		result = 31 * result + (homeAddress != null ? homeAddress.hashCode() : 0);
+		result = 31 * result + (workAddress != null ? workAddress.hashCode() : 0);
+		return result;
+	}
 }

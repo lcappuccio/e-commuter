@@ -1,9 +1,6 @@
 package org.systemexception.ecommuter.model;
 
-import org.systemexception.ecommuter.exceptions.TerritoriesException;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * @author leo
@@ -11,23 +8,17 @@ import java.util.List;
  */
 public class Territories {
 
-	private final List<Territory> territories;
+	private final HashSet<Territory> territories;
 
 	public Territories() {
-		territories = new ArrayList();
+		territories = new HashSet<>();
 	}
 
-	public void addTerritory(Territory territory) throws TerritoriesException {
-		for (Territory territory1 : territories) {
-			if (territory.getPostalCode().equals(territory1.getPostalCode()) &&
-					territory.getPlaceName().equals(territory1.getPlaceName())) {
-				throw new TerritoriesException("Territory already exists");
-			}
-		}
+	public void addTerritory(Territory territory) {
 		territories.add(territory);
 	}
 
-	public List<Territory> getTerritories() {
+	public HashSet<Territory> getTerritories() {
 		return territories;
 	}
 }

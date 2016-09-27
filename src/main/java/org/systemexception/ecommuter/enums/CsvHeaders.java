@@ -6,27 +6,17 @@ package org.systemexception.ecommuter.enums;
  */
 public enum CsvHeaders {
 
-	COUNTRY("COUNTRY"),
-	POSTAL_CODE("POSTAL_CODE"),
-	PLACE_NAME("PLACE_NAME"),
-	ADMIN_NAME1("ADMIN_NAME1"),
-	ADMIN_CODE1("ADMIN_CODE1"),
-	ADMIN_NAME2("ADMIN_NAME2"),
-	ADMIN_CODE2("ADMIN_CODE2"),
-	ADMIN_NAME3("ADMIN_NAME3"),
-	ADMIN_CODE3("ADMIN_CODE3"),
-	LATITUDE("LATITUDE"),
-	LONGITUDE("LONGITUDE"),
-	ACCURACY("ACCURACY");
+	COUNTRY,
+	POSTAL_CODE,
+	PLACE_NAME,
+	ADMIN_NAME1,
+	ADMIN_CODE1,
+	ADMIN_NAME2,
+	ADMIN_CODE2,
+	ADMIN_NAME3,
+	ADMIN_CODE3,
+	LATITUDE,
+	LONGITUDE,
+	ACCURACY
 
-	private final String csvHeader;
-
-	CsvHeaders(String csvHeader) {
-		this.csvHeader = csvHeader;
-	}
-
-	@Override
-	public String toString() {
-		return csvHeader;
-	}
 }

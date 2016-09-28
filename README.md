@@ -7,6 +7,7 @@ Use Google Maps Geocoding API to calculate distances between two addresses of a 
 [![codecov.io](https://codecov.io/github/lcappuccio/e-commuter/coverage.svg?branch=master)](https://codecov.io/github/lcappuccio/e-commuter?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ada9114fdc1a48ad93f6824fd40bbead)](https://www.codacy.com/app/lcappuccio/e-commuter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lcappuccio/e-commuter&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/a2f9fc57-5721-4ccd-a732-8949bdf98a8b)](https://codebeat.co/projects/github-com-lcappuccio-e-commuter)
+[![Release](https://jitpack.io/v/lcappuccio/e-commuter.svg)](https://jitpack.io/#lcappuccio/e-commuter)
 
 **Develop**
 

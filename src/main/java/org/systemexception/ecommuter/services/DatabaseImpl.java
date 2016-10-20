@@ -70,7 +70,7 @@ public class DatabaseImpl implements DatabaseApi {
 			}
 			tx.success();
 		}
-		logger.info("loadedTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+		logger.info("addedTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 	}
 
 	/**

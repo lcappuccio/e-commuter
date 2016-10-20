@@ -91,8 +91,8 @@ public class DatabaseImpl implements DatabaseApi {
 			insertPerson(person, homeNode.get(), workNode.get());
 		} else {
 			String errorMessage = "Non existing territory";
-			logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
-					Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			logger.error("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+					Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new TerritoriesException(errorMessage);
 		}
 		return person;

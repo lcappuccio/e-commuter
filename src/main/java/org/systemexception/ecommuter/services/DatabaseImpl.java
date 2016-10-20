@@ -233,20 +233,17 @@ public class DatabaseImpl implements DatabaseApi {
 	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
 		logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
 				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
-		HashSet<Node> foundNode = new HashSet<>();
+		HashSet<Node> foundNodes = new HashSet<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
 			if (nodeByPostalCode.isPresent()) {
 				for (Relationship relationship : nodeByPostalCode.get().getRelationships(relationshipType)) {
-					foundNode.add(relationship.getStartNode());
+					foundNodes.add(relationship.getStartNode());
 				}
-				for (Node node : foundNode) {
+				for (Node node : foundNodes) {
 					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
 					if (!foundPersons.getPersons().contains(personJson)) {
-						logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR +
-								relationshipType.toString() + Constants.LOG_ITEM_SEPARATOR + country +
-								Constants.LOG_ITEM_SEPARATOR + postalCode);
 						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
 					}
 				}

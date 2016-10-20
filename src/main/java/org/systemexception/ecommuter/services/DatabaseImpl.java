@@ -47,7 +47,7 @@ public class DatabaseImpl implements DatabaseApi {
 	public DatabaseImpl(final String dbFolder) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		IndexManager indexManager = graphDb.index();
-		createIndexesAndConstraintCreator(indexManager);
+		createIndexes(indexManager);
 		createSchema();
 		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
@@ -277,7 +277,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param indexManager
 	 * @return
 	 */
-	private void createIndexesAndConstraintCreator(IndexManager indexManager) {
+	private void createIndexes(IndexManager indexManager) {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());

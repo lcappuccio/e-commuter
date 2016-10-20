@@ -206,8 +206,7 @@ public class DatabaseImpl implements DatabaseApi {
 			} catch (ConstraintViolationException ex) {
 				String errorMessage = ex.getMessage();
 				tx.failure();
-				logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR +
-						errorMessage);
+				logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
 				throw new ConstraintViolationException(errorMessage);
 			}
 			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());

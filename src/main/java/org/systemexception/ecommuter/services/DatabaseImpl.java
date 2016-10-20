@@ -111,7 +111,7 @@ public class DatabaseImpl implements DatabaseApi {
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
-				logger.info("updatedPersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
+				logger.info("updatePersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
 				tx.terminate();
 			}
 		}

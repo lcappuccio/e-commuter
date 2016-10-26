@@ -69,13 +69,11 @@ public class PersonJsonParserTest {
 				"\"homeAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"," +
-				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"}}," +
+				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
 				"\"workAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"," +
-				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"}}}";
+				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
 	}
 
 	private JsonObject getPersonJsonObject() {

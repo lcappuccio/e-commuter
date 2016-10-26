@@ -26,6 +26,7 @@ public class LocationImpl implements LocationApi {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.apiKey);
 	private final HaversineUtil haversineUtil = new HaversineUtil();
+	private static final String EMPTY_STRING = "";
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws Exception {
@@ -88,7 +89,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
-		String country = "", postalCode = "", locality = "";
+		String country = EMPTY_STRING, postalCode = EMPTY_STRING, locality = EMPTY_STRING;
 
 		Address address = new Address();
 		address.setFormattedAddress(geocodingResult.formattedAddress);

@@ -89,10 +89,14 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
-		String country = EMPTY_STRING, postalCode = EMPTY_STRING, locality = EMPTY_STRING,
-				administrativeAreaLevel1 = EMPTY_STRING, administrativeAreaLevel2 = EMPTY_STRING;
-
+		
+		String country = EMPTY_STRING;
+		String postalCode = EMPTY_STRING;
+		String locality = EMPTY_STRING;
+		String administrativeAreaLevel1 = EMPTY_STRING;
+		String administrativeAreaLevel2 = EMPTY_STRING;
 		Address address = new Address();
+
 		address.setFormattedAddress(geocodingResult.formattedAddress);
 		address.setLatitude(geocodingResult.geometry.location.lat);
 		address.setLongitude(geocodingResult.geometry.location.lng);

@@ -263,7 +263,10 @@ public class DatabaseImpl implements DatabaseApi {
 			String country = csvRecord.get(CsvHeaders.COUNTRY);
 			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
 			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
-			Territory territory = new Territory(country, postalCode, placeName);
+			String administrativeLevel1 = csvRecord.get(CsvHeaders.ADMIN_NAME1);
+			String administrativeLevel2 = csvRecord.get(CsvHeaders.ADMIN_NAME2);
+			Territory territory = new Territory(country, postalCode, placeName, administrativeLevel1,
+					administrativeLevel2);
 			territories.addTerritory(territory);
 		}
 		logger.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());

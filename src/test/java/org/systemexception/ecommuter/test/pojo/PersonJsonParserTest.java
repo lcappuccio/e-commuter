@@ -67,15 +67,15 @@ public class PersonJsonParserTest {
 	public String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
+				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"," +
+				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"}}," +
 				"\"workAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
+				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"," +
+				"\"administrativeAreaLevel2\":\"MI\",\"administrativeAreaLevel1\":\"Lombardia\"}}}";
 	}
 
 	private JsonObject getPersonJsonObject() {

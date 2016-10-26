@@ -5,8 +5,8 @@ package org.systemexception.ecommuter.model;
  * @date 01/07/16 23:06
  */
 public class Address {
-	
-	private String streetNumber, route, administrativeAreaLevel2, administrativeAreaLevel1, formattedAddress;
+
+	private String streetNumber, route, formattedAddress;
 	private double latitude, longitude;
 	private Territory territory;
 
@@ -50,22 +50,6 @@ public class Address {
 		this.route = route;
 	}
 
-	public String getAdministrativeAreaLevel2() {
-		return administrativeAreaLevel2;
-	}
-
-	public void setAdministrativeAreaLevel2(String administrativeAreaLevel2) {
-		this.administrativeAreaLevel2 = administrativeAreaLevel2;
-	}
-
-	public String getAdministrativeAreaLevel1() {
-		return administrativeAreaLevel1;
-	}
-
-	public void setAdministrativeAreaLevel1(String administrativeAreaLevel1) {
-		this.administrativeAreaLevel1 = administrativeAreaLevel1;
-	}
-
 	public Territory getTerritory() {
 		return territory;
 	}
@@ -86,12 +70,6 @@ public class Address {
 		if (streetNumber != null ? !streetNumber.equals(address.streetNumber) : address.streetNumber != null)
 			return false;
 		if (route != null ? !route.equals(address.route) : address.route != null) return false;
-		if (administrativeAreaLevel2 != null ? !administrativeAreaLevel2.equals(address.administrativeAreaLevel2) :
-				address.administrativeAreaLevel2 != null)
-			return false;
-		if (administrativeAreaLevel1 != null ? !administrativeAreaLevel1.equals(address.administrativeAreaLevel1) :
-				address.administrativeAreaLevel1 != null)
-			return false;
 		if (formattedAddress != null ? !formattedAddress.equals(address.formattedAddress) : address.formattedAddress
 				!= null)
 			return false;
@@ -105,8 +83,6 @@ public class Address {
 		long temp;
 		result = streetNumber != null ? streetNumber.hashCode() : 0;
 		result = 31 * result + (route != null ? route.hashCode() : 0);
-		result = 31 * result + (administrativeAreaLevel2 != null ? administrativeAreaLevel2.hashCode() : 0);
-		result = 31 * result + (administrativeAreaLevel1 != null ? administrativeAreaLevel1.hashCode() : 0);
 		result = 31 * result + (formattedAddress != null ? formattedAddress.hashCode() : 0);
 		temp = Double.doubleToLongBits(latitude);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));

@@ -5,11 +5,7 @@ package org.systemexception.ecommuter.model;
  * @date 01/07/16 23:06
  */
 public class Address {
-
-	/**
-	 * Following model in
-	 * https://developers.google.com/maps/documentation/geocoding/start
-	 */
+	
 	private String streetNumber, route, administrativeAreaLevel2, administrativeAreaLevel1, formattedAddress;
 	private double latitude, longitude;
 	private Territory territory;

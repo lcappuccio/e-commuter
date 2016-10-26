@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.model.Territory;
 
 import java.util.UUID;
 
@@ -21,10 +22,17 @@ public class PersonsTest {
 	@Before
 	public void setSut() {
 		sut = new Persons();
+
 		Address homeAddress = new Address();
-		homeAddress.setPostalCode("123");
+		Territory territoryA = new Territory();
+		territoryA.setPostalCode("123");
+		homeAddress.setTerritory(territoryA);
+
 		Address workAddress = new Address();
-		workAddress.setPostalCode("456");
+		Territory territoryB = new Territory();
+		territoryB.setPostalCode("456");
+		workAddress.setTerritory(territoryB);
+
 		Person personA = new Person(UUID.randomUUID().toString(), "NAME", "SURNAME", homeAddress, workAddress);
 		Person personB = new Person(UUID.randomUUID().toString(), "NAME2", "SURNAME2", homeAddress, workAddress);
 		sut.addPerson(personA);

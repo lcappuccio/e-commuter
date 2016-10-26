@@ -14,6 +14,7 @@ import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
 
 /**
@@ -87,6 +88,8 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
+		String country = "", postalCode = "", locality = "";
+
 		Address address = new Address();
 		address.setFormattedAddress(geocodingResult.formattedAddress);
 		address.setLatitude(geocodingResult.geometry.location.lat);
@@ -95,10 +98,10 @@ public class LocationImpl implements LocationApi {
 		for (AddressComponent addressComponent : geocodingResult.addressComponents) {
 			for (AddressComponentType addressComponentType : addressComponent.types) {
 				if (addressComponentType.equals(AddressComponentType.COUNTRY)) {
-					address.setCountry(addressComponent.shortName);
+					country = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.POSTAL_CODE)) {
-					address.setPostalCode(addressComponent.shortName);
+					postalCode = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1)) {
 					address.setAdministrativeAreaLevel1(addressComponent.shortName);
@@ -107,7 +110,7 @@ public class LocationImpl implements LocationApi {
 					address.setAdministrativeAreaLevel2(addressComponent.shortName);
 				}
 				if (addressComponentType.equals(AddressComponentType.LOCALITY)) {
-					address.setLocality(addressComponent.shortName);
+					locality = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.ROUTE)) {
 					address.setRoute(addressComponent.shortName);
@@ -117,6 +120,8 @@ public class LocationImpl implements LocationApi {
 				}
 			}
 		}
+		Territory territory = new Territory(country, postalCode, locality);
+		address.setTerritory(territory);
 
 		return address;
 	}

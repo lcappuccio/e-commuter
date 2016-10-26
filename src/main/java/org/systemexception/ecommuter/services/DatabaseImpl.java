@@ -81,12 +81,14 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
-				"lives in " + person.getHomeAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
-				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
-				"works in " + person.getWorkAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
-				person.getWorkAddress().getPostalCode());
-		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getCountry(), homeAddress.getPostalCode());
-		Optional<Node> workNode = getNodeByPostalCode(workAddress.getCountry(), workAddress.getPostalCode());
+				"lives in " + person.getHomeAddress().getTerritory().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getHomeAddress().getTerritory().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
+				"works in " + person.getWorkAddress().getTerritory().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getWorkAddress().getTerritory().getPostalCode());
+		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getTerritory().getCountry(),
+				homeAddress.getTerritory().getPostalCode());
+		Optional<Node> workNode = getNodeByPostalCode(workAddress.getTerritory().getCountry(),
+				workAddress.getTerritory().getPostalCode());
 		if (homeNode.isPresent() && workNode.isPresent()) {
 			insertPerson(person, homeNode.get(), workNode.get());
 		} else {

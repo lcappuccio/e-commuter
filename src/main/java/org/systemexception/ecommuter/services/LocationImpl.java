@@ -89,7 +89,8 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
-		String country = EMPTY_STRING, postalCode = EMPTY_STRING, locality = EMPTY_STRING;
+		String country = EMPTY_STRING, postalCode = EMPTY_STRING, locality = EMPTY_STRING,
+				administrativeAreaLevel1 = EMPTY_STRING, administrativeAreaLevel2 = EMPTY_STRING;
 
 		Address address = new Address();
 		address.setFormattedAddress(geocodingResult.formattedAddress);
@@ -105,10 +106,10 @@ public class LocationImpl implements LocationApi {
 					postalCode = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1)) {
-					address.setAdministrativeAreaLevel1(addressComponent.shortName);
+					administrativeAreaLevel1 = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_2)) {
-					address.setAdministrativeAreaLevel2(addressComponent.shortName);
+					administrativeAreaLevel2 = addressComponent.shortName;
 				}
 				if (addressComponentType.equals(AddressComponentType.LOCALITY)) {
 					locality = addressComponent.shortName;
@@ -121,7 +122,8 @@ public class LocationImpl implements LocationApi {
 				}
 			}
 		}
-		Territory territory = new Territory(country, postalCode, locality);
+		Territory territory = new Territory(country, postalCode, locality, administrativeAreaLevel1,
+				administrativeAreaLevel2);
 		address.setTerritory(territory);
 
 		return address;

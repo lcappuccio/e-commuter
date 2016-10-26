@@ -27,8 +27,6 @@ public class LocationImplTest {
 
 	private final LocationApi sut = new LocationImpl();
 	private final String locationItaly = End2End.LOCATION_ITALY;
-	private final String locationLombardia = "Lombardia";
-	private final String locationMilanoRegion = "MI";
 	private final String locationMilano = "Milano";
 	private final String locationPiazzaDuomo = "Piazza del Duomo";
 
@@ -43,8 +41,6 @@ public class LocationImplTest {
 		assertEquals(45.4641776, geoFromAddress.getLatitude(), 0);
 		assertEquals(9.1899885, geoFromAddress.getLongitude(), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
-		assertEquals(locationLombardia, geoFromAddress.getTerritory().getAdministrativeAreaLevel1());
-		assertEquals(locationMilanoRegion, geoFromAddress.getTerritory().getAdministrativeAreaLevel2());
 		assertEquals(locationMilano, geoFromAddress.getTerritory().getPlaceName());
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationPiazzaDuomo, geoFromAddress.getRoute());
@@ -70,8 +66,6 @@ public class LocationImplTest {
 		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
 		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
-		assertEquals(locationLombardia, addressFromGeo.getTerritory().getAdministrativeAreaLevel1());
-		assertEquals(locationMilanoRegion, addressFromGeo.getTerritory().getAdministrativeAreaLevel2());
 		assertEquals(locationMilano, addressFromGeo.getTerritory().getPlaceName());
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationPiazzaDuomo, addressFromGeo.getRoute());
@@ -149,7 +143,7 @@ public class LocationImplTest {
 
 	private Address getAddress(String postalCode, double latitude, double longitude) {
 		Address address = new Address();
-		Territory territory = new Territory("Country", postalCode, "PlaceName", "AdminLevel1", "AdminLevel2");
+		Territory territory = new Territory("Country", postalCode, "PlaceName");
 		address.setTerritory(territory);
 		address.setLatitude(latitude);
 		address.setLongitude(longitude);

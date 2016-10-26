@@ -106,10 +106,12 @@ public class RestController {
 			@RequestBody @Valid final Person person,
 			@RequestParam(value = Endpoints.DISTANCE) final double distance) {
 
-		Persons personsLivesIn = databaseService.findPersonsLivesIn(person.getHomeAddress().getCountry(),
-				person.getHomeAddress().getPostalCode());
-		Persons personsWorksIn = databaseService.findPersonsWorksIn(person.getWorkAddress().getCountry(),
-				person.getWorkAddress().getPostalCode());
+		Persons personsLivesIn = databaseService.findPersonsLivesIn(
+				person.getHomeAddress().getTerritory().getCountry(),
+				person.getHomeAddress().getTerritory().getPostalCode());
+		Persons personsWorksIn = databaseService.findPersonsWorksIn(
+				person.getWorkAddress().getTerritory().getCountry(),
+				person.getWorkAddress().getTerritory().getPostalCode());
 		Persons fullPersonList = new Persons();
 		for (Person personLiving : personsLivesIn.getPersons()) {
 			fullPersonList.addPerson(personLiving);

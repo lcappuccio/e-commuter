@@ -10,6 +10,7 @@ import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.test.End2End;
 
@@ -41,11 +42,11 @@ public class LocationImplTest {
 		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.4641776, geoFromAddress.getLatitude(), 0);
 		assertEquals(9.1899885, geoFromAddress.getLongitude(), 0);
-		assertEquals(locationItaly, geoFromAddress.getCountry());
+		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationLombardia, geoFromAddress.getAdministrativeAreaLevel1());
 		assertEquals(locationMilanoRegion, geoFromAddress.getAdministrativeAreaLevel2());
-		assertEquals(locationMilano, geoFromAddress.getLocality());
-		assertEquals(locationItaly, geoFromAddress.getCountry());
+		assertEquals(locationMilano, geoFromAddress.getTerritory().getPlaceName());
+		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationPiazzaDuomo, geoFromAddress.getRoute());
 	}
 
@@ -55,8 +56,7 @@ public class LocationImplTest {
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
 		assertNull(geoFromAddress.getStreetNumber());
-		assertNull(geoFromAddress.getLocality());
-		assertNull(geoFromAddress.getCountry());
+		assertNull(geoFromAddress.getTerritory());
 		assertTrue(geoFromAddress.getLatitude() == 0d);
 		assertTrue(geoFromAddress.getLongitude() == 0d);
 	}
@@ -69,13 +69,13 @@ public class LocationImplTest {
 		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
 		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
-		assertEquals(locationItaly, addressFromGeo.getCountry());
+		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationLombardia, addressFromGeo.getAdministrativeAreaLevel1());
 		assertEquals(locationMilanoRegion, addressFromGeo.getAdministrativeAreaLevel2());
-		assertEquals(locationMilano, addressFromGeo.getLocality());
-		assertEquals(locationItaly, addressFromGeo.getCountry());
+		assertEquals(locationMilano, addressFromGeo.getTerritory().getPlaceName());
+		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationPiazzaDuomo, addressFromGeo.getRoute());
-		assertEquals("20122", addressFromGeo.getPostalCode());
+		assertEquals("20122", addressFromGeo.getTerritory().getPostalCode());
 	}
 
 	@Test
@@ -83,8 +83,7 @@ public class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(0, 0);
 
 		assertNull(addressFromGeo.getStreetNumber());
-		assertNull(addressFromGeo.getLocality());
-		assertNull(addressFromGeo.getCountry());
+		assertNull(addressFromGeo.getTerritory());
 		assertTrue(addressFromGeo.getLatitude() == 0d);
 		assertTrue(addressFromGeo.getLongitude() == 0d);
 	}
@@ -150,7 +149,8 @@ public class LocationImplTest {
 
 	private Address getAddress(String postalCode, double latitude, double longitude) {
 		Address address = new Address();
-		address.setPostalCode(postalCode);
+		Territory territory = new Territory("Country", postalCode, "PlaceName");
+		address.setTerritory(territory);
 		address.setLatitude(latitude);
 		address.setLongitude(longitude);
 		return address;

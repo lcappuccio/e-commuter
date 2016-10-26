@@ -6,7 +6,9 @@ package org.systemexception.ecommuter.model;
  */
 public class Territory {
 
-	private final String country, postalCode, placeName;
+	private String country, postalCode, placeName;
+
+	public Territory() {}
 
 	public Territory(String country, String postalCode, String placeName) {
 		this.country = country;
@@ -14,16 +16,28 @@ public class Territory {
 		this.placeName = placeName;
 	}
 
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
 	public String getPostalCode() {
 		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	public String getPlaceName() {
 		return placeName;
 	}
 
-	public String getCountry() {
-		return country;
+	public void setPlaceName(String placeName) {
+		this.placeName = placeName;
 	}
 
 	@Override

@@ -10,9 +10,9 @@ public class Address {
 	 * Following model in
 	 * https://developers.google.com/maps/documentation/geocoding/start
 	 */
-	private String streetNumber, route, locality, administrativeAreaLevel2, administrativeAreaLevel1, country,
-			postalCode, formattedAddress;
+	private String streetNumber, route, administrativeAreaLevel2, administrativeAreaLevel1, formattedAddress;
 	private double latitude, longitude;
+	private Territory territory;
 
 	public String getFormattedAddress() {
 		return formattedAddress;
@@ -54,14 +54,6 @@ public class Address {
 		this.route = route;
 	}
 
-	public String getLocality() {
-		return locality;
-	}
-
-	public void setLocality(String locality) {
-		this.locality = locality;
-	}
-
 	public String getAdministrativeAreaLevel2() {
 		return administrativeAreaLevel2;
 	}
@@ -78,20 +70,12 @@ public class Address {
 		this.administrativeAreaLevel1 = administrativeAreaLevel1;
 	}
 
-	public String getCountry() {
-		return country;
+	public Territory getTerritory() {
+		return territory;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getPostalCode() {
-		return postalCode;
-	}
-
-	public void setPostalCode(String postalCode) {
-		this.postalCode = postalCode;
+	public void setTerritory(Territory territory) {
+		this.territory = territory;
 	}
 
 	@Override
@@ -106,17 +90,16 @@ public class Address {
 		if (streetNumber != null ? !streetNumber.equals(address.streetNumber) : address.streetNumber != null)
 			return false;
 		if (route != null ? !route.equals(address.route) : address.route != null) return false;
-		if (locality != null ? !locality.equals(address.locality) : address.locality != null) return false;
 		if (administrativeAreaLevel2 != null ? !administrativeAreaLevel2.equals(address.administrativeAreaLevel2) :
 				address.administrativeAreaLevel2 != null)
 			return false;
 		if (administrativeAreaLevel1 != null ? !administrativeAreaLevel1.equals(address.administrativeAreaLevel1) :
 				address.administrativeAreaLevel1 != null)
 			return false;
-		if (country != null ? !country.equals(address.country) : address.country != null) return false;
-		if (postalCode != null ? !postalCode.equals(address.postalCode) : address.postalCode != null) return false;
-		return formattedAddress != null ? formattedAddress.equals(address.formattedAddress) : address.formattedAddress
-				== null;
+		if (formattedAddress != null ? !formattedAddress.equals(address.formattedAddress) : address.formattedAddress
+				!= null)
+			return false;
+		return territory != null ? territory.equals(address.territory) : address.territory == null;
 
 	}
 
@@ -126,16 +109,14 @@ public class Address {
 		long temp;
 		result = streetNumber != null ? streetNumber.hashCode() : 0;
 		result = 31 * result + (route != null ? route.hashCode() : 0);
-		result = 31 * result + (locality != null ? locality.hashCode() : 0);
 		result = 31 * result + (administrativeAreaLevel2 != null ? administrativeAreaLevel2.hashCode() : 0);
 		result = 31 * result + (administrativeAreaLevel1 != null ? administrativeAreaLevel1.hashCode() : 0);
-		result = 31 * result + (country != null ? country.hashCode() : 0);
-		result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
 		result = 31 * result + (formattedAddress != null ? formattedAddress.hashCode() : 0);
 		temp = Double.doubleToLongBits(latitude);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(longitude);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		result = 31 * result + (territory != null ? territory.hashCode() : 0);
 		return result;
 	}
 }

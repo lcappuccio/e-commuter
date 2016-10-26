@@ -78,8 +78,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_lives_in() {
-		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getCountry(),
-				person.getHomeAddress().getPostalCode());
+		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
+				person.getHomeAddress().getTerritory().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().iterator().next(), person);
@@ -87,8 +87,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_works_in() {
-		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getCountry(),
-				person.getHomeAddress().getPostalCode());
+		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getTerritory().getCountry(),
+				person.getHomeAddress().getTerritory().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
 		assertEquals(personsLivesIn.getPersons().iterator().next(), person);
@@ -104,7 +104,7 @@ public class DatabaseImplTest {
 	@Test(expected = TerritoriesException.class)
 	public void add_person_nonexisting_node() throws TerritoriesException {
 		Address missingAddress = person.getHomeAddress();
-		missingAddress.setPostalCode("XXXX");
+		missingAddress.getTerritory().setPostalCode("XXXX");
 		person.setHomeAddress(missingAddress);
 		sut.addPerson(person);
 	}
@@ -112,14 +112,14 @@ public class DatabaseImplTest {
 	@Test(expected = TerritoriesException.class)
 	public void add_person_bad_country_good_postalcode() throws TerritoriesException {
 		Address missingAddress = person.getHomeAddress();
-		missingAddress.setCountry("XXX");
+		missingAddress.getTerritory().setCountry("XXX");
 		sut.addPerson(person);
 	}
 
 	@Test
 	public void update_person() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
-				addressFromGeo.getPostalCode()).getPersons().iterator().next();
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
@@ -133,8 +133,8 @@ public class DatabaseImplTest {
 
 	@Test
 	public void update_person_bad_id() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getCountry(),
-				addressFromGeo.getPostalCode()).getPersons().iterator().next();
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());

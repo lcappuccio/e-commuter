@@ -7,7 +7,6 @@ import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
-import org.neo4j.graphdb.schema.ConstraintCreator;
 import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +46,8 @@ public class DatabaseImpl implements DatabaseApi {
 
 	public DatabaseImpl(final String dbFolder) {
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
-		ConstraintCreator constraintCreator;
 		IndexManager indexManager = graphDb.index();
-		createIndexesAndConstraintCreator(indexManager);
+		createIndexes(indexManager);
 		createSchema();
 		logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + dbFolder);
 	}
@@ -72,7 +70,7 @@ public class DatabaseImpl implements DatabaseApi {
 			}
 			tx.success();
 		}
-		logger.info("loadedTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+		logger.info("addedTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 	}
 
 	/**
@@ -83,18 +81,20 @@ public class DatabaseImpl implements DatabaseApi {
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		logger.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
-				"lives in " + person.getHomeAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
-				person.getHomeAddress().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
-				"works in " + person.getWorkAddress().getCountry() + Constants.LOG_ITEM_SEPARATOR +
-				person.getWorkAddress().getPostalCode());
-		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getCountry(), homeAddress.getPostalCode());
-		Optional<Node> workNode = getNodeByPostalCode(workAddress.getCountry(), workAddress.getPostalCode());
+				"lives in " + person.getHomeAddress().getTerritory().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getHomeAddress().getTerritory().getPostalCode() + Constants.LOG_ITEM_SEPARATOR +
+				"works in " + person.getWorkAddress().getTerritory().getCountry() + Constants.LOG_ITEM_SEPARATOR +
+				person.getWorkAddress().getTerritory().getPostalCode());
+		Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getTerritory().getCountry(),
+				homeAddress.getTerritory().getPostalCode());
+		Optional<Node> workNode = getNodeByPostalCode(workAddress.getTerritory().getCountry(),
+				workAddress.getTerritory().getPostalCode());
 		if (homeNode.isPresent() && workNode.isPresent()) {
 			insertPerson(person, homeNode.get(), workNode.get());
 		} else {
 			String errorMessage = "Non existing territory";
-			logger.error("addedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
-					Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			logger.error("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
+					Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new TerritoriesException(errorMessage);
 		}
 		return person;
@@ -113,7 +113,7 @@ public class DatabaseImpl implements DatabaseApi {
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
-				logger.info("updatedPersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
+				logger.info("updatePersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
 				tx.terminate();
 			}
 		}
@@ -208,8 +208,7 @@ public class DatabaseImpl implements DatabaseApi {
 			} catch (ConstraintViolationException ex) {
 				String errorMessage = ex.getMessage();
 				tx.failure();
-				logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + Constants.LOG_ITEM_SEPARATOR +
-						errorMessage);
+				logger.error(person.getId() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
 				throw new ConstraintViolationException(errorMessage);
 			}
 			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
@@ -235,20 +234,17 @@ public class DatabaseImpl implements DatabaseApi {
 	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
 		logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
 				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
-		HashSet<Node> foundNode = new HashSet<>();
+		HashSet<Node> foundNodes = new HashSet<>();
 		Persons foundPersons = new Persons();
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
 			if (nodeByPostalCode.isPresent()) {
 				for (Relationship relationship : nodeByPostalCode.get().getRelationships(relationshipType)) {
-					foundNode.add(relationship.getStartNode());
+					foundNodes.add(relationship.getStartNode());
 				}
-				for (Node node : foundNode) {
+				for (Node node : foundNodes) {
 					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
 					if (!foundPersons.getPersons().contains(personJson)) {
-						logger.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR +
-								relationshipType.toString() + Constants.LOG_ITEM_SEPARATOR + country +
-								Constants.LOG_ITEM_SEPARATOR + postalCode);
 						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
 					}
 				}
@@ -267,7 +263,10 @@ public class DatabaseImpl implements DatabaseApi {
 			String country = csvRecord.get(CsvHeaders.COUNTRY);
 			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
 			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
-			Territory territory = new Territory(country, postalCode, placeName);
+			String administrativeLevel1 = csvRecord.get(CsvHeaders.ADMIN_NAME1);
+			String administrativeLevel2 = csvRecord.get(CsvHeaders.ADMIN_NAME2);
+			Territory territory = new Territory(country, postalCode, placeName, administrativeLevel1,
+					administrativeLevel2);
 			territories.addTerritory(territory);
 		}
 		logger.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
@@ -279,7 +278,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param indexManager
 	 * @return
 	 */
-	private void createIndexesAndConstraintCreator(IndexManager indexManager) {
+	private void createIndexes(IndexManager indexManager) {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());

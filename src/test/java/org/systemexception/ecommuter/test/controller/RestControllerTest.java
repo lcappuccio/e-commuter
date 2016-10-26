@@ -23,6 +23,7 @@ import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 import org.systemexception.ecommuter.test.End2End;
 
@@ -128,46 +129,74 @@ public class RestControllerTest {
 
 	@Test
 	public void nearby_persons() throws Exception {
-		Person person = mock(Person.class);
-		Persons personsLiving = mock(Persons.class);
-		Persons personsWorking = mock(Persons.class);
 		double distance = 0.5;
+		Person person = mock(Person.class);
 
-		when(person.getHomeAddress()).thenReturn(mock(Address.class));
-		when(person.getWorkAddress()).thenReturn(mock(Address.class));
-		when(person.getHomeAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
-		when(person.getHomeAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
-		when(person.getWorkAddress().getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
-		when(person.getWorkAddress().getCountry()).thenReturn(End2End.LOCATION_ITALY);
-		when(databaseApi.findPersonsLivesIn(person.getHomeAddress().getCountry(),
-				person.getHomeAddress().getPostalCode())).thenReturn(personsLiving);
-		when(databaseApi.findPersonsWorksIn(person.getWorkAddress().getCountry(),
-				person.getWorkAddress().getPostalCode())).thenReturn(personsWorking);
+		Persons personsLiving = mock(Persons.class);
+		Address addressLiving = mock(Address.class);
+		Territory territoryLiving = mock(Territory.class);
+
+		Persons personsWorking = mock(Persons.class);
+		Address addressWorking = mock(Address.class);
+		Territory territoryWorking = mock(Territory.class);
+
+		when(person.getHomeAddress()).thenReturn(addressLiving);
+		when(person.getHomeAddress().getTerritory()).thenReturn(territoryLiving);
+		when(territoryLiving.getCountry()).thenReturn(End2End.LOCATION_ITALY);
+		when(territoryLiving.getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+
+		when(person.getWorkAddress()).thenReturn(addressWorking);
+		when(person.getWorkAddress().getTerritory()).thenReturn(territoryWorking);
+		when(territoryWorking.getCountry()).thenReturn(End2End.LOCATION_ITALY);
+		when(territoryWorking.getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+
+		when(databaseApi.findPersonsLivesIn(territoryLiving.getCountry(), territoryLiving.getPostalCode()))
+				.thenReturn(personsLiving);
+		when(databaseApi.findPersonsWorksIn(territoryWorking.getCountry(), territoryWorking.getPostalCode()))
+				.thenReturn(personsWorking);
 
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
 				.param(Endpoints.DISTANCE, String.valueOf(distance))
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
-		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getCountry(),
-				person.getHomeAddress().getPostalCode());
-		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getCountry(),
-				person.getWorkAddress().getPostalCode());
+		verify(databaseApi).findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
+				person.getHomeAddress().getTerritory().getPostalCode());
+		verify(databaseApi).findPersonsWorksIn(person.getWorkAddress().getTerritory().getCountry(),
+				person.getWorkAddress().getTerritory().getPostalCode());
 		// Testing only interaction
 		verify(locationApi).findNearbyPersons(any(), any(), anyDouble());
 	}
 
 	private String getPerson() {
-		return "{\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"streetNumber\":\"37\"," +
-				"\"route\":\"Viale Dante Alighieri\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia" +
-				" " +
-				"di Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\"," +
-				"\"postalCode\":\"21016\",\"formattedAddress\":\"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\"," +
-				"\"latitude\":46.00051029999999,\"longitude\":8.7385149},\"workAddress\":{\"streetNumber\":\"9A\"," +
-				"\"route\":\"Piazza Libertà\",\"locality\":\"Luino\",\"administrativeAreaLevel2\":\"Provincia di " +
-				"Varese\",\"administrativeAreaLevel1\":\"Lombardia\",\"country\":\"IT\",\"postalCode\":\"21016\"," +
-				"\"formattedAddress\":\"Piazza Libertà, 9A, 21016 Luino VA, Italy\",\"latitude\":46.0035187," +
-				"\"longitude\":8.7429054}}";
+		return "{" +
+				"\"name\": \"TEST_NAME_A\"," +
+				"\"surname\": \"TEST_SURNAME_A\"," +
+				"\"homeAddress\": {" +
+				"\"streetNumber\": \"37\"," +
+				"\"route\": \"Viale Dante Alighieri\"," +
+				"\"administrativeAreaLevel2\": \"Provincia di Varese\"," +
+				"\"administrativeAreaLevel1\": \"Lombardia\"," +
+				"\"formattedAddress \": \"Viale Dante Alighieri, 37, 21016 Luino VA, Italy\"," +
+				"\"latitude\": 46.00051029999999," +
+				"\"longitude\": 8.7385149," +
+				"\"territory\": {" +
+				"\"country\": \"IT\"," +
+				"\"postalCode\": \"21016\"," +
+				"\"placeName\": \"Luino\"" +
+				"}}," +
+				"\"workAddress\": {" +
+				"\"streetNumber\": \"9A\"," +
+				"\"route\": \"Piazza Libertà\"," +
+				"\"administrativeAreaLevel2\": \"Provincia di Varese\"," +
+				"\"administrativeAreaLevel1\": \"Lombardia\"," +
+				"\"formattedAddress\": \"Piazza Libertà, 9A, 21016 Luino VA, Italy \"," +
+				"\"latitude\": 46.0035187," +
+				"\"longitude\": 8.7429054," +
+				"\"territory\": {" +
+				"\"country\": \"IT\"," +
+				"\"postalCode\": \"21016\"," +
+				"\"placeName\": \"Luino\"}}}";
 	}
 
 	private String getAddress() {

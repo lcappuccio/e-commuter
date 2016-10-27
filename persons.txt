@@ -1,6 +1,6 @@
 {
 	"name": "TEST_NAME_A",
-	"surname": "TEST_SURNAME_A",
+	"lastname": "TEST_SURNAME_A",
 	"homeAddress": {
 		"streetNumber": "37",
 		"route": "Viale Dante Alighieri",
@@ -29,7 +29,7 @@
 
 {
 	"name": "TEST_NAME_B",
-	"surname": "TEST_SURNAME_B",
+	"lastname": "TEST_SURNAME_B",
 	"homeAddress": {
 		"streetNumber": "25",
 		"route": "Via Vittorio Veneto",
@@ -58,7 +58,7 @@
 
 {
 	"name": "TEST_NAME_C",
-	"surname": "TEST_SURNAME_C",
+	"lastname": "TEST_SURNAME_C",
 	"homeAddress": {
 		"streetNumber": "20",
 		"route": "Via del Carmine",

@@ -53,4 +53,12 @@ public interface DatabaseApi {
 	 */
 	Persons findPersonsWorksIn(String country, String postalCode);
 
+	/**
+	 * Finds all persons with exactly the given last name
+	 *
+	 * @param lastname
+	 * @return
+	 */
+	Persons findPersonsByLastname(String lastname);
+
 }

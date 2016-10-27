@@ -6,16 +6,16 @@ package org.systemexception.ecommuter.model;
  */
 public class Person {
 
-	private String id, name, surname;
+	private String id, name, lastname;
 	private Address homeAddress, workAddress;
 
 	public Person() {}
 
-	public Person (final String personId, final String name, final String surname, final Address homeAddress, final
+	public Person (final String personId, final String name, final String lastname, final Address homeAddress, final
 	Address workAddress) {
 		this.id = personId;
 		this.name = name;
-		this.surname = surname;
+		this.lastname = lastname;
 		this.homeAddress = homeAddress;
 		this.workAddress = workAddress;
 	}
@@ -36,12 +36,12 @@ public class Person {
 		this.name = name;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getLastname() {
+		return lastname;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public Address getHomeAddress() {
@@ -69,7 +69,7 @@ public class Person {
 
 		if (id != null ? !id.equals(person.id) : person.id != null) return false;
 		if (name != null ? !name.equals(person.name) : person.name != null) return false;
-		if (surname != null ? !surname.equals(person.surname) : person.surname != null) return false;
+		if (lastname != null ? !lastname.equals(person.lastname) : person.lastname != null) return false;
 		if (homeAddress != null ? !homeAddress.equals(person.homeAddress) : person.homeAddress != null) return false;
 		return workAddress != null ? workAddress.equals(person.workAddress) : person.workAddress == null;
 
@@ -79,7 +79,7 @@ public class Person {
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (surname != null ? surname.hashCode() : 0);
+		result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
 		result = 31 * result + (homeAddress != null ? homeAddress.hashCode() : 0);
 		result = 31 * result + (workAddress != null ? workAddress.hashCode() : 0);
 		return result;

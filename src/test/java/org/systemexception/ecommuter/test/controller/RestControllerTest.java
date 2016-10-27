@@ -81,6 +81,25 @@ public class RestControllerTest {
 	}
 
 	@Test
+	public void find_person_by_lastname() throws Exception {
+		Person person = PersonJsonParser.fromString(getPerson());
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME)
+				.param(Endpoints.LAST_NAME, person.getLastname())).andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(databaseApi).findPersonsByLastname(person.getLastname());
+	}
+
+	@Test
+	public void delete_person() throws Exception {
+		Person person = PersonJsonParser.fromString(getPerson());
+		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)
+				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
+				.andExpect(status().is(HttpStatus.OK.value()));
+
+		verify(databaseApi).deletePerson(person);
+	}
+
+	@Test
 	public void update_person() throws Exception {
 		Person person = PersonJsonParser.fromString(getPerson());
 		Person updatedPerson = new Person(person.getId(), "UPDATED_NAME", "UPDATED_SURNAME", person.getHomeAddress(),
@@ -92,16 +111,6 @@ public class RestControllerTest {
 				.andExpect(status().is(HttpStatus.OK.value()));
 
 		verify(databaseApi).updatePerson(person);
-	}
-
-	@Test
-	public void delete_person() throws Exception {
-		Person person = PersonJsonParser.fromString(getPerson());
-		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)
-				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
-				.andExpect(status().is(HttpStatus.OK.value()));
-
-		verify(databaseApi).deletePerson(person);
 	}
 
 	@Test
@@ -171,7 +180,7 @@ public class RestControllerTest {
 	private String getPerson() {
 		return "{" +
 				"\"name\": \"TEST_NAME_A\"," +
-				"\"surname\": \"TEST_SURNAME_A\"," +
+				"\"lastname\": \"TEST_SURNAME_A\"," +
 				"\"homeAddress\": {" +
 				"\"streetNumber\": \"37\"," +
 				"\"route\": \"Viale Dante Alighieri\"," +

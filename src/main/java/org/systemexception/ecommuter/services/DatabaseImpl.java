@@ -110,12 +110,7 @@ public class DatabaseImpl implements DatabaseApi {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
 			if (personNode != null) {
-				String personAsJson = personNode.getProperty(PERSON_DATA.toString()).toString();
-				Person personFromJson = PersonJsonParser.fromString(personAsJson);
-				if (!personFromJson.getLastname().equals(person.getLastname())) {
-					indexPersonLastName.remove(personNode);
-					indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
-				}
+				updateLastnameIndex(person, personNode);
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
@@ -298,7 +293,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	/**
-	 * Creates indexes and returns a ConstraintCreator
+	 * Creates indexes with the given IndexManager
 	 *
 	 * @param indexManager
 	 * @return
@@ -315,7 +310,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	/**
-	 * Creates the database schema
+	 * Creates the database schema and constraints
 	 */
 	private void createSchema() {
 		try (Transaction tx = graphDb.beginTx()) {
@@ -329,6 +324,21 @@ public class DatabaseImpl implements DatabaseApi {
 				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
 			}
 			tx.success();
+		}
+	}
+
+	/**
+	 * Update indexPersonLastName if updating the surname
+	 *
+	 * @param person the person received to update
+	 * @param personNode the person in the database
+	 */
+	private void updateLastnameIndex(Person person, Node personNode) {
+		String personAsJson = personNode.getProperty(PERSON_DATA.toString()).toString();
+		Person personFromJson = PersonJsonParser.fromString(personAsJson);
+		if (!personFromJson.getLastname().equals(person.getLastname())) {
+			indexPersonLastName.remove(personNode);
+			indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
 		}
 	}
 

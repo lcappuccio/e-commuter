@@ -154,4 +154,23 @@ public class DatabaseImplTest {
 		assertEquals(PERSON_LAST_NAME, personsByLastname.getPersons().iterator().next().getLastname());
 		assertEquals(person, personsByLastname.getPersons().iterator().next());
 	}
+
+	@Test
+	public void find_person_by_name_after_update() {
+		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
+		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getWorkAddress());
+		String lastnameUpdate = updatedSurname + "UPDATE";
+		personBuffer.setLastname(lastnameUpdate);
+		Person personAfterUpdate = sut.updatePerson(personBuffer);
+		Persons personsByLastname = sut.findPersonsByLastname(lastnameUpdate);
+
+		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
+		assertNotEquals(personBeforeUpdate, personAfterUpdate);
+		assertFalse(personsByLastname.getPersons().isEmpty());
+		assertEquals(1, personsByLastname.getPersons().size());
+		assertEquals(lastnameUpdate, personsByLastname.getPersons().iterator().next().getLastname());
+	}
 }

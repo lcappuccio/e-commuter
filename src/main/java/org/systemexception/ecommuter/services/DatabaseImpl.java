@@ -110,11 +110,17 @@ public class DatabaseImpl implements DatabaseApi {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
 			if (personNode != null) {
+				String personAsJson = personNode.getProperty(PERSON_DATA.toString()).toString();
+				Person personFromJson = PersonJsonParser.fromString(personAsJson);
+				if (!personFromJson.getLastname().equals(person.getLastname())) {
+					indexPersonLastName.remove(personNode);
+					indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
+				}
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
 				logger.info("updatePersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
-				tx.terminate();
+				tx.success();
 			}
 		}
 		logger.info("updatedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
@@ -166,7 +172,7 @@ public class DatabaseImpl implements DatabaseApi {
 	public Persons findPersonsByLastname(final String lastname) {
 		Persons persons = new Persons();
 		logger.info("findPersonsByLastname" + Constants.LOG_OBJECT_SEPARATOR + lastname);
-		try (Transaction tx = graphDb.beginTx()){
+		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastname).iterator();
 			tx.success();
 			while (nodeIterator.hasNext()) {

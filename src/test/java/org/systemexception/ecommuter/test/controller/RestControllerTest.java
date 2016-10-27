@@ -45,7 +45,6 @@ public class RestControllerTest {
 	private DatabaseApi databaseApi;
 	private LocationApi locationApi;
 	private StorageApi storageApi;
-	private RestController restController;
 	private MockMvc sut;
 	public final static String TEXT_PLAIN_FILE = "text/plain";
 
@@ -54,7 +53,7 @@ public class RestControllerTest {
 		databaseApi = mock(DatabaseApi.class);
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
-		restController = new RestController(databaseApi, locationApi, storageApi);
+		RestController restController = new RestController(databaseApi, locationApi, storageApi);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
 	}
 

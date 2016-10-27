@@ -28,6 +28,20 @@
 			"response": []
 		},
 		{
+			"name": "Person - Find by name",
+			"request": {
+				"url": "http://{{ip}}:{{port}}/ecommuter/person/lastname?lastname=",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "Person - Update",
 			"request": {
 				"url": "http://{{ip}}:{{port}}/ecommuter/person/update",

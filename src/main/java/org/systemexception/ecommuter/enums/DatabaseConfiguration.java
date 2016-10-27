@@ -7,24 +7,14 @@ package org.systemexception.ecommuter.enums;
 public enum DatabaseConfiguration {
 
 	// TERRITORIES
-	COUNTRY("country"),
-	POSTAL_CODE("postalCode"),
-	PLACE_NAME("placeName"),
+	COUNTRY,
+	POSTAL_CODE,
+	PLACE_NAME,
 	// PERSON
-	PERSON_ID("id"),
-	PERSON_DATA("personData"),
+	PERSON_ID,
+	PERSON_DATA,
 	// EDGE
-	LIVES_IN("livesIn"),
-	WORKS_IN("worksIn");
+	LIVES_IN,
+	WORKS_IN
 
-	private final String databaseConfiguration;
-
-	DatabaseConfiguration(String databaseConfiguration) {
-		this.databaseConfiguration = databaseConfiguration;
-	}
-
-	@Override
-	public String toString() {
-		return databaseConfiguration;
-	}
 }

@@ -15,6 +15,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.enums.Endpoints;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -33,6 +35,7 @@ public class ViewControllerTest {
 
 	@Test
 	public void get_main_view() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT)).andExpect(status().is(HttpStatus.OK.value()));
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT)).andExpect(status().is(HttpStatus.OK.value()))
+				.andExpect(content().string(containsString("e-commuter")));
 	}
 }

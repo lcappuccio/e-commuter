@@ -83,8 +83,6 @@ public class RestControllerTest {
 	@Test
 	public void find_person_by_lastname() throws Exception {
 		Person person = PersonJsonParser.fromString(getPerson());
-		Persons personsByLastname = mock(Persons.class);
-		// when(databaseApi.findPersonsByLastname(person.getLastname())).thenReturn(personsByLastname);
 		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME)
 				.param(Endpoints.LAST_NAME, person.getLastname())).andExpect(status().is(HttpStatus.OK.value()));
 

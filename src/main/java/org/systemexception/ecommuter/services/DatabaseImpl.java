@@ -243,9 +243,10 @@ public class DatabaseImpl implements DatabaseApi {
 					foundNodes.add(relationship.getStartNode());
 				}
 				for (Node node : foundNodes) {
-					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
-					if (!foundPersons.getPersons().contains(personJson)) {
-						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+					String personJsonString = node.getProperty(PERSON_DATA.toString()).toString();
+					Person person = PersonJsonParser.fromString(personJsonString);
+					if (!foundPersons.getPersons().contains(person)) {
+						foundPersons.addPerson(person);
 					}
 				}
 			}

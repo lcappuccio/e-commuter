@@ -19,14 +19,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.0.RELEASE</version>
+		<version>1.4.1.RELEASE</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.google.maps</groupId>
 			<artifactId>google-maps-services</artifactId>
-			<version>0.1.15</version>
+			<version>0.1.16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
-			<version>3.0.4</version>
+			<version>3.0.6</version>
 		</dependency>
 		<!-- Spring Dependencies -->
 		<dependency>

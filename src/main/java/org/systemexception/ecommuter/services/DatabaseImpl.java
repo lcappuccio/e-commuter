@@ -277,6 +277,12 @@ public class DatabaseImpl implements DatabaseApi {
 		return foundPersons;
 	}
 
+	/**
+	 * Parses a territories csv file and fills the territories list
+	 *
+	 * @param territoriesFile
+	 * @throws CsvParserException
+	 */
 	private void readCsvTerritories(final File territoriesFile) throws CsvParserException {
 		logger.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		CsvParser csvParser = new CsvParser(territoriesFile);

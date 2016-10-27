@@ -48,6 +48,10 @@ other parameters are not necessary
 4. Repeat previous steps for various persons living and working nearby
 5. Send one of the created persons to `nearbyPersons` with the desired radius to extract a list of Persons living and
  working nearby
+ 
+### Adding data programmatically
+
+See [e-commuter-generator](https://github.com/lcappuccio/e-commuter-generator) to generate data programmatically.
 
 ## Endpoints
 

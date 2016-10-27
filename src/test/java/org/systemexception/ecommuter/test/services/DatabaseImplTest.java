@@ -1,9 +1,6 @@
 package org.systemexception.ecommuter.test.services;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.neo4j.graphdb.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,9 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:application.properties")
 public class DatabaseImplTest {
 
-	private final static String DATABASE_FOLDER = End2End.TARGET_FOLER + File.separator + End2End.TEST_DATABASE_FOLDER;
+	private static final String DATABASE_FOLDER = End2End.TARGET_FOLER + File.separator + End2End.TEST_DATABASE_FOLDER;
+	private static final String PERSON_LAST_NAME = "NEWLASTNAME";
+	private static final String PERSON_NAME = "NEWNAME";
 	@Autowired
 	private DatabaseApi sut;
 	@Autowired
@@ -60,7 +59,7 @@ public class DatabaseImplTest {
 		sut.addTerritories(myFile);
 		addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
 		String personId = UUID.randomUUID().toString();
-		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_C, addressFromGeo, addressFromGeo);
+		person = new Person(personId, PERSON_NAME, PERSON_LAST_NAME, addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
 		sut.addPerson(person);
@@ -121,10 +120,10 @@ public class DatabaseImplTest {
 		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
-				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
 		personBuffer.setName(updatedName);
-		personBuffer.setSurname(updatedSurname);
+		personBuffer.setLastname(updatedSurname);
 		Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
@@ -136,13 +135,23 @@ public class DatabaseImplTest {
 		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
-				personBeforeUpdate.getSurname(), personBeforeUpdate.getHomeAddress(),
+				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
 		personBuffer.setId("BAD_ID");
 		personBuffer.setName(updatedName);
-		personBuffer.setSurname(updatedSurname);
+		personBuffer.setLastname(updatedSurname);
 		Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);
+	}
+
+	@Test
+	public void find_person_by_name() {
+		Persons personsByLastname = sut.findPersonsByLastname(PERSON_LAST_NAME);
+
+		assertFalse(personsByLastname.getPersons().isEmpty());
+		assertEquals(1, personsByLastname.getPersons().size());
+		assertEquals(PERSON_LAST_NAME, personsByLastname.getPersons().iterator().next().getLastname());
+		assertEquals(person, personsByLastname.getPersons().iterator().next());
 	}
 }

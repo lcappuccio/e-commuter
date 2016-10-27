@@ -36,7 +36,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private Index<Node> indexPostalCode, indexPersonId;
+	private Index<Node> indexPostalCode, indexPersonId, indexPersonLastName;
 	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
@@ -132,6 +132,7 @@ public class DatabaseImpl implements DatabaseApi {
 			Node personNode = nodes.getSingle();
 			while (personNode.getRelationships().iterator().hasNext()) {
 				personNode.getRelationships().iterator().next().delete();
+				indexPersonLastName.remove(personNode, person.getLastname());
 			}
 			personNode.delete();
 			tx.success();
@@ -157,6 +158,25 @@ public class DatabaseImpl implements DatabaseApi {
 		logger.info("findPersonsWorkingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
 		return getPersons(country, postalCode, worksInRelation);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Persons findPersonsByLastname(final String lastname) {
+		Persons persons = new Persons();
+		logger.info("findPersonsByLastname" + Constants.LOG_OBJECT_SEPARATOR + lastname);
+		try (Transaction tx = graphDb.beginTx()){
+			Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastname).iterator();
+			tx.success();
+			while (nodeIterator.hasNext()) {
+				Node node = nodeIterator.next();
+				String personJsonString = node.getProperty(PERSON_DATA.toString()).toString();
+				Person person = PersonJsonParser.fromString(personJsonString);
+				persons.addPerson(person);
+			}
+		}
+		return persons;
 	}
 
 	/**
@@ -212,6 +232,7 @@ public class DatabaseImpl implements DatabaseApi {
 				throw new ConstraintViolationException(errorMessage);
 			}
 			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
+			indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
 			// Add LIVES_IN edge
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
 			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeNode.getProperty(POSTAL_CODE.toString()));
@@ -280,6 +301,7 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
+			indexPersonLastName = indexManager.forNodes(PERSON_LAST_NAME.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();

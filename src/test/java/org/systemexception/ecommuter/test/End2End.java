@@ -42,7 +42,7 @@ public class End2End {
 	private final static String DATABASE_FOLDER = TARGET_FOLER + File.separator + TEST_DATABASE_FOLDER;
 	public static final String PERSON_NAME_A = "TEST_NAME_A", PERSON_SURNAME_A = "TEST_SURNAME_A",
 			PERSON_NAME_B = "TEST_NAME_B", PERSON_SURNAME_B = "TEST_SURNAME_B",
-			PERSON_NAME_C = "TEST_NAME_C", PERSON_SURNAME_C = "TEST_SURNAME_AC";
+			PERSON_NAME_C = "TEST_NAME_C", PERSON_SURNAME_C = "TEST_SURNAME_C";
 	public static final String LOCATION_LUINO_POSTCODE = "21016", LOCATION_ITALY = "IT";
 	@Autowired
 	private DatabaseApi databaseApi;
@@ -75,7 +75,7 @@ public class End2End {
 		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);
 		personA.setId(UUID.randomUUID().toString());
 		personA.setName(PERSON_NAME_A);
-		personA.setSurname(PERSON_SURNAME_A);
+		personA.setLastname(PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
 		personA.setWorkAddress(addressWorkA);
 
@@ -84,7 +84,7 @@ public class End2End {
 		Address addressHomeB = locationService.geoToAddress(45.999950, 8.740594);
 		personB.setId(UUID.randomUUID().toString());
 		personB.setName(PERSON_NAME_B);
-		personB.setSurname(PERSON_SURNAME_B);
+		personB.setLastname(PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
 		personB.setWorkAddress(addressWorkB);
 
@@ -93,7 +93,7 @@ public class End2End {
 		Address addressHomeC = locationService.geoToAddress(45.999659, 8.737842);
 		personC.setId(UUID.randomUUID().toString());
 		personC.setName(PERSON_NAME_C);
-		personC.setSurname(PERSON_SURNAME_C);
+		personC.setLastname(PERSON_SURNAME_C);
 		personC.setHomeAddress(addressHomeC);
 		personC.setWorkAddress(addressWorkC);
 

@@ -13,6 +13,7 @@ public enum DatabaseConfiguration {
 	// PERSON
 	PERSON_ID,
 	PERSON_DATA,
+	PERSON_LAST_NAME,
 	// EDGE
 	LIVES_IN,
 	WORKS_IN

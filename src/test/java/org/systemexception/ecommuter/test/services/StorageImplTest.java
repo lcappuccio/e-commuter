@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.api.StorageApi;
+import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.services.StorageImpl;
 import org.systemexception.ecommuter.test.End2End;

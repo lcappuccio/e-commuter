@@ -10,7 +10,6 @@ import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;

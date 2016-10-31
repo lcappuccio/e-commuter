@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.controller;
+package org.systemexception.ecommuter.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;

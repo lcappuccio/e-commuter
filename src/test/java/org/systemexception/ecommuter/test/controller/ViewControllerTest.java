@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.controller;
+package org.systemexception.ecommuter.test.controller;
 
 import org.junit.Before;
 import org.junit.Test;

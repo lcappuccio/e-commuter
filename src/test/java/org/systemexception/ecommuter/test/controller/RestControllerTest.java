@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.controller;
+package org.systemexception.ecommuter.test.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -18,6 +18,7 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.api.StorageApi;
+import org.systemexception.ecommuter.controller.RestController;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;

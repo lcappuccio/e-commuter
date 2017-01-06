@@ -32,14 +32,14 @@ public class LocationImplTest {
 
 	@Test
 	public void address_to_geo() throws Exception {
-		String stringAddress = "Piazza del Duomo Milano";
+		String stringAddress = "Piazza del Duomo, 20100, Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
-		assertEquals(45.4641776, geoFromAddress.getLatitude(), 0);
-		assertEquals(9.1899885, geoFromAddress.getLongitude(), 0);
+		assertEquals("Piazza del Duomo, 20100 Milano, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals(45.4636791, geoFromAddress.getLatitude(), 0);
+		assertEquals(9.1900435, geoFromAddress.getLongitude(), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationMilano, geoFromAddress.getTerritory().getPlaceName());
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -88,7 +88,7 @@ public class LocationImplTest {
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
 
-		assertEquals(19.7, distanceBetween, 0);
+		assertEquals(20.8, distanceBetween, 0);
 	}
 
 	@Test

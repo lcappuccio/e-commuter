@@ -122,14 +122,14 @@ public class RestController {
 				person.getWorkAddress().getTerritory().getCountry(),
 				person.getWorkAddress().getTerritory().getPostalCode());
 		Persons fullPersonList = new Persons();
+
 		for (Person personLiving : personsLivesIn.getPersons()) {
 			fullPersonList.addPerson(personLiving);
 		}
 		for (Person personWorking : personsWorksIn.getPersons()) {
-			if (!fullPersonList.getPersons().contains(person)) {
-				fullPersonList.addPerson(personWorking);
-			}
+			fullPersonList.addPerson(personWorking);
 		}
+
 		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		return new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 	}

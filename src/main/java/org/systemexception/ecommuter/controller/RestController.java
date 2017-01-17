@@ -55,6 +55,7 @@ public class RestController {
 
 		File territoriesFile = storageService.saveFile(dataFile);
 		databaseService.addTerritories(territoriesFile);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -129,7 +130,6 @@ public class RestController {
 		for (Person personWorking : personsWorksIn.getPersons()) {
 			fullPersonList.addPerson(personWorking);
 		}
-
 		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		return new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 	}

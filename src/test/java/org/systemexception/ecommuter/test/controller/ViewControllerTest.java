@@ -26,7 +26,7 @@ public class ViewControllerTest {
 
 	private MockMvc sut;
 	@Autowired
-	WebApplicationContext webApplicationContext;
+	private WebApplicationContext webApplicationContext;
 
 	@Before
 	public void setSut() {

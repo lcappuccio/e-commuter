@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.api;
+package org.systemexception.ecommuter.services;
 
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.model.Address;

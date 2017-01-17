@@ -9,7 +9,6 @@ import com.google.maps.model.LatLng;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.api.LocationApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;

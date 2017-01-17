@@ -10,7 +10,6 @@ import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.systemexception.ecommuter.api.DatabaseApi;
 import org.systemexception.ecommuter.enums.Constants;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
@@ -36,7 +35,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final GraphDatabaseService graphDb;
-	private Index<Node> indexPostalCode, indexPersonId;
+	private Index<Node> indexPostalCode, indexPersonId, indexPersonLastName;
 	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
@@ -110,11 +109,12 @@ public class DatabaseImpl implements DatabaseApi {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
 			if (personNode != null) {
+				updateLastnameIndex(person, personNode);
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
 				logger.info("updatePersonNotFound" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
-				tx.terminate();
+				tx.success();
 			}
 		}
 		logger.info("updatedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
@@ -132,6 +132,7 @@ public class DatabaseImpl implements DatabaseApi {
 			Node personNode = nodes.getSingle();
 			while (personNode.getRelationships().iterator().hasNext()) {
 				personNode.getRelationships().iterator().next().delete();
+				indexPersonLastName.remove(personNode, person.getLastname());
 			}
 			personNode.delete();
 			tx.success();
@@ -157,6 +158,25 @@ public class DatabaseImpl implements DatabaseApi {
 		logger.info("findPersonsWorkingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
 		return getPersons(country, postalCode, worksInRelation);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Persons findPersonsByLastname(final String lastname) {
+		Persons persons = new Persons();
+		logger.info("findPersonsByLastname" + Constants.LOG_OBJECT_SEPARATOR + lastname);
+		try (Transaction tx = graphDb.beginTx()) {
+			Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastname).iterator();
+			tx.success();
+			while (nodeIterator.hasNext()) {
+				Node node = nodeIterator.next();
+				String personJsonString = node.getProperty(PERSON_DATA.toString()).toString();
+				Person person = PersonJsonParser.fromString(personJsonString);
+				persons.addPerson(person);
+			}
+		}
+		return persons;
 	}
 
 	/**
@@ -212,6 +232,7 @@ public class DatabaseImpl implements DatabaseApi {
 				throw new ConstraintViolationException(errorMessage);
 			}
 			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
+			indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
 			// Add LIVES_IN edge
 			Relationship livesIn = personNode.createRelationshipTo(homeNode, livesInRelation);
 			indexLivesIn.add(livesIn, LIVES_IN.toString(), homeNode.getProperty(POSTAL_CODE.toString()));
@@ -243,9 +264,10 @@ public class DatabaseImpl implements DatabaseApi {
 					foundNodes.add(relationship.getStartNode());
 				}
 				for (Node node : foundNodes) {
-					String personJson = node.getProperty(PERSON_DATA.toString()).toString();
-					if (!foundPersons.getPersons().contains(personJson)) {
-						foundPersons.addPerson(PersonJsonParser.fromString(personJson));
+					String personJsonString = node.getProperty(PERSON_DATA.toString()).toString();
+					Person person = PersonJsonParser.fromString(personJsonString);
+					if (!foundPersons.getPersons().contains(person)) {
+						foundPersons.addPerson(person);
 					}
 				}
 			}
@@ -254,6 +276,12 @@ public class DatabaseImpl implements DatabaseApi {
 		return foundPersons;
 	}
 
+	/**
+	 * Parses a territories csv file and fills the territories list
+	 *
+	 * @param territoriesFile
+	 * @throws CsvParserException
+	 */
 	private void readCsvTerritories(final File territoriesFile) throws CsvParserException {
 		logger.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		CsvParser csvParser = new CsvParser(territoriesFile);
@@ -270,7 +298,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	/**
-	 * Creates indexes and returns a ConstraintCreator
+	 * Creates indexes with the given IndexManager
 	 *
 	 * @param indexManager
 	 * @return
@@ -279,6 +307,7 @@ public class DatabaseImpl implements DatabaseApi {
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
+			indexPersonLastName = indexManager.forNodes(PERSON_LAST_NAME.toString());
 			indexLivesIn = indexManager.forRelationships(LIVES_IN.toString());
 			indexWorksIn = indexManager.forRelationships(WORKS_IN.toString());
 			tx.success();
@@ -286,7 +315,7 @@ public class DatabaseImpl implements DatabaseApi {
 	}
 
 	/**
-	 * Creates the database schema
+	 * Creates the database schema and constraints
 	 */
 	private void createSchema() {
 		try (Transaction tx = graphDb.beginTx()) {
@@ -300,6 +329,21 @@ public class DatabaseImpl implements DatabaseApi {
 				logger.info("DatabaseImpl" + Constants.LOG_OBJECT_SEPARATOR + "Constraint " + PERSON_ID.toString());
 			}
 			tx.success();
+		}
+	}
+
+	/**
+	 * Update indexPersonLastName if updating the surname
+	 *
+	 * @param person the person received to update
+	 * @param personNode the person in the database
+	 */
+	private void updateLastnameIndex(Person person, Node personNode) {
+		String personAsJson = personNode.getProperty(PERSON_DATA.toString()).toString();
+		Person personFromJson = PersonJsonParser.fromString(personAsJson);
+		if (!personFromJson.getLastname().equals(person.getLastname())) {
+			indexPersonLastName.remove(personNode);
+			indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());
 		}
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.api.LocationApi;
+import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
@@ -65,7 +65,7 @@ public class PersonJsonParserTest {
 	}
 
 	public String getPersonJson() {
-		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"surname\":\"TEST_SURNAME_A\"," +
+		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +

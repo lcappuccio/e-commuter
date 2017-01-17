@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.api;
+package org.systemexception.ecommuter.services;
 
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
@@ -52,5 +52,13 @@ public interface DatabaseApi {
 	 * Finds all persons working in your postal code
 	 */
 	Persons findPersonsWorksIn(String country, String postalCode);
+
+	/**
+	 * Finds all persons with exactly the given last name
+	 *
+	 * @param lastname
+	 * @return
+	 */
+	Persons findPersonsByLastname(String lastname);
 
 }

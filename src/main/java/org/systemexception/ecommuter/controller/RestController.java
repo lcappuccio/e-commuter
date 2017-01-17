@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.api.DatabaseApi;
-import org.systemexception.ecommuter.api.LocationApi;
-import org.systemexception.ecommuter.api.StorageApi;
+import org.systemexception.ecommuter.services.DatabaseApi;
+import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
@@ -55,6 +55,7 @@ public class RestController {
 
 		File territoriesFile = storageService.saveFile(dataFile);
 		databaseService.addTerritories(territoriesFile);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -66,12 +67,13 @@ public class RestController {
 		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_UPDATE, method = RequestMethod.PUT,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) throws TerritoriesException {
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME, method = RequestMethod.GET,
+			params = {Endpoints.LAST_NAME}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Persons> findPersonByLastname(
+			@RequestParam(value = Endpoints.LAST_NAME) final String lastname) throws TerritoriesException {
 
-		Person personUpdated = databaseService.updatePerson(person);
-		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
+		Persons personsByLastname = databaseService.findPersonsByLastname(lastname);
+		return new ResponseEntity<>(personsByLastname, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_DELETE, method = RequestMethod.DELETE,
@@ -80,6 +82,14 @@ public class RestController {
 
 		databaseService.deletePerson(person);
 		return new ResponseEntity<>(person, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_UPDATE, method = RequestMethod.PUT,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) throws TerritoriesException {
+
+		Person personUpdated = databaseService.updatePerson(person);
+		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, method = RequestMethod.PUT,
@@ -113,13 +123,12 @@ public class RestController {
 				person.getWorkAddress().getTerritory().getCountry(),
 				person.getWorkAddress().getTerritory().getPostalCode());
 		Persons fullPersonList = new Persons();
+
 		for (Person personLiving : personsLivesIn.getPersons()) {
 			fullPersonList.addPerson(personLiving);
 		}
 		for (Person personWorking : personsWorksIn.getPersons()) {
-			if (!fullPersonList.getPersons().contains(person)) {
-				fullPersonList.addPerson(personWorking);
-			}
+			fullPersonList.addPerson(personWorking);
 		}
 		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		return new ResponseEntity<>(nearbyPersons, HttpStatus.OK);

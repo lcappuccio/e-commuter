@@ -14,6 +14,8 @@ import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.test.End2End;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
 import static org.junit.Assert.*;
 
 /**
@@ -38,8 +40,8 @@ public class LocationImplTest {
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
 		assertEquals("Piazza del Duomo, 20100 Milano, Italy", geoFromAddress.getFormattedAddress());
-		assertEquals(45.463702, geoFromAddress.getLatitude(), 0);
-		assertEquals(9.1928149, geoFromAddress.getLongitude(), 0);
+		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
+		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationMilano, geoFromAddress.getTerritory().getPlaceName());
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -63,8 +65,8 @@ public class LocationImplTest {
 
 		assertNotNull(addressFromGeo);
 		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
-		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
-		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
+		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
+		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationMilano, addressFromGeo.getTerritory().getPlaceName());
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
@@ -148,6 +150,12 @@ public class LocationImplTest {
 		address.setLatitude(latitude);
 		address.setLongitude(longitude);
 		return address;
+	}
+
+	private double roundDoubleToTwoDecimal(double value) {
+		int precision = 2;
+		int scale = (int) pow(10, precision);
+		return (double) round(value * scale) / scale;
 	}
 
 }

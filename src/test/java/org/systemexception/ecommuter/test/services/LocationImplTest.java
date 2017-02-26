@@ -90,7 +90,7 @@ public class LocationImplTest {
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
 
-		assertEquals(20.8, distanceBetween, 0);
+		assertTrue(isNumberBetween(distanceBetween, 20.7, 20.9));
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class LocationImplTest {
 		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
 
-		assertEquals(737.9, distanceBetween, 0);
+		assertTrue(isNumberBetween(distanceBetween, 737.8, 737.9));
 	}
 
 	@Test
@@ -156,6 +156,10 @@ public class LocationImplTest {
 		int precision = 2;
 		int scale = (int) pow(10, precision);
 		return (double) round(value * scale) / scale;
+	}
+
+	private boolean isNumberBetween(double numberToCheck, double lowValue, double highValue) {
+		return ((numberToCheck >= lowValue) && (numberToCheck <= highValue));
 	}
 
 }

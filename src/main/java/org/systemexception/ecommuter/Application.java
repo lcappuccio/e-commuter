@@ -12,6 +12,7 @@ import org.systemexception.ecommuter.services.DatabaseImpl;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.services.StorageImpl;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -71,7 +72,7 @@ public class Application {
 				"Save persons with geocoding and find who's close to who",
 				null,
 				null,
-				"leo@systemexception.org",
+				new Contact("Leonardo Cappuccio", "https://github.com/lcappuccio/e-commuter/", null),
 				"GPL v3",
 				"https://github.com/lcappuccio/e-commuter/blob/master/LICENSE"
 		);

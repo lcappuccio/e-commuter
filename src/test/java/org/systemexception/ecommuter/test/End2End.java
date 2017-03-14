@@ -65,7 +65,7 @@ public class End2End {
 
 	@Test
 	public void api_key_is_not_null() {
-		assertNotNull(Application.apiKey);
+		assertNotNull(Application.API_KEY);
 	}
 
 	@Test

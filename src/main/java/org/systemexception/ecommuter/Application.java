@@ -5,12 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
-import org.systemexception.ecommuter.services.DatabaseImpl;
-import org.systemexception.ecommuter.services.LocationImpl;
-import org.systemexception.ecommuter.services.StorageImpl;
+import org.systemexception.ecommuter.services.*;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -26,22 +21,21 @@ import java.security.InvalidParameterException;
 @SpringBootApplication
 public class Application {
 
+	public final static String API_KEY = System.getenv("API_KEY");
+	private final static Logger LOGGER = Logger.getLogger(Application.class);
+
 	@Value("${database.name}")
 	private String databaseName;
-
 	@Value("${storage.folder}")
 	private String storageFolder;
 
-	private final static Logger logger = Logger.getLogger(Application.class);
-	public final static String apiKey = System.getenv("API_KEY");
-
 	public static void main(String[] args) {
-		if (apiKey != null) {
-			logger.info("Starting with API_KEY:" + apiKey);
+		if (API_KEY != null) {
+			LOGGER.info("Starting with API_KEY:" + API_KEY);
 			SpringApplication.run(Application.class, args);
 		} else {
 			String errorMessage = "API key is not set";
-			logger.error(errorMessage);
+			LOGGER.error(errorMessage);
 			throw new InvalidParameterException(errorMessage);
 		}
 	}

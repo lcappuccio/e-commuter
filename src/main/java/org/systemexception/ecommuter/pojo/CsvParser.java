@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class CsvParser {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(CsvParser.class);
 	private List<CSVRecord> records;
 
 	public CsvParser(File csvFile) throws CsvParserException {
@@ -38,10 +38,10 @@ public class CsvParser {
 			Reader csvReader = new InputStreamReader(csvUrl.openStream(), "UTF-8");
 			CSVParser csvParser = new CSVParser(csvReader, csvFormat);
 			records = csvParser.getRecords();
-			logger.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
+			LOGGER.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {
 			String errorMessage = ex.getMessage();
-			logger.error(csvFile.getName() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			LOGGER.error(csvFile.getName() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new CsvParserException(errorMessage);
 		}
 	}

@@ -21,9 +21,10 @@ import java.util.Locale;
  */
 public class StorageImpl implements StorageApi {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(StorageImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StorageImpl.class);
 	private final String storageFolder;
-	public final static String DATETIME_FORMAT = "yyyyMMddHHmmss";
+
+	public static final String DATETIME_FORMAT = "yyyyMMddHHmmss";
 
 	public StorageImpl(final String storageFolder) throws IOException {
 		this.storageFolder = storageFolder;

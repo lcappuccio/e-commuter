@@ -34,13 +34,15 @@ import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
 public class DatabaseImpl implements DatabaseApi {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseImpl.class);
+
 	private final GraphDatabaseService graphDb;
-	private Index<Node> indexPostalCode, indexPersonId, indexPersonLastName;
-	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private final RelationshipType livesInRelation = RelationshipType.withName(LIVES_IN.toString());
 	private final RelationshipType worksInRelation = RelationshipType.withName(WORKS_IN.toString());
 	private final Label constraintPersonIdLabel = Label.label(PERSON_ID.toString()),
 			postalCodeLabel = Label.label(POSTAL_CODE.toString());
+
+	private Index<Node> indexPostalCode, indexPersonId, indexPersonLastName;
+	private RelationshipIndex indexLivesIn, indexWorksIn;
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {

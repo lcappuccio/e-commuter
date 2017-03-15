@@ -21,8 +21,8 @@ import java.security.InvalidParameterException;
 @SpringBootApplication
 public class Application {
 
-	public final static String API_KEY = System.getenv("API_KEY");
-	private final static Logger LOGGER = Logger.getLogger(Application.class);
+	public static final String API_KEY = System.getenv("API_KEY");
+	private static final Logger LOGGER = Logger.getLogger(Application.class);
 
 	@Value("${database.name}")
 	private String databaseName;

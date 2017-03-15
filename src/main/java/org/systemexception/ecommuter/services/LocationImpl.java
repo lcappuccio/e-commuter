@@ -23,9 +23,10 @@ import org.systemexception.ecommuter.pojo.HaversineUtil;
 public class LocationImpl implements LocationApi {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationImpl.class);
+	private static final String EMPTY_STRING = "";
+
 	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.API_KEY);
 	private final HaversineUtil haversineUtil = new HaversineUtil();
-	private static final String EMPTY_STRING = "";
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws Exception {

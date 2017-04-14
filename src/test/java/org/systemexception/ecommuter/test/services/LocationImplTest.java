@@ -39,7 +39,7 @@ public class LocationImplTest {
 
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, 20100 Milano, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());

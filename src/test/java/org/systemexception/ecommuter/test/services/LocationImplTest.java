@@ -14,6 +14,8 @@ import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.services.LocationImpl;
 import org.systemexception.ecommuter.test.End2End;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
 import static org.junit.Assert.*;
 
 /**
@@ -37,9 +39,9 @@ public class LocationImplTest {
 
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, 20100 Milano, Italy", geoFromAddress.getFormattedAddress());
-		assertEquals(45.4636791, geoFromAddress.getLatitude(), 0);
-		assertEquals(9.1900435, geoFromAddress.getLongitude(), 0);
+		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
+		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
 		assertEquals(locationMilano, geoFromAddress.getTerritory().getPlaceName());
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -63,8 +65,8 @@ public class LocationImplTest {
 
 		assertNotNull(addressFromGeo);
 		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
-		assertEquals(45.4635507, addressFromGeo.getLatitude(), 0);
-		assertEquals(9.1903881, addressFromGeo.getLongitude(), 0);
+		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
+		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationMilano, addressFromGeo.getTerritory().getPlaceName());
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
@@ -88,7 +90,7 @@ public class LocationImplTest {
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
 
-		assertEquals(20.8, distanceBetween, 0);
+		assertTrue(isNumberBetween(distanceBetween, 20.7, 20.9));
 	}
 
 	@Test
@@ -97,7 +99,7 @@ public class LocationImplTest {
 		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
 
-		assertEquals(737.9, distanceBetween, 0);
+		assertTrue(isNumberBetween(distanceBetween, 737.8, 737.9));
 	}
 
 	@Test
@@ -148,6 +150,16 @@ public class LocationImplTest {
 		address.setLatitude(latitude);
 		address.setLongitude(longitude);
 		return address;
+	}
+
+	private double roundDoubleToTwoDecimal(double value) {
+		int precision = 2;
+		int scale = (int) pow(10, precision);
+		return (double) round(value * scale) / scale;
+	}
+
+	private boolean isNumberBetween(double numberToCheck, double lowValue, double highValue) {
+		return ((numberToCheck >= lowValue) && (numberToCheck <= highValue));
 	}
 
 }

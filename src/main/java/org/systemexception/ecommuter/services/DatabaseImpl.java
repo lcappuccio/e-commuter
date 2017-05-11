@@ -220,7 +220,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param homeNode
 	 * @param workNode
 	 */
-	private void insertPerson(final Person person, final Node homeNode, final Node workNode) {
+	private synchronized void insertPerson(final Person person, final Node homeNode, final Node workNode) {
 		try (Transaction tx = graphDb.beginTx()) {
 			Node personNode = graphDb.createNode();
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());

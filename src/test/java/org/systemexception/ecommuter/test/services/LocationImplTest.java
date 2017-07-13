@@ -39,7 +39,7 @@ public class LocationImplTest {
 
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, Milano, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals("Piazza del Duomo, Milano MI, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -64,7 +64,7 @@ public class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("Piazza del Duomo, 6, 20122 Milano, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("Piazza del Duomo, 6, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());

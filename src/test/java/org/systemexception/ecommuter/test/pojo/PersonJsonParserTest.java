@@ -67,11 +67,11 @@ public class PersonJsonParserTest {
 	public String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
+				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano MI, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
 				"\"workAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano, Italy\",\"latitude\":45.4635507," +
+				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano MI, Italy\",\"latitude\":45.4635507," +
 				"\"longitude\":9.1903881," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
 	}

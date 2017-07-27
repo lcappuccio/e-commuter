@@ -38,8 +38,8 @@ import static org.junit.Assert.assertTrue;
 @TestPropertySource(locations = "classpath:application.properties")
 public class End2End {
 
-	public static final String TARGET_FOLER = "target", TEST_DATABASE_FOLDER = "test_database";
-	private final static String DATABASE_FOLDER = TARGET_FOLER + File.separator + TEST_DATABASE_FOLDER;
+	public static final String TARGET_FOLDER = "target", TEST_DATABASE_FOLDER = "test_database";
+	private final static String DATABASE_FOLDER = TARGET_FOLDER + File.separator + TEST_DATABASE_FOLDER;
 	public static final String PERSON_NAME_A = "TEST_NAME_A", PERSON_SURNAME_A = "TEST_SURNAME_A",
 			PERSON_NAME_B = "TEST_NAME_B", PERSON_SURNAME_B = "TEST_SURNAME_B",
 			PERSON_NAME_C = "TEST_NAME_C", PERSON_SURNAME_C = "TEST_SURNAME_C";
@@ -52,7 +52,7 @@ public class End2End {
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		storageApi = new StorageImpl(TARGET_FOLER);
+		storageApi = new StorageImpl(TARGET_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 

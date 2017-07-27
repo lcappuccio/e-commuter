@@ -337,7 +337,7 @@ public class DatabaseImpl implements DatabaseApi {
 	/**
 	 * Update indexPersonLastName if updating the surname
 	 *
-	 * @param person the person received to update
+	 * @param person     the person received to update
 	 * @param personNode the person in the database
 	 */
 	private void updateLastnameIndex(Person person, Node personNode) {

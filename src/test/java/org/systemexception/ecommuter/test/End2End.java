@@ -48,16 +48,13 @@ public class End2End {
 	private DatabaseApi databaseApi;
 	@Autowired
 	private LocationApi locationService;
-	private static StorageApi storageApi;
-
-	@BeforeClass
-	public static void setSut() throws IOException {
-		storageApi = new StorageImpl(TARGET_FOLDER);
-		storageApi.removeFolder(DATABASE_FOLDER);
-	}
+	@Autowired
+	private StorageApi storageApi;
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException {
+	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, IOException {
+		storageApi = new StorageImpl(TARGET_FOLDER);
+		storageApi.removeFolder(DATABASE_FOLDER);
 		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		File myFile = new File(myTestURL.toURI());
 		databaseApi.addTerritories(myFile);

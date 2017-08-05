@@ -55,7 +55,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 	@Override
 	public void addTerritories(final File territoriesFile) throws CsvParserException {
-		readCsvTerritories(territoriesFile);
+		territories = new Territories(territoriesFile);
 		LOGGER.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 		// Create all nodes
 		try (Transaction tx = graphDb.beginTx()) {
@@ -276,27 +276,6 @@ public class DatabaseImpl implements DatabaseApi {
 			tx.success();
 		}
 		return foundPersons;
-	}
-
-	/**
-	 * Parses a territories csv file and fills the territories list
-	 *
-	 * @param territoriesFile
-	 * @throws CsvParserException
-	 */
-	private void readCsvTerritories(final File territoriesFile) throws CsvParserException {
-		LOGGER.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
-		CsvParser csvParser = new CsvParser(territoriesFile);
-		List<CSVRecord> csvRecords = csvParser.readCsvContents();
-		territories = new Territories();
-		for (CSVRecord csvRecord : csvRecords) {
-			String country = csvRecord.get(CsvHeaders.COUNTRY);
-			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
-			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
-			Territory territory = new Territory(country, postalCode, placeName);
-			territories.addTerritory(territory);
-		}
-		LOGGER.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 	}
 
 	/**

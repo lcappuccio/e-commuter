@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class StorageImplTest {
 
-	private final static String STORAGE_FOLDER = End2End.TARGET_FOLER + File.separator + "test_storage";
+	private final static String STORAGE_FOLDER = End2End.TARGET_FOLDER + File.separator + "test_storage";
 	private StorageApi sut;
 	private MultipartFile multipartFile;
 	private static StorageApi storageApi;

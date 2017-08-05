@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:application.properties")
 public class DatabaseImplTest {
 
-	private static final String DATABASE_FOLDER = End2End.TARGET_FOLER + File.separator + End2End.TEST_DATABASE_FOLDER;
+	private static final String DATABASE_FOLDER = End2End.TARGET_FOLDER + File.separator + End2End.TEST_DATABASE_FOLDER;
 	private static final String PERSON_LAST_NAME = "NEWLASTNAME";
 	private static final String PERSON_NAME = "NEWNAME";
 	@Autowired

@@ -60,10 +60,6 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public double distanceBetween(final Address addressA, final Address addressB) {
-		LOGGER.info("distanceBetween" + Constants.LOG_OBJECT_SEPARATOR +
-				"(" + addressA.getLatitude() + Constants.LOG_ITEM_SEPARATOR + addressA.getLongitude() + ")" +
-				Constants.LOG_ITEM_SEPARATOR +
-				"(" + addressB.getLatitude() + Constants.LOG_ITEM_SEPARATOR + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
 	}

@@ -1,6 +1,7 @@
 package org.systemexception.ecommuter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +23,7 @@ import java.security.InvalidParameterException;
 public class Application {
 
 	public static final String API_KEY = System.getenv("API_KEY");
-	private static final Logger LOGGER = Logger.getLogger(Application.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
 	@Value("${database.name}")
 	private String databaseName;

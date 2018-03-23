@@ -1,6 +1,5 @@
 package org.systemexception.ecommuter.services;
 
-import org.apache.commons.csv.CSVRecord;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
@@ -11,18 +10,15 @@ import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.ecommuter.enums.Constants;
-import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
-import org.systemexception.ecommuter.pojo.CsvParser;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import static org.systemexception.ecommuter.enums.DatabaseConfiguration.*;
@@ -46,6 +42,7 @@ public class DatabaseImpl implements DatabaseApi {
 	private Territories territories;
 
 	public DatabaseImpl(final String dbFolder) {
+
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbFolder));
 		IndexManager indexManager = graphDb.index();
 		createIndexes(indexManager);
@@ -55,8 +52,10 @@ public class DatabaseImpl implements DatabaseApi {
 
 	@Override
 	public void addTerritories(final File territoriesFile) throws CsvParserException {
+
 		territories = new Territories(territoriesFile);
 		LOGGER.info("addTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+
 		// Create all nodes
 		try (Transaction tx = graphDb.beginTx()) {
 			for (Territory territory : territories.getTerritories()) {
@@ -71,6 +70,7 @@ public class DatabaseImpl implements DatabaseApi {
 			}
 			tx.success();
 		}
+
 		LOGGER.info("addedTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
 	}
 
@@ -79,6 +79,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Person addPerson(final Person person) throws TerritoriesException {
+
 		Address homeAddress = person.getHomeAddress();
 		Address workAddress = person.getWorkAddress();
 		LOGGER.info("addPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId() + Constants.LOG_ITEM_SEPARATOR +
@@ -90,6 +91,7 @@ public class DatabaseImpl implements DatabaseApi {
 				homeAddress.getTerritory().getPostalCode());
 		Optional<Node> workNode = getNodeByPostalCode(workAddress.getTerritory().getCountry(),
 				workAddress.getTerritory().getPostalCode());
+
 		if (homeNode.isPresent() && workNode.isPresent()) {
 			insertPerson(person, homeNode.get(), workNode.get());
 		} else {
@@ -98,6 +100,7 @@ public class DatabaseImpl implements DatabaseApi {
 					Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new TerritoriesException(errorMessage);
 		}
+
 		return person;
 	}
 
@@ -106,7 +109,9 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Person updatePerson(Person person) {
+
 		LOGGER.info("updatePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
+
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
@@ -119,6 +124,7 @@ public class DatabaseImpl implements DatabaseApi {
 				tx.success();
 			}
 		}
+
 		LOGGER.info("updatedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
 		return person;
 	}
@@ -128,7 +134,9 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public void deletePerson(Person person) {
+
 		LOGGER.info("deletePerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
+
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
 			Node personNode = nodes.getSingle();
@@ -139,6 +147,7 @@ public class DatabaseImpl implements DatabaseApi {
 			personNode.delete();
 			tx.success();
 		}
+
 		LOGGER.info("deletedPerson" + Constants.LOG_OBJECT_SEPARATOR + person.getId());
 	}
 
@@ -147,8 +156,10 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsLivesIn(final String country, final String postalCode) {
+
 		LOGGER.info("findPersonsLivingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
+
 		return getPersons(country, postalCode, livesInRelation);
 	}
 
@@ -157,8 +168,10 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	@Override
 	public Persons findPersonsWorksIn(final String country, final String postalCode) {
+
 		LOGGER.info("findPersonsWorkingIn" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
+
 		return getPersons(country, postalCode, worksInRelation);
 	}
 
@@ -166,8 +179,10 @@ public class DatabaseImpl implements DatabaseApi {
 	 * {@inheritDoc}
 	 */
 	public Persons findPersonsByLastname(final String lastname) {
+
 		Persons persons = new Persons();
 		LOGGER.info("findPersonsByLastname" + Constants.LOG_OBJECT_SEPARATOR + lastname);
+
 		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastname).iterator();
 			tx.success();
@@ -190,8 +205,10 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	// TODO LC This could be more than one node!
 	private Optional<Node> getNodeByPostalCode(final String country, final String postalCode) {
+
 		LOGGER.info("getNodeByPostalCode" + Constants.LOG_OBJECT_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR +
 				postalCode);
+
 		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
 			tx.success();
@@ -221,6 +238,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param workNode
 	 */
 	private synchronized void insertPerson(final Person person, final Node homeNode, final Node workNode) {
+
 		try (Transaction tx = graphDb.beginTx()) {
 			Node personNode = graphDb.createNode();
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
@@ -255,10 +273,12 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @return the list of persons with the given relationship to this node
 	 */
 	private Persons getPersons(String country, String postalCode, RelationshipType relationshipType) {
+
 		LOGGER.info("getPersonsByPostalCodeRelation" + Constants.LOG_OBJECT_SEPARATOR + relationshipType.toString() +
 				Constants.LOG_ITEM_SEPARATOR + country + Constants.LOG_ITEM_SEPARATOR + postalCode);
 		HashSet<Node> foundNodes = new HashSet<>();
 		Persons foundPersons = new Persons();
+
 		try (Transaction tx = graphDb.beginTx()) {
 			Optional<Node> nodeByPostalCode = getNodeByPostalCode(country, postalCode);
 			if (nodeByPostalCode.isPresent()) {
@@ -275,6 +295,7 @@ public class DatabaseImpl implements DatabaseApi {
 			}
 			tx.success();
 		}
+
 		return foundPersons;
 	}
 
@@ -285,6 +306,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @return
 	 */
 	private void createIndexes(IndexManager indexManager) {
+
 		try (Transaction tx = graphDb.beginTx()) {
 			indexPostalCode = indexManager.forNodes(POSTAL_CODE.toString());
 			indexPersonId = indexManager.forNodes(PERSON_ID.toString());
@@ -299,6 +321,7 @@ public class DatabaseImpl implements DatabaseApi {
 	 * Creates the database schema and constraints
 	 */
 	private void createSchema() {
+
 		try (Transaction tx = graphDb.beginTx()) {
 			Iterator<ConstraintDefinition> constraintDefinitionIterator =
 					graphDb.schema().getConstraints(constraintPersonIdLabel).iterator();
@@ -320,8 +343,10 @@ public class DatabaseImpl implements DatabaseApi {
 	 * @param personNode the person in the database
 	 */
 	private void updateLastnameIndex(Person person, Node personNode) {
+
 		String personAsJson = personNode.getProperty(PERSON_DATA.toString()).toString();
 		Person personFromJson = PersonJsonParser.fromString(personAsJson);
+
 		if (!personFromJson.getLastname().equals(person.getLastname())) {
 			indexPersonLastName.remove(personNode);
 			indexPersonLastName.add(personNode, PERSON_LAST_NAME.toString(), person.getLastname());

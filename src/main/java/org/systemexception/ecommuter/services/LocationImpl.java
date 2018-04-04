@@ -25,7 +25,7 @@ public class LocationImpl implements LocationApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationImpl.class);
 	private static final String EMPTY_STRING = "";
 
-	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.API_KEY);
+	private final GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey(Application.API_KEY).build();
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override

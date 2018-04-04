@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>com.google.maps</groupId>
 			<artifactId>google-maps-services</artifactId>
-			<version>0.1.16</version>
+			<version>0.2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>

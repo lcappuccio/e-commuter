@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -54,9 +55,9 @@ public class CsvParserTest {
 		List<CSVRecord> records = sut.readCsvContents();
 		for (CSVRecord territory : records) {
 			if (territory.get(CsvHeaders.PLACE_NAME.name()).toLowerCase(Locale.getDefault()).equals("luino")) {
-				assertTrue(territory.get(CsvHeaders.POSTAL_CODE.name()).equals(End2End.LOCATION_LUINO_POSTCODE));
-				assertTrue(territory.get(CsvHeaders.LATITUDE.name()).equals("46.0019"));
-				assertTrue(territory.get(CsvHeaders.LONGITUDE.name()).equals("8.7451"));
+				assertEquals(territory.get(CsvHeaders.POSTAL_CODE.name()), End2End.LOCATION_LUINO_POSTCODE);
+				assertEquals("46.0019", territory.get(CsvHeaders.LATITUDE.name()));
+				assertEquals("8.7451", territory.get(CsvHeaders.LONGITUDE.name()));
 			}
 		}
 	}

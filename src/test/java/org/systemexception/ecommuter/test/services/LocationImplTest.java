@@ -55,8 +55,8 @@ public class LocationImplTest {
 
 		assertNull(geoFromAddress.getStreetNumber());
 		assertNull(geoFromAddress.getTerritory());
-		assertTrue(geoFromAddress.getLatitude() == 0d);
-		assertTrue(geoFromAddress.getLongitude() == 0d);
+		assertEquals(0d, geoFromAddress.getLatitude(), 0.0);
+		assertEquals(0d, geoFromAddress.getLongitude(), 0.0);
 	}
 
 	@Test
@@ -80,8 +80,8 @@ public class LocationImplTest {
 
 		assertNull(addressFromGeo.getStreetNumber());
 		assertNull(addressFromGeo.getTerritory());
-		assertTrue(addressFromGeo.getLatitude() == 0d);
-		assertTrue(addressFromGeo.getLongitude() == 0d);
+		assertEquals(0d, addressFromGeo.getLatitude(), 0.0);
+		assertEquals(0d, addressFromGeo.getLongitude(), 0.0);
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class LocationImplTest {
 
 		Persons nearbyPersons = sut.findNearbyPersons(personA, persons, 0.5);
 
-		assertTrue(nearbyPersons.getPersons().size() == 1);
+		assertEquals(1, nearbyPersons.getPersons().size());
 
 	}
 

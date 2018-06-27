@@ -61,7 +61,7 @@ public class RestControllerTest {
 	public void add_territories() throws Exception {
 		MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
 				UUID.randomUUID().toString(), TEXT_PLAIN_FILE, "some data".getBytes());
-		sut.perform(MockMvcRequestBuilders.fileUpload(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
+		sut.perform(MockMvcRequestBuilders.multipart(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		File receivedFile = storageApi.saveFile(dataFile);
 

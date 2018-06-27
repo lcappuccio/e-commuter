@@ -8,14 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.services.DatabaseApi;
+import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.services.StorageImpl;
 import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.UUID;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author leo
@@ -99,7 +99,7 @@ public class End2End {
 
 		Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
 				LOCATION_ITALY, LOCATION_LUINO_POSTCODE), 0.5);
-		assertTrue(nearbyPersons.getPersons().size() == 1);
-		assertTrue(nearbyPersons.getPersons().iterator().next().equals(personB));
+		assertEquals(1, nearbyPersons.getPersons().size());
+		assertEquals(nearbyPersons.getPersons().iterator().next(), personB);
 	}
 }

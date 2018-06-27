@@ -97,7 +97,7 @@ public class DatabaseImplTest {
 	public void find_person_nonexisting_node() {
 		Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
 
-		assertTrue(0 == nullPersons.getPersons().size());
+		assertEquals(0, nullPersons.getPersons().size());
 	}
 
 	@Test(expected = TerritoriesException.class)

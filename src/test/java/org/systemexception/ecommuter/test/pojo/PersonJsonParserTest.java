@@ -64,7 +64,7 @@ public class PersonJsonParserTest {
 		assertEquals(person, pesonFromString);
 	}
 
-	public String getPersonJson() {
+	private String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
 				"\"homeAddress\":{\"streetNumber\":\"110\",\"route\":\"Piazza del Duomo\"," +
 				"\"formattedAddress\":\"Piazza del Duomo, 110, 20122 Milano MI, Italy\",\"latitude\":45.4636631," +

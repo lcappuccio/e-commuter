@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.services;
+package org.systemexception.ecommuter.services;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -8,16 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
-import org.systemexception.ecommuter.services.StorageImpl;
-import org.systemexception.ecommuter.test.End2End;
-import org.systemexception.ecommuter.test.pojo.CsvParserTest;
+import org.systemexception.ecommuter.End2End;
+import org.systemexception.ecommuter.pojo.CsvParserTest;
 
 import java.io.File;
 import java.io.IOException;

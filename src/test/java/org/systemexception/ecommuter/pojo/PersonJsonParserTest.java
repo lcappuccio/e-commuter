@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.pojo;
+package org.systemexception.ecommuter.pojo;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,9 +13,8 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.pojo.PersonJsonParser;
 import org.systemexception.ecommuter.services.LocationImpl;
-import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.End2End;
 
 import java.util.UUID;
 

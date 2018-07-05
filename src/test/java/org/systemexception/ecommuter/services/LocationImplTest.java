@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.services;
+package org.systemexception.ecommuter.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,13 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
-import org.systemexception.ecommuter.services.LocationImpl;
-import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.End2End;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.round;

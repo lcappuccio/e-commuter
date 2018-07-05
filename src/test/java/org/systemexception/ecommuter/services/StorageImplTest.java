@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.services;
+package org.systemexception.ecommuter.services;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -6,11 +6,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.services.StorageApi;
+import org.systemexception.ecommuter.controller.RestControllerTest;
 import org.systemexception.ecommuter.enums.Endpoints;
-import org.systemexception.ecommuter.services.StorageImpl;
-import org.systemexception.ecommuter.test.End2End;
-import org.systemexception.ecommuter.test.controller.RestControllerTest;
+import org.systemexception.ecommuter.End2End;
 
 import java.io.File;
 import java.io.IOException;

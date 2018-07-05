@@ -1,12 +1,11 @@
-package org.systemexception.ecommuter.test.pojo;
+package org.systemexception.ecommuter.pojo;
 
 import org.apache.commons.csv.CSVRecord;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.systemexception.ecommuter.enums.CsvHeaders;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.pojo.CsvParser;
-import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.End2End;
 
 import java.io.File;
 import java.net.URISyntaxException;

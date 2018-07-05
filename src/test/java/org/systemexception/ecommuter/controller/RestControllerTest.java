@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.controller;
+package org.systemexception.ecommuter.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -18,14 +18,13 @@ import org.systemexception.ecommuter.Application;
 import org.systemexception.ecommuter.services.DatabaseApi;
 import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.services.StorageApi;
-import org.systemexception.ecommuter.controller.RestController;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
-import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.End2End;
 
 import java.io.File;
 import java.util.UUID;

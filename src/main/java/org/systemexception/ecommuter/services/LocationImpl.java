@@ -69,9 +69,7 @@ public class LocationImpl implements LocationApi {
 		LOGGER.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
 				Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
 		Persons nearbyPersons = new Persons();
-		if (persons.getPersons().contains(person)) {
-			persons.getPersons().remove(person);
-		}
+		persons.getPersons().remove(person);
 		for (Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
@@ -85,7 +83,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
-		
+
 		String country = EMPTY_STRING;
 		String postalCode = EMPTY_STRING;
 		String locality = EMPTY_STRING;

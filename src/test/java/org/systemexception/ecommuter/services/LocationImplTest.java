@@ -62,7 +62,7 @@ public class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("Piazza del Duomo, 110, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("Duomo, Piazza del Duomo, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());

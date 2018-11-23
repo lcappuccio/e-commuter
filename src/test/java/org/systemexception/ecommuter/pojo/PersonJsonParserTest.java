@@ -35,7 +35,7 @@ public class PersonJsonParserTest {
 
 	@Before
 	public void setSut() throws Exception {
-		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
+		Address addressFromGeo = locationService.geoToAddress(45.4641835, 9.1896379);
 		personId = UUID.randomUUID().toString();
 		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_A, addressFromGeo ,addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
@@ -65,13 +65,13 @@ public class PersonJsonParserTest {
 
 	private String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
-				"\"homeAddress\":{\"streetNumber\":\"110\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 110, 20122 Milano MI, Italy\",\"latitude\":45.4636631," +
-				"\"longitude\":9.1897884," +
+				"\"homeAddress\":{\"route\":\"Piazza del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
+				"\"longitude\":9.1896379," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
-				"\"workAddress\":{\"streetNumber\":\"110\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 110, 20122 Milano MI, Italy\",\"latitude\":45.4636631," +
-				"\"longitude\":9.1897884," +
+				"\"workAddress\":{\"route\":\"Piazza del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
+				"\"longitude\":9.1896379," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
 	}
 

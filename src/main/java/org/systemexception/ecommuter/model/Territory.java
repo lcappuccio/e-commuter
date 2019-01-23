@@ -20,7 +20,7 @@ public class Territory {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(final String country) {
 		this.country = country;
 	}
 
@@ -28,7 +28,7 @@ public class Territory {
 		return postalCode;
 	}
 
-	public void setPostalCode(String postalCode) {
+	public void setPostalCode(final String postalCode) {
 		this.postalCode = postalCode;
 	}
 
@@ -36,12 +36,12 @@ public class Territory {
 		return placeName;
 	}
 
-	public void setPlaceName(String placeName) {
+	public void setPlaceName(final String placeName) {
 		this.placeName = placeName;
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 

@@ -27,39 +27,38 @@ public class Territories {
 		this.territories = new HashSet<>();
 	}
 
-	public Territories(File territoriesFile) throws CsvParserException {
+	public Territories(final File territoriesFile) throws CsvParserException {
 
 		territories = new HashSet<>();
 
 		LOGGER.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
-		CsvParser csvParser = new CsvParser(territoriesFile);
-		List<CSVRecord> csvRecords = csvParser.readCsvContents();
-		for (CSVRecord csvRecord : csvRecords) {
-			String country = csvRecord.get(CsvHeaders.COUNTRY);
-			String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
-			String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
-			Territory territory = new Territory(country, postalCode, placeName);
+		final CsvParser csvParser = new CsvParser(territoriesFile);
+		final List<CSVRecord> csvRecords = csvParser.readCsvContents();
+		for (final CSVRecord csvRecord : csvRecords) {
+			final String country = csvRecord.get(CsvHeaders.COUNTRY);
+			final String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
+			final String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
+			final Territory territory = new Territory(country, postalCode, placeName);
 			territories.add(territory);
 		}
 		LOGGER.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
-
 	}
 
 	public HashSet<Territory> getTerritories() {
 		return territories;
 	}
 
+	void addTerritory(final Territory territory) {
+		isValidTerritory(territory);
+		territories.add(territory);
+	}
+
 	private void isValidTerritory(final Territory territory) {
 		if (territories.contains(territory)) {
-			String errorMessage = "isValidTerritory"  + Constants.LOG_OBJECT_SEPARATOR + territory.getCountry() +
+			final String errorMessage = "isValidTerritory"  + Constants.LOG_OBJECT_SEPARATOR + territory.getCountry() +
 					Constants.LOG_ITEM_SEPARATOR + territory.getPostalCode();
 			LOGGER.error(errorMessage);
 			throw new InvalidParameterException(errorMessage);
 		}
-	}
-
-	public void addTerritory(final Territory territory) {
-		isValidTerritory(territory);
-		territories.add(territory);
 	}
 }

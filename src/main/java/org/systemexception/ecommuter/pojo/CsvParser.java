@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class CsvParser {
 		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
 		try {
 			URL csvUrl = csvFile.toURI().toURL();
-			Reader csvReader = new InputStreamReader(csvUrl.openStream(), "UTF-8");
+			Reader csvReader = new InputStreamReader(csvUrl.openStream(), StandardCharsets.UTF_8);
 			CSVParser csvParser = new CSVParser(csvReader, csvFormat);
 			records = csvParser.getRecords();
 			LOGGER.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());

@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.services;
+package org.systemexception.ecommuter.services;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -6,11 +6,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.services.StorageApi;
+import org.systemexception.ecommuter.controller.RestControllerTest;
 import org.systemexception.ecommuter.enums.Endpoints;
-import org.systemexception.ecommuter.services.StorageImpl;
-import org.systemexception.ecommuter.test.End2End;
-import org.systemexception.ecommuter.test.controller.RestControllerTest;
+import org.systemexception.ecommuter.End2End;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +44,7 @@ public class StorageImplTest {
 	}
 
 	@AfterClass
-	public static void tearDownSut() throws IOException {
+	public static void tearDownSut() {
 		storageApi.removeFolder(STORAGE_FOLDER);
 
 		assertFalse(new File(STORAGE_FOLDER).exists());
@@ -66,25 +64,25 @@ public class StorageImplTest {
 
 	@Test
 	public void saveDataExists() throws IOException {
-		File savedFile = sut.saveFile(multipartFile);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
+		final File savedFile = sut.saveFile(multipartFile);
+		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 
 		assertTrue(testDataFile.exists());
 	}
 
 	@Test
 	public void historify() throws IOException {
-		File savedFile = sut.saveFile(multipartFile);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
-		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
+		final File savedFile = sut.saveFile(multipartFile);
+		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
+		final BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
 		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
 				+ "_" + testDataFile.getName()).exists());
 	}
 
 	private String convertTime(long time) {
-		Date date = new Date(time);
-		Format format = new SimpleDateFormat(StorageImpl.DATETIME_FORMAT);
+		final Date date = new Date(time);
+		final Format format = new SimpleDateFormat(StorageImpl.DATETIME_FORMAT);
 		return format.format(date);
 	}
 }

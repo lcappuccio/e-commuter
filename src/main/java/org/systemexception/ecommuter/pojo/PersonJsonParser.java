@@ -12,7 +12,7 @@ import org.systemexception.ecommuter.model.Person;
  */
 public class PersonJsonParser {
 
-	public static Person fromJson(final JsonObject jsonObject) {
+	static Person fromJson(final JsonObject jsonObject) {
 		Gson gson = new Gson();
 		Person person = new Person();
 		if (jsonObject.isJsonObject()) {

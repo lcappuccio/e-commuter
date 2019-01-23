@@ -11,7 +11,7 @@ public enum Constants {
 
 	private final String aString;
 
-	Constants(String aString) {
+	Constants(final String aString) {
 		this.aString = aString;
 	}
 

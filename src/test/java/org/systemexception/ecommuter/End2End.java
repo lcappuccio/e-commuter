@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test;
+package org.systemexception.ecommuter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,17 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+import org.systemexception.ecommuter.pojo.CsvParserTest;
+import org.systemexception.ecommuter.services.DatabaseApi;
+import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.services.StorageImpl;
-import org.systemexception.ecommuter.test.pojo.CsvParserTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +24,7 @@ import java.net.URL;
 import java.util.UUID;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author leo
@@ -51,11 +49,11 @@ public class End2End {
 	private StorageApi storageApi;
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, IOException {
+	public void setUp() throws CsvParserException, URISyntaxException, IOException {
 		storageApi = new StorageImpl(TARGET_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
-		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
-		File myFile = new File(myTestURL.toURI());
+		final URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
+		final File myFile = new File(myTestURL.toURI());
 		databaseApi.addTerritories(myFile);
 	}
 
@@ -66,27 +64,27 @@ public class End2End {
 
 	@Test
 	public void end2End() throws Exception {
-		Person personA = new Person();
-		Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
-		Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);
+		final Person personA = new Person();
+		final Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
+		final Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);
 		personA.setId(UUID.randomUUID().toString());
 		personA.setName(PERSON_NAME_A);
 		personA.setLastname(PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
 		personA.setWorkAddress(addressWorkA);
 
-		Person personB = new Person();
-		Address addressWorkB = locationService.geoToAddress(46.002834, 8.742499);
-		Address addressHomeB = locationService.geoToAddress(45.999950, 8.740594);
+		final Person personB = new Person();
+		final Address addressWorkB = locationService.geoToAddress(46.002834, 8.742499);
+		final Address addressHomeB = locationService.geoToAddress(45.999950, 8.740594);
 		personB.setId(UUID.randomUUID().toString());
 		personB.setName(PERSON_NAME_B);
 		personB.setLastname(PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
 		personB.setWorkAddress(addressWorkB);
 
-		Person personC = new Person();
-		Address addressWorkC = locationService.geoToAddress(45.996015, 8.732703);
-		Address addressHomeC = locationService.geoToAddress(45.999659, 8.737842);
+		final Person personC = new Person();
+		final Address addressWorkC = locationService.geoToAddress(45.996015, 8.732703);
+		final Address addressHomeC = locationService.geoToAddress(45.999659, 8.737842);
 		personC.setId(UUID.randomUUID().toString());
 		personC.setName(PERSON_NAME_C);
 		personC.setLastname(PERSON_SURNAME_C);
@@ -97,9 +95,9 @@ public class End2End {
 		databaseApi.addPerson(personB);
 		databaseApi.addPerson(personC);
 
-		Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
+		final Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
 				LOCATION_ITALY, LOCATION_LUINO_POSTCODE), 0.5);
-		assertTrue(nearbyPersons.getPersons().size() == 1);
-		assertTrue(nearbyPersons.getPersons().iterator().next().equals(personB));
+		assertEquals(1, nearbyPersons.getPersons().size());
+		assertEquals(nearbyPersons.getPersons().iterator().next(), personB);
 	}
 }

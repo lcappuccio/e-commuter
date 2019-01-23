@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.pojo;
+package org.systemexception.ecommuter.pojo;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,12 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.End2End;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
-import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.services.LocationImpl;
-import org.systemexception.ecommuter.test.End2End;
 
 import java.util.UUID;
 
@@ -36,7 +35,7 @@ public class PersonJsonParserTest {
 
 	@Before
 	public void setSut() throws Exception {
-		Address addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
+		final Address addressFromGeo = locationService.geoToAddress(45.4641835, 9.1896379);
 		personId = UUID.randomUUID().toString();
 		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_A, addressFromGeo ,addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
@@ -44,7 +43,7 @@ public class PersonJsonParserTest {
 
 	@Test
 	public void generate_person_from_json() {
-		JsonObject jsonObject = PersonJsonParser.fromPerson(person);
+		final JsonObject jsonObject = PersonJsonParser.fromPerson(person);
 
 		assertEquals(getPersonJson(), jsonObject.toString());
 	}
@@ -52,33 +51,33 @@ public class PersonJsonParserTest {
 
 	@Test
 	public void generate_json_from_person() {
-		Person personFromJson = PersonJsonParser.fromJson(getPersonJsonObject());
+		final Person personFromJson = PersonJsonParser.fromJson(getPersonJsonObject());
 
 		assertEquals(person, personFromJson);
 	}
 
 	@Test
 	public void generate_person_from_string() {
-		Person pesonFromString = PersonJsonParser.fromString(getPersonJson());
+		final Person pesonFromString = PersonJsonParser.fromString(getPersonJson());
 
 		assertEquals(person, pesonFromString);
 	}
 
-	public String getPersonJson() {
+	private String getPersonJson() {
 		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
-				"\"homeAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano MI, Italy\",\"latitude\":45.4635507," +
-				"\"longitude\":9.1903881," +
+				"\"homeAddress\":{\"route\":\"Piazza del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
+				"\"longitude\":9.1896379," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
-				"\"workAddress\":{\"streetNumber\":\"6\",\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Piazza del Duomo, 6, 20122 Milano MI, Italy\",\"latitude\":45.4635507," +
-				"\"longitude\":9.1903881," +
+				"\"workAddress\":{\"route\":\"Piazza del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
+				"\"longitude\":9.1896379," +
 				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
 	}
 
 	private JsonObject getPersonJsonObject() {
-		JsonParser jsonParser = new JsonParser();
-		JsonElement jsonElement = jsonParser.parse(getPersonJson());
+		final JsonParser jsonParser = new JsonParser();
+		final JsonElement jsonElement = jsonParser.parse(getPersonJson());
 		return jsonElement.getAsJsonObject();
 	}
 

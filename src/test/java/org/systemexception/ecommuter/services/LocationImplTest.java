@@ -1,4 +1,4 @@
-package org.systemexception.ecommuter.test.services;
+package org.systemexception.ecommuter.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,13 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
-import org.systemexception.ecommuter.services.LocationImpl;
-import org.systemexception.ecommuter.test.End2End;
+import org.systemexception.ecommuter.End2End;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.round;
@@ -55,8 +53,8 @@ public class LocationImplTest {
 
 		assertNull(geoFromAddress.getStreetNumber());
 		assertNull(geoFromAddress.getTerritory());
-		assertTrue(geoFromAddress.getLatitude() == 0d);
-		assertTrue(geoFromAddress.getLongitude() == 0d);
+		assertEquals(0d, geoFromAddress.getLatitude(), 0.0);
+		assertEquals(0d, geoFromAddress.getLongitude(), 0.0);
 	}
 
 	@Test
@@ -64,7 +62,7 @@ public class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("Piazza del Duomo, 6, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("Duomo, Piazza del Duomo, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
@@ -80,8 +78,8 @@ public class LocationImplTest {
 
 		assertNull(addressFromGeo.getStreetNumber());
 		assertNull(addressFromGeo.getTerritory());
-		assertTrue(addressFromGeo.getLatitude() == 0d);
-		assertTrue(addressFromGeo.getLongitude() == 0d);
+		assertEquals(0d, addressFromGeo.getLatitude(), 0.0);
+		assertEquals(0d, addressFromGeo.getLongitude(), 0.0);
 	}
 
 	@Test
@@ -139,7 +137,7 @@ public class LocationImplTest {
 
 		Persons nearbyPersons = sut.findNearbyPersons(personA, persons, 0.5);
 
-		assertTrue(nearbyPersons.getPersons().size() == 1);
+		assertEquals(1, nearbyPersons.getPersons().size());
 
 	}
 

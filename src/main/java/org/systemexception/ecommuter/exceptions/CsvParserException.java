@@ -11,7 +11,7 @@ public class CsvParserException extends Exception {
 	 *
 	 * @param msg the detail message.
 	 */
-	public CsvParserException(String msg) {
+	public CsvParserException(final String msg) {
 		super(msg);
 	}
 }

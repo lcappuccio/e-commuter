@@ -25,21 +25,20 @@ public class LocationImpl implements LocationApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationImpl.class);
 	private static final String EMPTY_STRING = "";
 
-	private final GeoApiContext geoApiContext = new GeoApiContext().setApiKey(Application.API_KEY);
+	private final GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey(Application.API_KEY).build();
 	private final HaversineUtil haversineUtil = new HaversineUtil();
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws Exception {
 		LOGGER.info("geoToAddress" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR +
 				longitude);
-		GeocodingResult[] geocodingResults;
-		geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude, longitude)).await();
+		final GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude, longitude)).await();
 		if (geocodingResults.length < 1) {
 			LOGGER.info("geoToAddressNoResult" + Constants.LOG_OBJECT_SEPARATOR + latitude +
 					Constants.LOG_ITEM_SEPARATOR + longitude);
 			return new Address();
 		}
-		GeocodingResult geocodingResult = geocodingResults[0];
+		final GeocodingResult geocodingResult = geocodingResults[0];
 
 		return geoCodingResultToAddress(geocodingResult);
 	}
@@ -47,23 +46,18 @@ public class LocationImpl implements LocationApi {
 	@Override
 	public Address addressToGeo(final String stringAddress) throws Exception {
 		LOGGER.info("addressToGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
-		GeocodingResult[] geocodingResults;
-		geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
+		final GeocodingResult[] geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		if (geocodingResults.length < 1) {
 			LOGGER.info("addressToGeoNoGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
 			return new Address();
 		}
-		GeocodingResult geocodingResult = geocodingResults[0];
+		final GeocodingResult geocodingResult = geocodingResults[0];
 
 		return geoCodingResultToAddress(geocodingResult);
 	}
 
 	@Override
 	public double distanceBetween(final Address addressA, final Address addressB) {
-		LOGGER.info("distanceBetween" + Constants.LOG_OBJECT_SEPARATOR +
-				"(" + addressA.getLatitude() + Constants.LOG_ITEM_SEPARATOR + addressA.getLongitude() + ")" +
-				Constants.LOG_ITEM_SEPARATOR +
-				"(" + addressB.getLatitude() + Constants.LOG_ITEM_SEPARATOR + addressB.getLongitude() + ")");
 		return haversineUtil.haversine(addressA.getLatitude(), addressA.getLongitude(),
 				addressB.getLatitude(), addressB.getLongitude());
 	}
@@ -72,11 +66,9 @@ public class LocationImpl implements LocationApi {
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
 		LOGGER.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
 				Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
-		Persons nearbyPersons = new Persons();
-		if (persons.getPersons().contains(person)) {
-			persons.getPersons().remove(person);
-		}
-		for (Person innerPerson : persons.getPersons()) {
+		final Persons nearbyPersons = new Persons();
+		persons.getPersons().remove(person);
+		for (final Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
 			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius && !person.equals(innerPerson)) {
@@ -89,7 +81,7 @@ public class LocationImpl implements LocationApi {
 	}
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
-		
+
 		String country = EMPTY_STRING;
 		String postalCode = EMPTY_STRING;
 		String locality = EMPTY_STRING;
@@ -99,7 +91,7 @@ public class LocationImpl implements LocationApi {
 		address.setLatitude(geocodingResult.geometry.location.lat);
 		address.setLongitude(geocodingResult.geometry.location.lng);
 
-		for (AddressComponent addressComponent : geocodingResult.addressComponents) {
+		for (final AddressComponent addressComponent : geocodingResult.addressComponents) {
 			for (AddressComponentType addressComponentType : addressComponent.types) {
 				if (addressComponentType.equals(AddressComponentType.COUNTRY)) {
 					country = addressComponent.shortName;
@@ -118,7 +110,7 @@ public class LocationImpl implements LocationApi {
 				}
 			}
 		}
-		Territory territory = new Territory(country, postalCode, locality);
+		final Territory territory = new Territory(country, postalCode, locality);
 		address.setTerritory(territory);
 
 		return address;

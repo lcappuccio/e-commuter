@@ -52,24 +52,24 @@ public class RestControllerTest {
 		databaseApi = mock(DatabaseApi.class);
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
-		RestController restController = new RestController(databaseApi, locationApi, storageApi);
+		final RestController restController = new RestController(databaseApi, locationApi, storageApi);
 		sut = MockMvcBuilders.standaloneSetup(restController).build();
 	}
 
 	@Test
 	public void add_territories() throws Exception {
-		MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
+		final MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
 				UUID.randomUUID().toString(), TEXT_PLAIN_FILE, "some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.multipart(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
 				.andExpect(status().is(HttpStatus.OK.value()));
-		File receivedFile = storageApi.saveFile(dataFile);
+		final File receivedFile = storageApi.saveFile(dataFile);
 
 		verify(databaseApi).addTerritories(receivedFile);
 	}
 
 	@Test
 	public void add_person() throws Exception {
-		Person person = PersonJsonParser.fromString(getPerson());
+		final Person person = PersonJsonParser.fromString(getPerson());
 		when(databaseApi.addPerson(person)).thenReturn(person);
 		sut.perform(MockMvcRequestBuilders.post(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_ADD)
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
@@ -80,7 +80,7 @@ public class RestControllerTest {
 
 	@Test
 	public void find_person_by_lastname() throws Exception {
-		Person person = PersonJsonParser.fromString(getPerson());
+		final Person person = PersonJsonParser.fromString(getPerson());
 		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME)
 				.param(Endpoints.LAST_NAME, person.getLastname())).andExpect(status().is(HttpStatus.OK.value()));
 
@@ -89,7 +89,7 @@ public class RestControllerTest {
 
 	@Test
 	public void delete_person() throws Exception {
-		Person person = PersonJsonParser.fromString(getPerson());
+		final Person person = PersonJsonParser.fromString(getPerson());
 		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
@@ -99,8 +99,8 @@ public class RestControllerTest {
 
 	@Test
 	public void update_person() throws Exception {
-		Person person = PersonJsonParser.fromString(getPerson());
-		Person updatedPerson = new Person(person.getId(), "UPDATED_NAME", "UPDATED_SURNAME", person.getHomeAddress(),
+		final Person person = PersonJsonParser.fromString(getPerson());
+		final Person updatedPerson = new Person(person.getId(), "UPDATED_NAME", "UPDATED_SURNAME", person.getHomeAddress(),
 				person.getWorkAddress());
 
 		when(databaseApi.updatePerson(person)).thenReturn(updatedPerson);
@@ -113,8 +113,8 @@ public class RestControllerTest {
 
 	@Test
 	public void geo_to_address() throws Exception {
-		String latitude = "123.4";
-		String longitude = "456.7";
+		final String latitude = "123.4";
+		final String longitude = "456.7";
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
 				.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
 				.andExpect(status().is(HttpStatus.OK.value()));
@@ -124,9 +124,9 @@ public class RestControllerTest {
 
 	@Test
 	public void address_to_geo() throws Exception {
-		Gson gson = new Gson();
-		JsonParser jsonParser = new JsonParser();
-		Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
+		final Gson gson = new Gson();
+		final JsonParser jsonParser = new JsonParser();
+		final Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
 				.contentType(MediaType.APPLICATION_JSON).content(getAddress().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
@@ -136,16 +136,16 @@ public class RestControllerTest {
 
 	@Test
 	public void nearby_persons() throws Exception {
-		double distance = 0.5;
-		Person person = mock(Person.class);
+		final double distance = 0.5;
+		final Person person = mock(Person.class);
 
-		Persons personsLiving = mock(Persons.class);
-		Address addressLiving = mock(Address.class);
-		Territory territoryLiving = mock(Territory.class);
+		final Persons personsLiving = mock(Persons.class);
+		final Address addressLiving = mock(Address.class);
+		final Territory territoryLiving = mock(Territory.class);
 
-		Persons personsWorking = mock(Persons.class);
-		Address addressWorking = mock(Address.class);
-		Territory territoryWorking = mock(Territory.class);
+		final Persons personsWorking = mock(Persons.class);
+		final Address addressWorking = mock(Address.class);
+		final Territory territoryWorking = mock(Territory.class);
 
 		when(person.getHomeAddress()).thenReturn(addressLiving);
 		when(person.getHomeAddress().getTerritory()).thenReturn(territoryLiving);

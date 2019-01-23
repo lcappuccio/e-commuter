@@ -45,7 +45,7 @@ public class TerritoriesTest {
 
 		sut = new Territories();
 		sut.addTerritory(territoryA);
-		Territory badTerritory = new Territory("IT", "123", "TEST");
+		final Territory badTerritory = new Territory("IT", "123", "TEST");
 		sut.addTerritory(badTerritory);
 
 		assertEquals(1, sut.getTerritories().size());

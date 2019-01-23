@@ -64,25 +64,25 @@ public class StorageImplTest {
 
 	@Test
 	public void saveDataExists() throws IOException {
-		File savedFile = sut.saveFile(multipartFile);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
+		final File savedFile = sut.saveFile(multipartFile);
+		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 
 		assertTrue(testDataFile.exists());
 	}
 
 	@Test
 	public void historify() throws IOException {
-		File savedFile = sut.saveFile(multipartFile);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
-		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
+		final File savedFile = sut.saveFile(multipartFile);
+		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
+		final BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
 		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
 				+ "_" + testDataFile.getName()).exists());
 	}
 
 	private String convertTime(long time) {
-		Date date = new Date(time);
-		Format format = new SimpleDateFormat(StorageImpl.DATETIME_FORMAT);
+		final Date date = new Date(time);
+		final Format format = new SimpleDateFormat(StorageImpl.DATETIME_FORMAT);
 		return format.format(date);
 	}
 }

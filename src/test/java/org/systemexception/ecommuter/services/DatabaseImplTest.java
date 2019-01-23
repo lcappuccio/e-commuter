@@ -44,17 +44,17 @@ public class DatabaseImplTest {
 
 	@BeforeClass
 	public static void setSut() throws IOException {
-		StorageApi storageApi = new StorageImpl(DATABASE_FOLDER);
+		final StorageApi storageApi = new StorageImpl(DATABASE_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
-		File myFile = new File(myTestURL.toURI());
+		final URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
+		final File myFile = new File(myTestURL.toURI());
 		sut.addTerritories(myFile);
 		addressFromGeo = locationService.geoToAddress(45.4641776, 9.1899885);
-		String personId = UUID.randomUUID().toString();
+		final String personId = UUID.randomUUID().toString();
 		person = new Person(personId, PERSON_NAME, PERSON_LAST_NAME, addressFromGeo, addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
 		person.setWorkAddress(addressFromGeo);
@@ -73,7 +73,7 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_lives_in() {
-		Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
+		final Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
@@ -82,7 +82,7 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_works_in() {
-		Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getTerritory().getCountry(),
+		final Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
 		assertEquals(personsLivesIn.getPersons().size(), 1);
@@ -91,14 +91,14 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_nonexisting_node() {
-		Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
+		final Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
 
 		assertEquals(0, nullPersons.getPersons().size());
 	}
 
 	@Test(expected = TerritoriesException.class)
 	public void add_person_nonexisting_node() throws TerritoriesException {
-		Address missingAddress = person.getHomeAddress();
+		final Address missingAddress = person.getHomeAddress();
 		missingAddress.getTerritory().setPostalCode("XXXX");
 		person.setHomeAddress(missingAddress);
 		sut.addPerson(person);
@@ -106,21 +106,21 @@ public class DatabaseImplTest {
 
 	@Test(expected = TerritoriesException.class)
 	public void add_person_bad_country_good_postalcode() throws TerritoriesException {
-		Address missingAddress = person.getHomeAddress();
+		final Address missingAddress = person.getHomeAddress();
 		missingAddress.getTerritory().setCountry("XXX");
 		sut.addPerson(person);
 	}
 
 	@Test
 	public void update_person() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
-		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
 		personBuffer.setName(updatedName);
 		personBuffer.setLastname(updatedSurname);
-		Person personAfterUpdate = sut.updatePerson(personBuffer);
+		final Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);
@@ -128,22 +128,22 @@ public class DatabaseImplTest {
 
 	@Test
 	public void update_person_bad_id() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
-		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
 		personBuffer.setId("BAD_ID");
 		personBuffer.setName(updatedName);
 		personBuffer.setLastname(updatedSurname);
-		Person personAfterUpdate = sut.updatePerson(personBuffer);
+		final Person personAfterUpdate = sut.updatePerson(personBuffer);
 
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);
 	}
 
 	@Test
 	public void find_person_by_name() {
-		Persons personsByLastname = sut.findPersonsByLastname(PERSON_LAST_NAME);
+		final Persons personsByLastname = sut.findPersonsByLastname(PERSON_LAST_NAME);
 
 		assertFalse(personsByLastname.getPersons().isEmpty());
 		assertEquals(1, personsByLastname.getPersons().size());
@@ -153,15 +153,15 @@ public class DatabaseImplTest {
 
 	@Test
 	public void find_person_by_name_after_update() {
-		Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
+		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
-		Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
+		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
 				personBeforeUpdate.getLastname(), personBeforeUpdate.getHomeAddress(),
 				personBeforeUpdate.getWorkAddress());
-		String lastnameUpdate = updatedSurname + "UPDATE";
+		final String lastnameUpdate = updatedSurname + "UPDATE";
 		personBuffer.setLastname(lastnameUpdate);
-		Person personAfterUpdate = sut.updatePerson(personBuffer);
-		Persons personsByLastname = sut.findPersonsByLastname(lastnameUpdate);
+		final Person personAfterUpdate = sut.updatePerson(personBuffer);
+		final Persons personsByLastname = sut.findPersonsByLastname(lastnameUpdate);
 
 		assertEquals(personBeforeUpdate.getId(), personAfterUpdate.getId());
 		assertNotEquals(personBeforeUpdate, personAfterUpdate);

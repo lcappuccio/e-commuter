@@ -35,7 +35,7 @@ public class PersonJsonParserTest {
 
 	@Before
 	public void setSut() throws Exception {
-		Address addressFromGeo = locationService.geoToAddress(45.4641835, 9.1896379);
+		final Address addressFromGeo = locationService.geoToAddress(45.4641835, 9.1896379);
 		personId = UUID.randomUUID().toString();
 		person = new Person(personId, End2End.PERSON_NAME_A, End2End.PERSON_SURNAME_A, addressFromGeo ,addressFromGeo);
 		person.setHomeAddress(addressFromGeo);
@@ -43,7 +43,7 @@ public class PersonJsonParserTest {
 
 	@Test
 	public void generate_person_from_json() {
-		JsonObject jsonObject = PersonJsonParser.fromPerson(person);
+		final JsonObject jsonObject = PersonJsonParser.fromPerson(person);
 
 		assertEquals(getPersonJson(), jsonObject.toString());
 	}
@@ -51,14 +51,14 @@ public class PersonJsonParserTest {
 
 	@Test
 	public void generate_json_from_person() {
-		Person personFromJson = PersonJsonParser.fromJson(getPersonJsonObject());
+		final Person personFromJson = PersonJsonParser.fromJson(getPersonJsonObject());
 
 		assertEquals(person, personFromJson);
 	}
 
 	@Test
 	public void generate_person_from_string() {
-		Person pesonFromString = PersonJsonParser.fromString(getPersonJson());
+		final Person pesonFromString = PersonJsonParser.fromString(getPersonJson());
 
 		assertEquals(person, pesonFromString);
 	}
@@ -76,8 +76,8 @@ public class PersonJsonParserTest {
 	}
 
 	private JsonObject getPersonJsonObject() {
-		JsonParser jsonParser = new JsonParser();
-		JsonElement jsonElement = jsonParser.parse(getPersonJson());
+		final JsonParser jsonParser = new JsonParser();
+		final JsonElement jsonElement = jsonParser.parse(getPersonJson());
 		return jsonElement.getAsJsonObject();
 	}
 

@@ -28,7 +28,7 @@ public class CsvParserTest {
 
 	@BeforeClass
 	public static void setUp() throws URISyntaxException {
-		URL myTestURL = ClassLoader.getSystemResource(DATABASE_TEST_CSV_FILE);
+		final URL myTestURL = ClassLoader.getSystemResource(DATABASE_TEST_CSV_FILE);
 		resourceFile = new File(myTestURL.toURI());
 	}
 
@@ -51,8 +51,8 @@ public class CsvParserTest {
 	@Test
 	public void parse_correctly_luino_record() throws CsvParserException {
 		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
-		List<CSVRecord> records = sut.readCsvContents();
-		for (CSVRecord territory : records) {
+		final List<CSVRecord> records = sut.readCsvContents();
+		for (final CSVRecord territory : records) {
 			if (territory.get(CsvHeaders.PLACE_NAME.name()).toLowerCase(Locale.getDefault()).equals("luino")) {
 				assertEquals(territory.get(CsvHeaders.POSTAL_CODE.name()), End2End.LOCATION_LUINO_POSTCODE);
 				assertEquals("46.0019", territory.get(CsvHeaders.LATITUDE.name()));

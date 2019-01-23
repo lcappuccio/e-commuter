@@ -24,7 +24,7 @@ public class Person {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -32,7 +32,7 @@ public class Person {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -40,7 +40,7 @@ public class Person {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public void setLastname(final String lastname) {
 		this.lastname = lastname;
 	}
 
@@ -48,7 +48,7 @@ public class Person {
 		return homeAddress;
 	}
 
-	public void setHomeAddress(Address homeAddress) {
+	public void setHomeAddress(final Address homeAddress) {
 		this.homeAddress = homeAddress;
 	}
 
@@ -56,12 +56,12 @@ public class Person {
 		return workAddress;
 	}
 
-	public void setWorkAddress(Address workAddress) {
+	public void setWorkAddress(final Address workAddress) {
 		this.workAddress = workAddress;
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 

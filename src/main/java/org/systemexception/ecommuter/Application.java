@@ -30,7 +30,7 @@ public class Application {
 	@Value("${storage.folder}")
 	private String storageFolder;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		if (API_KEY != null) {
 			LOGGER.info("Starting with API_KEY:" + API_KEY);
 			SpringApplication.run(Application.class, args);

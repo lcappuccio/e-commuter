@@ -51,9 +51,9 @@ public class RestController {
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<HttpStatus> addTerritories(
 			@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
-			throws IOException, CsvParserException, TerritoriesException {
+			throws IOException, CsvParserException {
 
-		File territoriesFile = storageService.saveFile(dataFile);
+		final File territoriesFile = storageService.saveFile(dataFile);
 		databaseService.addTerritories(territoriesFile);
 
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -63,16 +63,16 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) throws TerritoriesException {
 
-		Person personSaved = databaseService.addPerson(person);
+		final Person personSaved = databaseService.addPerson(person);
 		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME, method = RequestMethod.GET,
 			params = {Endpoints.LAST_NAME}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Persons> findPersonByLastname(
-			@RequestParam(value = Endpoints.LAST_NAME) final String lastname) throws TerritoriesException {
+			@RequestParam(value = Endpoints.LAST_NAME) final String lastname) {
 
-		Persons personsByLastname = databaseService.findPersonsByLastname(lastname);
+		final Persons personsByLastname = databaseService.findPersonsByLastname(lastname);
 		return new ResponseEntity<>(personsByLastname, HttpStatus.OK);
 	}
 
@@ -86,9 +86,9 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_UPDATE, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) throws TerritoriesException {
+	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) {
 
-		Person personUpdated = databaseService.updatePerson(person);
+		final Person personUpdated = databaseService.updatePerson(person);
 		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
 	}
 
@@ -98,7 +98,7 @@ public class RestController {
 			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
 			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws Exception {
 
-		Address address = locationService.geoToAddress(latitude, longitude);
+		final Address address = locationService.geoToAddress(latitude, longitude);
 		return new ResponseEntity<>(address, HttpStatus.OK);
 	}
 
@@ -106,7 +106,7 @@ public class RestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws Exception {
 
-		Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
+		final Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		return new ResponseEntity<>(responseAddress, HttpStatus.OK);
 	}
 
@@ -116,13 +116,13 @@ public class RestController {
 			@RequestBody @Valid final Person person,
 			@RequestParam(value = Endpoints.DISTANCE) final double distance) {
 
-		Persons personsLivesIn = databaseService.findPersonsLivesIn(
+		final Persons personsLivesIn = databaseService.findPersonsLivesIn(
 				person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
-		Persons personsWorksIn = databaseService.findPersonsWorksIn(
+		final Persons personsWorksIn = databaseService.findPersonsWorksIn(
 				person.getWorkAddress().getTerritory().getCountry(),
 				person.getWorkAddress().getTerritory().getPostalCode());
-		Persons fullPersonList = new Persons();
+		final Persons fullPersonList = new Persons();
 
 		for (Person personLiving : personsLivesIn.getPersons()) {
 			fullPersonList.addPerson(personLiving);
@@ -130,7 +130,7 @@ public class RestController {
 		for (Person personWorking : personsWorksIn.getPersons()) {
 			fullPersonList.addPerson(personWorking);
 		}
-		Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
+		final Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);
 		return new ResponseEntity<>(nearbyPersons, HttpStatus.OK);
 	}
 

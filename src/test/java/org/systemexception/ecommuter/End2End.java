@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
@@ -50,7 +49,7 @@ public class End2End {
 	private StorageApi storageApi;
 
 	@Before
-	public void setUp() throws CsvParserException, TerritoriesException, URISyntaxException, IOException {
+	public void setUp() throws CsvParserException, URISyntaxException, IOException {
 		storageApi = new StorageImpl(TARGET_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 		URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);

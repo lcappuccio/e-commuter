@@ -24,7 +24,7 @@ public class StorageImpl implements StorageApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StorageImpl.class);
 	private final String storageFolder;
 
-	public static final String DATETIME_FORMAT = "yyyyMMddHHmmss";
+	static final String DATETIME_FORMAT = "yyyyMMddHHmmss";
 
 	public StorageImpl(final String storageFolder) throws IOException {
 		this.storageFolder = storageFolder;
@@ -32,8 +32,8 @@ public class StorageImpl implements StorageApi {
 	}
 
 	@Override
-	public File saveFile(MultipartFile receivedFile) throws IOException {
-		File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
+	public File saveFile(final MultipartFile receivedFile) throws IOException {
+		final File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
 				receivedFile.getOriginalFilename());
 		historifyFile(dataFile);
 		dataFile.createNewFile();
@@ -44,16 +44,16 @@ public class StorageImpl implements StorageApi {
 		return dataFile;
 	}
 
-	public void removeFolder(String folderPath) {
-		File toRemove = new File(folderPath);
+	public void removeFolder(final String folderPath) {
+		final File toRemove = new File(folderPath);
 		if (toRemove.exists()) {
-			String[] files = toRemove.list();
-			for (String file : files != null ? files : new String[0]) {
+			final String[] files = toRemove.list();
+			for (final String file : files != null ? files : new String[0]) {
 				new File(folderPath + File.separator + file).delete();
 			}
 		}
 		LOGGER.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + toRemove.getName());
-		boolean deleted = toRemove.delete();
+		final boolean deleted = toRemove.delete();
 		if (deleted) {
 			LOGGER.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
 		} else {
@@ -62,28 +62,28 @@ public class StorageImpl implements StorageApi {
 	}
 
 	private void createStorageFolder() throws IOException {
-		File storageFolderFile = new File(storageFolder);
+		final File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {
 			Files.createDirectory(storageFolderFile.toPath());
 			LOGGER.info("createStorageFolder" + Constants.LOG_OBJECT_SEPARATOR + storageFolderFile.getName());
 		}
 	}
 
-	private void historifyFile(File file) throws IOException {
+	private void historifyFile(final File file) throws IOException {
 		if (file.exists()) {
-			BasicFileAttributes attrs;
-			attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
-			long fileTime = attrs.creationTime().toMillis();
-			String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
+			final BasicFileAttributes attrs = Files.readAttributes(file.getAbsoluteFile().toPath(),
+					BasicFileAttributes.class);
+			final long fileTime = attrs.creationTime().toMillis();
+			final String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
 			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
 			LOGGER.info("historiFyFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName() +
 					Constants.LOG_ITEM_SEPARATOR + historifiedFilename);
 		}
 	}
 
-	private String convertTime(long time) {
-		Date date = new Date(time);
-		Format format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
+	private String convertTime(final long time) {
+		final Date date = new Date(time);
+		final Format format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		return format.format(date);
 	}
 }

@@ -5,15 +5,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.systemexception.ecommuter.enums.Constants;
-import org.systemexception.ecommuter.exceptions.CsvParserException;
-import org.systemexception.ecommuter.exceptions.TerritoriesException;
-import org.systemexception.ecommuter.model.Territories;
-import org.systemexception.ecommuter.model.Territory;
 
 import java.security.InvalidParameterException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author leo
@@ -34,15 +29,15 @@ public class TerritoriesTest {
 	public final ExpectedException expectedException = ExpectedException.none();
 
 	@Test
-	public void add_territories() throws TerritoriesException, CsvParserException {
+	public void add_territories() {
 		sut = new Territories();
 		sut.addTerritory(territoryA);
 		sut.addTerritory(territoryB);
-		assertTrue(sut.getTerritories().size() == 2);
+		assertEquals(2, sut.getTerritories().size());
 	}
 
 	@Test
-	public void add_duplicate_territory() throws TerritoriesException, CsvParserException {
+	public void add_duplicate_territory() {
 
 		expectedException.expect(InvalidParameterException.class);
 		expectedException.expectMessage("isValidTerritory"  + Constants.LOG_OBJECT_SEPARATOR + "IT" +

@@ -14,7 +14,7 @@ public class Persons {
 		persons = new HashSet<>();
 	}
 
-	public void addPerson(Person person) {
+	public void addPerson(final Person person) {
 		persons.add(person);
 	}
 

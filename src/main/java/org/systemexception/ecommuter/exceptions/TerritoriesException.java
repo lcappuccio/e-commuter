@@ -11,7 +11,7 @@ public class TerritoriesException extends Exception {
 	 *
 	 * @param msg the detail message.
 	 */
-	public TerritoriesException(String msg) {
+	public TerritoriesException(final String msg) {
 		super(msg);
 	}
 }

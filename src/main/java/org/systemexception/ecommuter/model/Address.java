@@ -14,7 +14,7 @@ public class Address {
 		return formattedAddress;
 	}
 
-	public void setFormattedAddress(String formattedAddress) {
+	public void setFormattedAddress(final String formattedAddress) {
 		this.formattedAddress = formattedAddress;
 	}
 
@@ -38,7 +38,7 @@ public class Address {
 		return streetNumber;
 	}
 
-	public void setStreetNumber(String streetNumber) {
+	public void setStreetNumber(final String streetNumber) {
 		this.streetNumber = streetNumber;
 	}
 
@@ -46,7 +46,7 @@ public class Address {
 		return route;
 	}
 
-	public void setRoute(String route) {
+	public void setRoute(final String route) {
 		this.route = route;
 	}
 
@@ -54,12 +54,12 @@ public class Address {
 		return territory;
 	}
 
-	public void setTerritory(Territory territory) {
+	public void setTerritory(final Territory territory) {
 		this.territory = territory;
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 

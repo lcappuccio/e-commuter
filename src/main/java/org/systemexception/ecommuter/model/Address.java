@@ -1,5 +1,7 @@
 package org.systemexception.ecommuter.model;
 
+import java.util.Objects;
+
 /**
  * @author leo
  * @date 01/07/16 23:06
@@ -67,13 +69,12 @@ public class Address {
 
 		if (Double.compare(address.latitude, latitude) != 0) return false;
 		if (Double.compare(address.longitude, longitude) != 0) return false;
-		if (streetNumber != null ? !streetNumber.equals(address.streetNumber) : address.streetNumber != null)
+		if (!Objects.equals(streetNumber, address.streetNumber))
 			return false;
-		if (route != null ? !route.equals(address.route) : address.route != null) return false;
-		if (formattedAddress != null ? !formattedAddress.equals(address.formattedAddress) : address.formattedAddress
-				!= null)
+		if (!Objects.equals(route, address.route)) return false;
+		if (!Objects.equals(formattedAddress, address.formattedAddress))
 			return false;
-		return territory != null ? territory.equals(address.territory) : address.territory == null;
+		return Objects.equals(territory, address.territory);
 
 	}
 

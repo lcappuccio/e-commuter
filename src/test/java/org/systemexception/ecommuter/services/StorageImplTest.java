@@ -6,13 +6,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import org.systemexception.ecommuter.End2End;
 import org.systemexception.ecommuter.controller.RestControllerTest;
 import org.systemexception.ecommuter.enums.Endpoints;
-import org.systemexception.ecommuter.End2End;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.Format;
@@ -51,7 +50,7 @@ public class StorageImplTest {
 	}
 
 	@Before
-	public void setUp() throws IOException, URISyntaxException {
+	public void setUp() throws IOException {
 		sut = new StorageImpl(STORAGE_FOLDER);
 		multipartFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD, UUID.randomUUID().toString(),
 				RestControllerTest.TEXT_PLAIN_FILE, "some data" .getBytes());

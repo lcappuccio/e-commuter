@@ -28,7 +28,7 @@ public class LocationImplTest {
 	private final LocationApi sut = new LocationImpl();
 	private final String locationItaly = End2End.LOCATION_ITALY;
 	private final String locationMilano = "Milano";
-	private final String locationPiazzaDuomo = "Piazza del Duomo";
+	private final String locationPiazzaDuomo = "P.za del Duomo";
 
 	@Test
 	public void address_to_geo() throws Exception {
@@ -37,7 +37,7 @@ public class LocationImplTest {
 
 		assertNotNull(geoFromAddress);
 		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, Milano MI, Italy", geoFromAddress.getFormattedAddress());
+		assertEquals("P.za del Duomo, Milano MI, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -62,7 +62,7 @@ public class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("Duomo, Piazza del Duomo, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("P.za del Duomo, 110, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());

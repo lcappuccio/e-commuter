@@ -1,9 +1,11 @@
 package org.systemexception.ecommuter.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.enums.Constants;
+import org.systemexception.ecommuter.pojo.UserDataSantizer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,14 +35,19 @@ public class StorageImpl implements StorageApi {
 
 	@Override
 	public File saveFile(final MultipartFile receivedFile) throws IOException {
+        String originalFilename = receivedFile.getOriginalFilename();
+        if (StringUtils.isEmpty(originalFilename)) {
+            throw new IllegalArgumentException();
+        }
+        final String santizedFileName = UserDataSantizer.returnAsSafe(originalFilename);
 		final File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
-				receivedFile.getOriginalFilename());
+                santizedFileName);
 		historifyFile(dataFile);
         boolean isFileCreated = dataFile.createNewFile();
         if (isFileCreated) {
             try (FileOutputStream fileOutputStream = new FileOutputStream(dataFile)) {
                 fileOutputStream.write(receivedFile.getBytes());
-                LOGGER.info("saveFile {}{}", Constants.LOG_OBJECT_SEPARATOR, receivedFile.getName());
+                LOGGER.info("saveFile {}{}", Constants.LOG_OBJECT_SEPARATOR, santizedFileName);
                 return dataFile;
             }
         } else {
@@ -79,17 +86,19 @@ public class StorageImpl implements StorageApi {
 	}
 
 	private void historifyFile(final File file) throws IOException {
-		if (file.exists()) {
-			final BasicFileAttributes attrs = Files.readAttributes(file.getAbsoluteFile().toPath(),
+        final String sanitiziedFilePath = UserDataSantizer.returnAsSafe(file.getAbsolutePath());
+        final File sanitizedFile = new File(sanitiziedFilePath);
+		if (sanitizedFile.exists()) {
+			final BasicFileAttributes attrs = Files.readAttributes(sanitizedFile.getAbsoluteFile().toPath(),
 					BasicFileAttributes.class);
 			final long fileTime = attrs.creationTime().toMillis();
-			final String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
+			final String historifiedFilename = convertTime(fileTime) + "_" + sanitizedFile.getName();
             final File historifiedFilePath = new File(storageFolder + File.separator + historifiedFilename);
-            boolean isFileRenamed = file.renameTo(historifiedFilePath);
+            boolean isFileRenamed = sanitizedFile.renameTo(historifiedFilePath);
             if (!isFileRenamed) {
-                LOGGER.error("error renaming file {} to {}", file.getAbsolutePath(), historifiedFilePath.getAbsolutePath());
+                LOGGER.error("error renaming file {} to {}", sanitizedFile.getAbsolutePath(), historifiedFilePath.getAbsolutePath());
             }
-            LOGGER.info("historiFyFile {} as {}", file.getName(), historifiedFilename);
+            LOGGER.info("historiFyFile {} as {}", sanitizedFile.getName(), historifiedFilename);
 		}
 	}
 

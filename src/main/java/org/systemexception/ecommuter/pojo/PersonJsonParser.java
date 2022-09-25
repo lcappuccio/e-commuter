@@ -12,6 +12,8 @@ import org.systemexception.ecommuter.model.Person;
  */
 public class PersonJsonParser {
 
+    private PersonJsonParser() {}
+
 	static Person fromJson(final JsonObject jsonObject) {
 		Gson gson = new Gson();
 		Person person = new Person();
@@ -22,16 +24,14 @@ public class PersonJsonParser {
 	}
 
 	public static Person fromString(final String jsonString) {
-		JsonParser jsonParser = new JsonParser();
-		JsonObject parse = jsonParser.parse(jsonString).getAsJsonObject();
+		JsonObject parse = JsonParser.parseString(jsonString).getAsJsonObject();
 		return fromJson(parse);
 	}
 
 	public static JsonObject fromPerson(final Person person) {
 		Gson gson = new Gson();
 		String personJson = gson.toJson(person);
-		JsonParser jsonParser = new JsonParser();
-		JsonElement jsonElement = jsonParser.parse(personJson);
+		JsonElement jsonElement = JsonParser.parseString(personJson);
 		return jsonElement.getAsJsonObject();
 	}
 }

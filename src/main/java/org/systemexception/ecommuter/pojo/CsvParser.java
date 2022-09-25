@@ -23,7 +23,7 @@ import java.util.List;
 public class CsvParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsvParser.class);
-	private List<CSVRecord> records;
+	private final List<CSVRecord> records;
 
 	public CsvParser(File csvFile) throws CsvParserException {
 		String[] headerMapping = new String[]{
@@ -46,7 +46,7 @@ public class CsvParser {
 		}
 	}
 
-	public List readCsvContents() {
+	public List<CSVRecord> readCsvContents() {
 		return records;
 	}
 }

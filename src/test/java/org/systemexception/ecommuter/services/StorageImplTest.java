@@ -75,8 +75,9 @@ public class StorageImplTest {
 		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 		final BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
-		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
-				+ "_" + testDataFile.getName()).exists());
+        String expectedPathName = STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
+                + "_" + testDataFile.getName();
+        assertTrue(new File(expectedPathName).exists());
 	}
 
 	private String convertTime(long time) {

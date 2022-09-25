@@ -51,7 +51,7 @@ public class End2EndTest {
 	@BeforeEach
 	void setUp() throws CsvParserException, URISyntaxException, IOException {
 		storageApi = new StorageImpl(TARGET_FOLDER);
-		storageApi.removeFolder(DATABASE_FOLDER);
+		removeFolder(DATABASE_FOLDER);
 		final URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		final File myFile = new File(myTestURL.toURI());
 		databaseApi.addTerritories(myFile);
@@ -100,4 +100,15 @@ public class End2EndTest {
 		assertEquals(1, nearbyPersons.getPersons().size());
 		assertEquals(nearbyPersons.getPersons().iterator().next(), personB);
 	}
+
+    public static void removeFolder(final String folderPath) throws IOException {
+        final File toRemove = new File(folderPath);
+        if (toRemove.exists()) {
+            final String[] files = toRemove.list();
+            for (final String file : files != null ? files : new String[0]) {
+                String fileNameToDelete = folderPath + File.separator + file;
+                new File(fileNameToDelete).delete();
+            }
+        }
+    }
 }

@@ -1,9 +1,11 @@
 package org.systemexception.ecommuter.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.ecommuter.enums.Constants;
+import org.systemexception.ecommuter.pojo.UserDataSantizer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,51 +35,49 @@ public class StorageImpl implements StorageApi {
 
 	@Override
 	public File saveFile(final MultipartFile receivedFile) throws IOException {
+        String originalFilename = receivedFile.getOriginalFilename();
+        if (StringUtils.isEmpty(originalFilename)) {
+            throw new IllegalArgumentException();
+        }
+        final String santizedFileName = UserDataSantizer.returnAsSafe(originalFilename);
 		final File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
-				receivedFile.getOriginalFilename());
+                santizedFileName);
 		historifyFile(dataFile);
-		dataFile.createNewFile();
-		FileOutputStream fos = new FileOutputStream(dataFile);
-		fos.write(receivedFile.getBytes());
-		fos.close();
-		LOGGER.info("saveFile" + Constants.LOG_OBJECT_SEPARATOR + receivedFile.getName());
-		return dataFile;
-	}
-
-	public void removeFolder(final String folderPath) {
-		final File toRemove = new File(folderPath);
-		if (toRemove.exists()) {
-			final String[] files = toRemove.list();
-			for (final String file : files != null ? files : new String[0]) {
-				new File(folderPath + File.separator + file).delete();
-			}
-		}
-		LOGGER.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + toRemove.getName());
-		final boolean deleted = toRemove.delete();
-		if (deleted) {
-			LOGGER.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
-		} else {
-			LOGGER.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
-		}
+        boolean isFileCreated = dataFile.createNewFile();
+        if (isFileCreated) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(dataFile)) {
+                fileOutputStream.write(receivedFile.getBytes());
+                LOGGER.info("saveFile {}{}", Constants.LOG_OBJECT_SEPARATOR, santizedFileName);
+                return dataFile;
+            }
+        } else {
+            LOGGER.error("error creating file {}", dataFile.getAbsolutePath());
+            throw new IOException();
+        }
 	}
 
 	private void createStorageFolder() throws IOException {
 		final File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {
 			Files.createDirectory(storageFolderFile.toPath());
-			LOGGER.info("createStorageFolder" + Constants.LOG_OBJECT_SEPARATOR + storageFolderFile.getName());
+			LOGGER.info("createStorageFolder {}{}", Constants.LOG_OBJECT_SEPARATOR, storageFolderFile.getName());
 		}
 	}
 
 	private void historifyFile(final File file) throws IOException {
-		if (file.exists()) {
-			final BasicFileAttributes attrs = Files.readAttributes(file.getAbsoluteFile().toPath(),
+        final String sanitiziedFilePath = UserDataSantizer.returnAsSafe(file.getAbsolutePath());
+        final File sanitizedFile = new File(sanitiziedFilePath);
+		if (sanitizedFile.exists()) {
+			final BasicFileAttributes attrs = Files.readAttributes(sanitizedFile.getAbsoluteFile().toPath(),
 					BasicFileAttributes.class);
 			final long fileTime = attrs.creationTime().toMillis();
-			final String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
-			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
-			LOGGER.info("historiFyFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName() +
-					Constants.LOG_ITEM_SEPARATOR + historifiedFilename);
+			final String historifiedFilename = convertTime(fileTime) + "_" + sanitizedFile.getName();
+            final File historifiedFilePath = new File(storageFolder + File.separator + historifiedFilename);
+            boolean isFileRenamed = sanitizedFile.renameTo(historifiedFilePath);
+            if (!isFileRenamed) {
+                LOGGER.error("error renaming file {} to {}", sanitizedFile.getAbsolutePath(), historifiedFilePath.getAbsolutePath());
+            }
+            LOGGER.info("historiFyFile {} as {}", sanitizedFile.getName(), historifiedFilename);
 		}
 	}
 

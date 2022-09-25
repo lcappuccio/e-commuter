@@ -19,10 +19,4 @@ public interface StorageApi {
 	 * @param file
 	 */
 	File saveFile(MultipartFile file) throws IOException;
-
-	/**
-	 *
-	 * @param folderPath
-	 */
-	void removeFolder(String folderPath);
 }

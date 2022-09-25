@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -31,23 +30,16 @@ public class StorageImplTest {
 	private final static String STORAGE_FOLDER = End2EndTest.TARGET_FOLDER + File.separator + "test_storage";
 	private StorageApi sut;
 	private MultipartFile multipartFile;
-	private static StorageApi storageApi;
 
 	@BeforeAll
 	public static void setSut() throws IOException {
-		storageApi = new StorageImpl(STORAGE_FOLDER);
-
-		storageApi.removeFolder(STORAGE_FOLDER);
-
-		assertFalse(new File(STORAGE_FOLDER).exists());
-	}
+		End2EndTest.removeFolder(STORAGE_FOLDER);
+    }
 
 	@AfterAll
-	public static void tearDownSut() {
-		storageApi.removeFolder(STORAGE_FOLDER);
-
-		assertFalse(new File(STORAGE_FOLDER).exists());
-	}
+	public static void tearDownSut() throws IOException {
+        End2EndTest.removeFolder(STORAGE_FOLDER);
+    }
 
 	@BeforeEach
 	public void setUp() throws IOException {
@@ -75,8 +67,9 @@ public class StorageImplTest {
 		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 		final BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(multipartFile);
-		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
-				+ "_" + testDataFile.getName()).exists());
+        String expectedPathName = STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis())
+                + "_" + testDataFile.getName();
+        assertTrue(new File(expectedPathName).exists());
 	}
 
 	private String convertTime(long time) {

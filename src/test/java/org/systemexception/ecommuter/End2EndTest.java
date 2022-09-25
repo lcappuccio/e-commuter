@@ -23,8 +23,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author leo

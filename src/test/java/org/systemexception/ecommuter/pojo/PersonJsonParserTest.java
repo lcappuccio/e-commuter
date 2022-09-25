@@ -45,8 +45,13 @@ public class PersonJsonParserTest {
 	public void generate_person_from_json() {
 		final JsonObject jsonObject = PersonJsonParser.fromPerson(person);
 
-		assertEquals(getPersonJson(), jsonObject.toString());
-	}
+        assertEquals(jsonObject.get("name").getAsString(), person.getName());
+        assertEquals(jsonObject.get("lastname").getAsString(), person.getLastname());
+        assertEquals(
+                jsonObject.getAsJsonObject("homeAddress").get("formattedAddress").getAsString(),
+                person.getHomeAddress().getFormattedAddress()
+        );
+    }
 
 
 	@Test
@@ -64,15 +69,14 @@ public class PersonJsonParserTest {
 	}
 
 	private String getPersonJson() {
-		return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
-				"\"homeAddress\":{\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
-				"\"longitude\":9.1896379," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}," +
-				"\"workAddress\":{\"route\":\"Piazza del Duomo\"," +
-				"\"formattedAddress\":\"Duomo, Piazza del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4641835," +
-				"\"longitude\":9.1896379," +
-				"\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\",\"placeName\":\"Milano\"}}}";
+        return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
+				"\"lastname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"route\":\"P.za del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
+				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
+				"\"placeName\":\"Milano\"}},\"workAddress\":{\"route\":\"P.za del Duomo\"," +
+				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
+				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
+				"\"placeName\":\"Milano\"}}}";
 	}
 
 	private JsonObject getPersonJsonObject() {

@@ -15,6 +15,7 @@ import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.HaversineUtil;
+import org.systemexception.ecommuter.pojo.UserDataSantizer;
 
 /**
  * @author leo
@@ -30,12 +31,18 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address geoToAddress(final double latitude, final double longitude) throws Exception {
-		LOGGER.info("geoToAddress" + Constants.LOG_OBJECT_SEPARATOR + latitude + Constants.LOG_ITEM_SEPARATOR +
+		LOGGER.info("geoToAddress{}{}{}{}",
+                Constants.LOG_OBJECT_SEPARATOR,
+                latitude,
+                Constants.LOG_ITEM_SEPARATOR,
 				longitude);
 		final GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(latitude, longitude)).await();
 		if (geocodingResults.length < 1) {
-			LOGGER.info("geoToAddressNoResult" + Constants.LOG_OBJECT_SEPARATOR + latitude +
-					Constants.LOG_ITEM_SEPARATOR + longitude);
+			LOGGER.info("geoToAddressNoResult{}{}{}{}",
+                    Constants.LOG_OBJECT_SEPARATOR,
+                    latitude,
+					Constants.LOG_ITEM_SEPARATOR,
+                    longitude);
 			return new Address();
 		}
 		final GeocodingResult geocodingResult = geocodingResults[0];
@@ -45,10 +52,11 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Address addressToGeo(final String stringAddress) throws Exception {
-		LOGGER.info("addressToGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
+        String safeStringAddress = UserDataSantizer.returnAsSafe(stringAddress);
+        LOGGER.info("addressToGeo{}{}", Constants.LOG_OBJECT_SEPARATOR, safeStringAddress);
 		final GeocodingResult[] geocodingResults = GeocodingApi.geocode(geoApiContext, stringAddress).await();
 		if (geocodingResults.length < 1) {
-			LOGGER.info("addressToGeoNoGeo" + Constants.LOG_OBJECT_SEPARATOR + stringAddress);
+			LOGGER.info("addressToGeoNoGeo{}no address for {}", Constants.LOG_OBJECT_SEPARATOR, safeStringAddress);
 			return new Address();
 		}
 		final GeocodingResult geocodingResult = geocodingResults[0];
@@ -64,16 +72,19 @@ public class LocationImpl implements LocationApi {
 
 	@Override
 	public Persons findNearbyPersons(final Person person, final Persons persons, final double radius) {
-		LOGGER.info("findNearbyPersons" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
-				Constants.LOG_ITEM_SEPARATOR + "distance " + radius);
+        final String safePersonId = UserDataSantizer.returnAsSafe(person.getId());
+		LOGGER.info("findNearbyPersons{}{}", Constants.LOG_OBJECT_SEPARATOR, safePersonId);
 		final Persons nearbyPersons = new Persons();
 		persons.getPersons().remove(person);
 		for (final Person innerPerson : persons.getPersons()) {
 			double distanceBetweenHome = distanceBetween(person.getHomeAddress(), innerPerson.getHomeAddress());
 			double distanceBetweenWork = distanceBetween(person.getWorkAddress(), innerPerson.getWorkAddress());
 			if (distanceBetweenHome <= radius && distanceBetweenWork <= radius && !person.equals(innerPerson)) {
-				LOGGER.info("foundNearby" + Constants.LOG_OBJECT_SEPARATOR + person.getId() +
-						Constants.LOG_ITEM_SEPARATOR + innerPerson.getId());
+				LOGGER.info("foundNearby{}{}{}{}",
+                        Constants.LOG_OBJECT_SEPARATOR,
+                        safePersonId,
+						Constants.LOG_ITEM_SEPARATOR,
+                        innerPerson.getId());
 				nearbyPersons.addPerson(innerPerson);
 			}
 		}

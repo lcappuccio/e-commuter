@@ -1,5 +1,7 @@
 package org.systemexception.ecommuter.model;
 
+import java.util.Objects;
+
 /**
  * @author leo
  * @date 01/03/15 17:15
@@ -47,9 +49,9 @@ public class Territory {
 
 		Territory territory = (Territory) o;
 
-		if (country != null ? !country.equals(territory.country) : territory.country != null) return false;
-		if (postalCode != null ? !postalCode.equals(territory.postalCode) : territory.postalCode != null) return false;
-		return placeName != null ? placeName.equals(territory.placeName) : territory.placeName == null;
+		if (!Objects.equals(country, territory.country)) return false;
+		if (!Objects.equals(postalCode, territory.postalCode)) return false;
+		return Objects.equals(placeName, territory.placeName);
 
 	}
 

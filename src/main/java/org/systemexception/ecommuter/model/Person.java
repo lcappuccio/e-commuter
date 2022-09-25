@@ -1,5 +1,7 @@
 package org.systemexception.ecommuter.model;
 
+import java.util.Objects;
+
 /**
  * @author leo
  * @date 01/07/16 23:53
@@ -67,11 +69,11 @@ public class Person {
 
 		Person person = (Person) o;
 
-		if (id != null ? !id.equals(person.id) : person.id != null) return false;
-		if (name != null ? !name.equals(person.name) : person.name != null) return false;
-		if (lastname != null ? !lastname.equals(person.lastname) : person.lastname != null) return false;
-		if (homeAddress != null ? !homeAddress.equals(person.homeAddress) : person.homeAddress != null) return false;
-		return workAddress != null ? workAddress.equals(person.workAddress) : person.workAddress == null;
+		if (!Objects.equals(id, person.id)) return false;
+		if (!Objects.equals(name, person.name)) return false;
+		if (!Objects.equals(lastname, person.lastname)) return false;
+		if (!Objects.equals(homeAddress, person.homeAddress)) return false;
+		return Objects.equals(workAddress, person.workAddress);
 
 	}
 

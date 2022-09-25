@@ -1,43 +1,43 @@
 package org.systemexception.ecommuter.services;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.systemexception.ecommuter.Application;
+import org.systemexception.ecommuter.End2EndTest;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
-import org.systemexception.ecommuter.End2End;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.round;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author leo
  * @date 02/07/16 01:24
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
-public class LocationImplTest {
+class LocationImplTest {
 
 	private final LocationApi sut = new LocationImpl();
-	private final String locationItaly = End2End.LOCATION_ITALY;
+	private final String locationItaly = End2EndTest.LOCATION_ITALY;
 	private final String locationMilano = "Milano";
-	private final String locationPiazzaDuomo = "Piazza del Duomo";
+	private final String locationPiazzaDuomo = "P.za del Duomo";
 
 	@Test
-	public void address_to_geo() throws Exception {
+	void address_to_geo() throws Exception {
 		String stringAddress = "Piazza del Duomo, 20100, Milano";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
 		assertNotNull(geoFromAddress);
-		assertNotEquals(geoFromAddress, stringAddress);
-		assertEquals("Piazza del Duomo, Milano MI, Italy", geoFromAddress.getFormattedAddress());
+		assertNotEquals(geoFromAddress.getFormattedAddress(), stringAddress);
+		assertEquals("P.za del Duomo, Milano MI, Italy", geoFromAddress.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(geoFromAddress.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(geoFromAddress.getLongitude()), 0);
 		assertEquals(locationItaly, geoFromAddress.getTerritory().getCountry());
@@ -47,7 +47,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void address_to_geo_empty() throws Exception {
+	void address_to_geo_empty() throws Exception {
 		String stringAddress = "A place that really does not exist";
 		Address geoFromAddress = sut.addressToGeo(stringAddress);
 
@@ -58,11 +58,11 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void geo_to_address() throws Exception {
+	void geo_to_address() throws Exception {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("Duomo, Piazza del Duomo, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("P.za del Duomo, 110, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
@@ -73,7 +73,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void geo_to_address_empty() throws Exception {
+	void geo_to_address_empty() throws Exception {
 		Address addressFromGeo = sut.geoToAddress(0, 0);
 
 		assertNull(addressFromGeo.getStreetNumber());
@@ -83,7 +83,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_addresses() throws Exception {
+	void calculate_distance_for_addresses() throws Exception {
 		Address addressLuino = sut.addressToGeo("Piazza Garibaldi, Luino, VA");
 		Address addressVarese = sut.addressToGeo("Piazza Giovanni XXIII, Varese, VA");
 		double distanceBetween = sut.distanceBetween(addressLuino, addressVarese);
@@ -92,7 +92,7 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void calculate_distance_for_coordinates() throws Exception {
+	void calculate_distance_for_coordinates() throws Exception {
 		Address addressLuino = sut.geoToAddress(46.0021, 8.7507);
 		Address addressBarcelona = sut.geoToAddress(41.38879, 2.15899);
 		double distanceBetween = sut.distanceBetween(addressBarcelona, addressLuino);
@@ -101,32 +101,32 @@ public class LocationImplTest {
 	}
 
 	@Test
-	public void find_nearby_persons() {
+	void find_nearby_persons() {
 
 		Person personA = new Person();
-		Address addressWorkA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);
-		Address addressHomeA = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.000490, 8.738347);
+		Address addressWorkA = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 46.003509, 8.742917);
+		Address addressHomeA = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 46.000490, 8.738347);
 		personA.setId("ID_A");
-		personA.setName(End2End.PERSON_NAME_A);
-		personA.setLastname(End2End.PERSON_SURNAME_A);
+		personA.setName(End2EndTest.PERSON_NAME_A);
+		personA.setLastname(End2EndTest.PERSON_SURNAME_A);
 		personA.setHomeAddress(addressHomeA);
 		personA.setWorkAddress(addressWorkA);
 
 		Person personB = new Person();
-		Address addressWorkB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 46.002834, 8.742499);
-		Address addressHomeB = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999950, 8.740594);
+		Address addressWorkB = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 46.002834, 8.742499);
+		Address addressHomeB = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 45.999950, 8.740594);
 		personB.setId("ID_B");
-		personB.setName(End2End.PERSON_NAME_B);
-		personB.setLastname(End2End.PERSON_SURNAME_B);
+		personB.setName(End2EndTest.PERSON_NAME_B);
+		personB.setLastname(End2EndTest.PERSON_SURNAME_B);
 		personB.setHomeAddress(addressHomeB);
 		personB.setWorkAddress(addressWorkB);
 
 		Person personC = new Person();
-		Address addressWorkC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.996015, 8.732703);
-		Address addressHomeC = getAddress(End2End.LOCATION_LUINO_POSTCODE, 45.999659, 8.737842);
+		Address addressWorkC = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 45.996015, 8.732703);
+		Address addressHomeC = getAddress(End2EndTest.LOCATION_LUINO_POSTCODE, 45.999659, 8.737842);
 		personC.setId("ID_C");
-		personC.setName(End2End.PERSON_NAME_C);
-		personC.setLastname(End2End.PERSON_SURNAME_C);
+		personC.setName(End2EndTest.PERSON_NAME_C);
+		personC.setLastname(End2EndTest.PERSON_SURNAME_C);
 		personC.setHomeAddress(addressHomeC);
 		personC.setWorkAddress(addressWorkC);
 

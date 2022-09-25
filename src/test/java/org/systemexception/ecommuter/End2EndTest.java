@@ -1,12 +1,12 @@
 package org.systemexception.ecommuter;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
@@ -23,17 +23,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author leo
  * @date 03/07/16 20:59
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
-public class End2End {
+public class End2EndTest {
 
 	public static final String TARGET_FOLDER = "target", TEST_DATABASE_FOLDER = "test_database";
 	private final static String DATABASE_FOLDER = TARGET_FOLDER + File.separator + TEST_DATABASE_FOLDER;
@@ -48,8 +48,8 @@ public class End2End {
 	@Autowired
 	private StorageApi storageApi;
 
-	@Before
-	public void setUp() throws CsvParserException, URISyntaxException, IOException {
+	@BeforeEach
+	void setUp() throws CsvParserException, URISyntaxException, IOException {
 		storageApi = new StorageImpl(TARGET_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 		final URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
@@ -58,12 +58,12 @@ public class End2End {
 	}
 
 	@Test
-	public void api_key_is_not_null() {
+	void api_key_is_not_null() {
 		assertNotNull(Application.API_KEY);
 	}
 
 	@Test
-	public void end2End() throws Exception {
+	void end2End() throws Exception {
 		final Person personA = new Person();
 		final Address addressWorkA = locationService.geoToAddress(46.003509, 8.742917);
 		final Address addressHomeA = locationService.geoToAddress(46.000490, 8.738347);

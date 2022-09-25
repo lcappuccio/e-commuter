@@ -1,18 +1,21 @@
 package org.systemexception.ecommuter.services;
 
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.neo4j.graphdb.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.systemexception.ecommuter.Application;
+import org.systemexception.ecommuter.End2EndTest;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
-import org.systemexception.ecommuter.End2End;
 import org.systemexception.ecommuter.pojo.CsvParserTest;
 
 import java.io.File;
@@ -20,18 +23,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * @author leo
  * @date 03/07/16 02:12
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class DatabaseImplTest {
 
-	private static final String DATABASE_FOLDER = End2End.TARGET_FOLDER + File.separator + End2End.TEST_DATABASE_FOLDER;
+	private static final String DATABASE_FOLDER = End2EndTest.TARGET_FOLDER + File.separator + End2EndTest.TEST_DATABASE_FOLDER;
 	private static final String PERSON_LAST_NAME = "NEWLASTNAME";
 	private static final String PERSON_NAME = "NEWNAME";
 	@Autowired
@@ -42,13 +46,13 @@ public class DatabaseImplTest {
 	private Address addressFromGeo;
 	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setSut() throws IOException {
 		final StorageApi storageApi = new StorageImpl(DATABASE_FOLDER);
 		storageApi.removeFolder(DATABASE_FOLDER);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		final URL myTestURL = ClassLoader.getSystemResource(CsvParserTest.DATABASE_TEST_CSV_FILE);
 		final File myFile = new File(myTestURL.toURI());
@@ -61,18 +65,21 @@ public class DatabaseImplTest {
 		sut.addPerson(person);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		sut.deletePerson(person);
 	}
 
-	@Test(expected = ConstraintViolationException.class)
-	public void add_person_twice() throws TerritoriesException {
-		sut.addPerson(person);
+	@Test
+	void add_person_twice() {
+        assertThrows(ConstraintViolationException.class,
+                () -> {
+                    sut.addPerson(person);
+                });
 	}
 
 	@Test
-	public void find_person_lives_in() {
+	void find_person_lives_in() {
 		final Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
@@ -81,7 +88,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_works_in() {
+	void find_person_works_in() {
 		final Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
@@ -90,29 +97,35 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_nonexisting_node() {
+	void find_person_nonexisting_node() {
 		final Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
 
 		assertEquals(0, nullPersons.getPersons().size());
 	}
 
-	@Test(expected = TerritoriesException.class)
-	public void add_person_nonexisting_node() throws TerritoriesException {
-		final Address missingAddress = person.getHomeAddress();
-		missingAddress.getTerritory().setPostalCode("XXXX");
-		person.setHomeAddress(missingAddress);
-		sut.addPerson(person);
-	}
-
-	@Test(expected = TerritoriesException.class)
-	public void add_person_bad_country_good_postalcode() throws TerritoriesException {
-		final Address missingAddress = person.getHomeAddress();
-		missingAddress.getTerritory().setCountry("XXX");
-		sut.addPerson(person);
-	}
+	@Test
+	void add_person_nonexisting_node() {
+        assertThrows(TerritoriesException.class,
+                () -> {
+                    final Address missingAddress = person.getHomeAddress();
+                    missingAddress.getTerritory().setPostalCode("XXXX");
+                    person.setHomeAddress(missingAddress);
+                    sut.addPerson(person);
+                });
+    }
 
 	@Test
-	public void update_person() {
+	void add_person_bad_country_good_postalcode() {
+        assertThrows(TerritoriesException.class,
+                () -> {
+                    final Address missingAddress = person.getHomeAddress();
+                    missingAddress.getTerritory().setCountry("XXX");
+                    sut.addPerson(person);
+                });
+    }
+
+	@Test
+	void update_person() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
@@ -127,7 +140,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void update_person_bad_id() {
+	void update_person_bad_id() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
@@ -142,7 +155,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_by_name() {
+	void find_person_by_name() {
 		final Persons personsByLastname = sut.findPersonsByLastname(PERSON_LAST_NAME);
 
 		assertFalse(personsByLastname.getPersons().isEmpty());
@@ -152,7 +165,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_by_name_after_update() {
+	void find_person_by_name_after_update() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),

@@ -1,6 +1,9 @@
 # e-commuter
 Use Google Maps Geocoding API to calculate distances between two addresses of a collection of persons.
 
+[![Neo4J for Git](https://github.com/lcappuccio/e-commuter/actions/workflows/build.yml/badge.svg)](https://github.com/lcappuccio/e-commuter/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lcappuccio_e-commuter&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lcappuccio_e-commuter)
+
 ## Implementation
 
 We're using the Google API only to geocode an address and viceversa (reverse geocoding).

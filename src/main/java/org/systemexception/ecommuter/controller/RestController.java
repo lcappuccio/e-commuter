@@ -1,6 +1,5 @@
 package org.systemexception.ecommuter.controller;
 
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,16 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.systemexception.ecommuter.services.DatabaseApi;
+import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.services.StorageApi;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -32,8 +30,6 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping(value = Endpoints.CONTEXT)
-@EnableSwagger2
-@Api(basePath = Endpoints.CONTEXT, description = "e-commuter REST API")
 public class RestController {
 
 	private final DatabaseApi databaseService;

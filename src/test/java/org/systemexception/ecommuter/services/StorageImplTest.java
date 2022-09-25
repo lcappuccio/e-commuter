@@ -57,12 +57,12 @@ public class StorageImplTest {
 	}
 
 	@Test
-	public void outputFolderExists() {
+	void outputFolderExists() {
 		assertTrue(new File(STORAGE_FOLDER).exists());
 	}
 
 	@Test
-	public void saveDataExists() throws IOException {
+	void saveDataExists() throws IOException {
 		final File savedFile = sut.saveFile(multipartFile);
 		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 
@@ -70,7 +70,7 @@ public class StorageImplTest {
 	}
 
 	@Test
-	public void historify() throws IOException {
+	void historify() throws IOException {
 		final File savedFile = sut.saveFile(multipartFile);
 		final File testDataFile = new File(STORAGE_FOLDER + File.separator + savedFile.getName());
 		final BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);

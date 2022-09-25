@@ -56,7 +56,7 @@ public class CsvParserTest {
 		final List<CSVRecord> records = sut.readCsvContents();
 		for (final CSVRecord territory : records) {
 			if (territory.get(CsvHeaders.PLACE_NAME.name()).toLowerCase(Locale.getDefault()).equals("luino")) {
-				assertEquals(territory.get(CsvHeaders.POSTAL_CODE.name()), End2EndTest.LOCATION_LUINO_POSTCODE);
+				assertEquals(End2EndTest.LOCATION_LUINO_POSTCODE, territory.get(CsvHeaders.POSTAL_CODE.name()));
 				assertEquals("46.0019", territory.get(CsvHeaders.LATITUDE.name()));
 				assertEquals("8.7451", territory.get(CsvHeaders.LONGITUDE.name()));
 			}

@@ -71,7 +71,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void add_person_twice() {
+	void add_person_twice() {
         assertThrows(ConstraintViolationException.class,
                 () -> {
                     sut.addPerson(person);
@@ -79,7 +79,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_lives_in() {
+	void find_person_lives_in() {
 		final Persons personsLivesIn = sut.findPersonsLivesIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
@@ -88,7 +88,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_works_in() {
+	void find_person_works_in() {
 		final Persons personsLivesIn = sut.findPersonsWorksIn(person.getHomeAddress().getTerritory().getCountry(),
 				person.getHomeAddress().getTerritory().getPostalCode());
 
@@ -97,14 +97,14 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_nonexisting_node() {
+	void find_person_nonexisting_node() {
 		final Persons nullPersons = sut.findPersonsLivesIn("XXXX","XXXX");
 
 		assertEquals(0, nullPersons.getPersons().size());
 	}
 
 	@Test
-	public void add_person_nonexisting_node() {
+	void add_person_nonexisting_node() {
         assertThrows(TerritoriesException.class,
                 () -> {
                     final Address missingAddress = person.getHomeAddress();
@@ -115,7 +115,7 @@ public class DatabaseImplTest {
     }
 
 	@Test
-	public void add_person_bad_country_good_postalcode() {
+	void add_person_bad_country_good_postalcode() {
         assertThrows(TerritoriesException.class,
                 () -> {
                     final Address missingAddress = person.getHomeAddress();
@@ -125,7 +125,7 @@ public class DatabaseImplTest {
     }
 
 	@Test
-	public void update_person() {
+	void update_person() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
@@ -140,7 +140,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void update_person_bad_id() {
+	void update_person_bad_id() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),
@@ -155,7 +155,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_by_name() {
+	void find_person_by_name() {
 		final Persons personsByLastname = sut.findPersonsByLastname(PERSON_LAST_NAME);
 
 		assertFalse(personsByLastname.getPersons().isEmpty());
@@ -165,7 +165,7 @@ public class DatabaseImplTest {
 	}
 
 	@Test
-	public void find_person_by_name_after_update() {
+	void find_person_by_name_after_update() {
 		final Person personBeforeUpdate = sut.findPersonsLivesIn(addressFromGeo.getTerritory().getCountry(),
 				addressFromGeo.getTerritory().getPostalCode()).getPersons().iterator().next();
 		final Person personBuffer = new Person(personBeforeUpdate.getId(), personBeforeUpdate.getName(),

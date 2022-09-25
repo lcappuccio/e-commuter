@@ -2,29 +2,29 @@ package org.systemexception.ecommuter.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.ecommuter.Application;
-import org.systemexception.ecommuter.services.DatabaseApi;
-import org.systemexception.ecommuter.services.LocationApi;
-import org.systemexception.ecommuter.services.StorageApi;
+import org.systemexception.ecommuter.End2EndTest;
 import org.systemexception.ecommuter.enums.Endpoints;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.model.Territory;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
-import org.systemexception.ecommuter.End2End;
+import org.systemexception.ecommuter.services.DatabaseApi;
+import org.systemexception.ecommuter.services.LocationApi;
+import org.systemexception.ecommuter.services.StorageApi;
 
 import java.io.File;
 import java.util.UUID;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author leo
  * @date 03/07/16 22:46
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class RestControllerTest {
@@ -47,8 +47,8 @@ public class RestControllerTest {
 	private MockMvc sut;
 	public final static String TEXT_PLAIN_FILE = "text/plain";
 
-	@Before
-	public void setSut() {
+	@BeforeEach
+	void setSut() {
 		databaseApi = mock(DatabaseApi.class);
 		locationApi = mock(LocationApi.class);
 		storageApi = mock(StorageApi.class);
@@ -57,7 +57,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void add_territories() throws Exception {
+	void add_territories() throws Exception {
 		final MockMultipartFile dataFile = new MockMultipartFile(Endpoints.FILE_TO_UPLOAD,
 				UUID.randomUUID().toString(), TEXT_PLAIN_FILE, "some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.multipart(Endpoints.CONTEXT + Endpoints.ADD_TERRITORIES).file(dataFile))
@@ -68,7 +68,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void add_person() throws Exception {
+	void add_person() throws Exception {
 		final Person person = PersonJsonParser.fromString(getPerson());
 		when(databaseApi.addPerson(person)).thenReturn(person);
 		sut.perform(MockMvcRequestBuilders.post(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_ADD)
@@ -79,7 +79,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void find_person_by_lastname() throws Exception {
+	void find_person_by_lastname() throws Exception {
 		final Person person = PersonJsonParser.fromString(getPerson());
 		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_BY_LASTNAME)
 				.param(Endpoints.LAST_NAME, person.getLastname())).andExpect(status().is(HttpStatus.OK.value()));
@@ -88,7 +88,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void delete_person() throws Exception {
+	void delete_person() throws Exception {
 		final Person person = PersonJsonParser.fromString(getPerson());
 		sut.perform(MockMvcRequestBuilders.delete(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_DELETE)
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
@@ -98,7 +98,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void update_person() throws Exception {
+	void update_person() throws Exception {
 		final Person person = PersonJsonParser.fromString(getPerson());
 		final Person updatedPerson = new Person(person.getId(), "UPDATED_NAME", "UPDATED_SURNAME", person.getHomeAddress(),
 				person.getWorkAddress());
@@ -112,7 +112,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void geo_to_address() throws Exception {
+	void geo_to_address() throws Exception {
 		final String latitude = "123.4";
 		final String longitude = "456.7";
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
@@ -123,7 +123,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void address_to_geo() throws Exception {
+	void address_to_geo() throws Exception {
 		final Gson gson = new Gson();
 		final JsonParser jsonParser = new JsonParser();
 		final Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
@@ -135,7 +135,7 @@ public class RestControllerTest {
 	}
 
 	@Test
-	public void nearby_persons() throws Exception {
+	void nearby_persons() throws Exception {
 		final double distance = 0.5;
 		final Person person = mock(Person.class);
 
@@ -149,13 +149,13 @@ public class RestControllerTest {
 
 		when(person.getHomeAddress()).thenReturn(addressLiving);
 		when(person.getHomeAddress().getTerritory()).thenReturn(territoryLiving);
-		when(territoryLiving.getCountry()).thenReturn(End2End.LOCATION_ITALY);
-		when(territoryLiving.getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(territoryLiving.getCountry()).thenReturn(End2EndTest.LOCATION_ITALY);
+		when(territoryLiving.getPostalCode()).thenReturn(End2EndTest.LOCATION_LUINO_POSTCODE);
 
 		when(person.getWorkAddress()).thenReturn(addressWorking);
 		when(person.getWorkAddress().getTerritory()).thenReturn(territoryWorking);
-		when(territoryWorking.getCountry()).thenReturn(End2End.LOCATION_ITALY);
-		when(territoryWorking.getPostalCode()).thenReturn(End2End.LOCATION_LUINO_POSTCODE);
+		when(territoryWorking.getCountry()).thenReturn(End2EndTest.LOCATION_ITALY);
+		when(territoryWorking.getPostalCode()).thenReturn(End2EndTest.LOCATION_LUINO_POSTCODE);
 
 		when(databaseApi.findPersonsLivesIn(territoryLiving.getCountry(), territoryLiving.getPostalCode()))
 				.thenReturn(personsLiving);

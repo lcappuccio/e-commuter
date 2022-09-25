@@ -1,22 +1,22 @@
 package org.systemexception.ecommuter.model;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author leo
  * @date 03/07/16 12:38
  */
-public class PersonsTest {
+class PersonsTest {
 
 	private Persons sut;
 
-	@Before
-	public void setSut() {
+	@BeforeEach
+	void setSut() {
 		sut = new Persons();
 
 		final Address homeAddress = new Address();
@@ -36,7 +36,7 @@ public class PersonsTest {
 	}
 
 	@Test
-	public void add_persons() {
+	void add_persons() {
 		assertEquals(2, sut.getPersons().size());
 	}
 

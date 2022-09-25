@@ -14,6 +14,7 @@ import org.systemexception.ecommuter.exceptions.CsvParserException;
 import org.systemexception.ecommuter.exceptions.TerritoriesException;
 import org.systemexception.ecommuter.model.*;
 import org.systemexception.ecommuter.pojo.PersonJsonParser;
+import org.systemexception.ecommuter.pojo.UserDataSantizer;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -88,19 +89,8 @@ public class DatabaseImpl implements DatabaseApi {
 
 		final Address homeAddress = person.getHomeAddress();
 		final Address workAddress = person.getWorkAddress();
-		LOGGER.info("addPerson{}{}{}lives in{}{}{}{}{}works in{}{}{}{}",
-                Constants.LOG_OBJECT_SEPARATOR,
-                person.getId(),
-                Constants.LOG_ITEM_SEPARATOR,
-                Constants.LOG_ITEM_SEPARATOR,
-                person.getHomeAddress().getTerritory().getCountry(),
-                Constants.LOG_ITEM_SEPARATOR,
-				person.getHomeAddress().getTerritory().getPostalCode(),
-                Constants.LOG_ITEM_SEPARATOR,
-                Constants.LOG_ITEM_SEPARATOR,
-                person.getWorkAddress().getTerritory().getCountry(),
-                Constants.LOG_ITEM_SEPARATOR,
-				person.getWorkAddress().getTerritory().getPostalCode());
+        final String personIdSanitized = UserDataSantizer.returnAsSafe(person.getId());
+        LOGGER.info("addPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 		final Optional<Node> homeNode = getNodeByPostalCode(homeAddress.getTerritory().getCountry(),
 				homeAddress.getTerritory().getPostalCode());
 		final Optional<Node> workNode = getNodeByPostalCode(workAddress.getTerritory().getCountry(),
@@ -110,11 +100,7 @@ public class DatabaseImpl implements DatabaseApi {
 			insertPerson(person, homeNode.get(), workNode.get());
 		} else {
 			final String errorMessage = "Non existing territory";
-			LOGGER.error("addPerson{}{}{}{}",
-                    Constants.LOG_OBJECT_SEPARATOR,
-                    person.getId(),
-					Constants.LOG_ITEM_SEPARATOR,
-                    errorMessage);
+			LOGGER.error("addPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 			throw new TerritoriesException(errorMessage);
 		}
 
@@ -127,7 +113,8 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Person updatePerson(final Person person) {
 
-		LOGGER.info("updatePerson{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+        final String personIdSanitized = UserDataSantizer.returnAsSafe(person.getId());
+        LOGGER.info("updatePerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 
 		try (Transaction tx = graphDb.beginTx()) {
 			final IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
@@ -137,12 +124,12 @@ public class DatabaseImpl implements DatabaseApi {
 				personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 				tx.success();
 			} else {
-				LOGGER.info("updatePersonNotFound{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+				LOGGER.info("updatePersonNotFound{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 				tx.success();
 			}
 		}
 
-		LOGGER.info("updatedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+		LOGGER.info("updatedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 		return person;
 	}
 
@@ -152,20 +139,21 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public void deletePerson(final Person person) {
 
-		LOGGER.info("deletePerson{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+        final String personIdSanitized = UserDataSantizer.returnAsSafe(person.getId());
+        LOGGER.info("deletePerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 
 		try (final Transaction tx = graphDb.beginTx()) {
-			final IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), person.getId());
+			final IndexHits<Node> nodes = indexPersonId.get(PERSON_ID.toString(), personIdSanitized);
 			final Node personNode = nodes.getSingle();
 			while (personNode.getRelationships().iterator().hasNext()) {
 				personNode.getRelationships().iterator().next().delete();
-				indexPersonLastName.remove(personNode, person.getLastname());
+				indexPersonLastName.remove(personNode, personIdSanitized);
 			}
 			personNode.delete();
 			tx.success();
 		}
 
-		LOGGER.info("deletedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+		LOGGER.info("deletedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, personIdSanitized);
 	}
 
 	/**
@@ -174,11 +162,13 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Persons findPersonsLivesIn(final String country, final String postalCode) {
 
+        final String countrySanitized = UserDataSantizer.returnAsSafe(country);
+        final String postalCodeSanitized = UserDataSantizer.returnAsSafe(postalCode);
 		LOGGER.info("findPersonsLivingIn{}{}{}{}",
                 Constants.LOG_OBJECT_SEPARATOR,
-                country,
+                countrySanitized,
                 Constants.LOG_ITEM_SEPARATOR,
-				postalCode);
+				postalCodeSanitized);
 
 		return getPersons(country, postalCode, livesInRelation);
 	}
@@ -189,11 +179,13 @@ public class DatabaseImpl implements DatabaseApi {
 	@Override
 	public Persons findPersonsWorksIn(final String country, final String postalCode) {
 
+        final String countrySanitized = UserDataSantizer.returnAsSafe(country);
+        final String postalCodeSanitized = UserDataSantizer.returnAsSafe(postalCode);
 		LOGGER.info("findPersonsWorkingIn{}{}{}{}",
                 Constants.LOG_OBJECT_SEPARATOR,
-                country,
+                countrySanitized,
                 Constants.LOG_ITEM_SEPARATOR,
-				postalCode);
+				postalCodeSanitized);
 
 		return getPersons(country, postalCode, worksInRelation);
 	}
@@ -203,11 +195,12 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	public Persons findPersonsByLastname(final String lastname) {
 
+        final String lastNameSanitized = UserDataSantizer.returnAsSafe(lastname);
 		final Persons persons = new Persons();
-		LOGGER.info("findPersonsByLastname{}{}", Constants.LOG_OBJECT_SEPARATOR, lastname);
+		LOGGER.info("findPersonsByLastname{}{}", Constants.LOG_OBJECT_SEPARATOR, lastNameSanitized);
 
 		try (final Transaction tx = graphDb.beginTx()) {
-			final Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastname).iterator();
+			final Iterator<Node> nodeIterator = indexPersonLastName.get(PERSON_LAST_NAME.toString(), lastNameSanitized).iterator();
 			tx.success();
 			while (nodeIterator.hasNext()) {
 				final Node node = nodeIterator.next();
@@ -224,39 +217,41 @@ public class DatabaseImpl implements DatabaseApi {
 	 *
 	 * @param country
 	 * @param postalCode
-	 * @return an optional with the node of the postal code
+	 * @return an optional with the node of the postal code, IMPORTANT, there can be more than one location with same
+     * postal code
 	 */
-	// TODO LC This could be more than one node!
 	private Optional<Node> getNodeByPostalCode(final String country, final String postalCode) {
 
-		LOGGER.info("getNodeByPostalCode{}{}{}{}",
+        String safeCountry = UserDataSantizer.returnAsSafe(country);
+        String safePostalCode = UserDataSantizer.returnAsSafe(postalCode);
+        LOGGER.info("getNodeByPostalCode{}{}{}{}",
                 Constants.LOG_OBJECT_SEPARATOR,
-                country,
+                safeCountry,
                 Constants.LOG_ITEM_SEPARATOR,
-				postalCode);
+                safePostalCode);
 
 		try (final Transaction tx = graphDb.beginTx()) {
-			final Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), postalCode).iterator();
+			final Iterator<Node> nodeIterator = indexPostalCode.get(POSTAL_CODE.toString(), safePostalCode).iterator();
 			tx.success();
 			if (nodeIterator.hasNext()) {
 				final Node node = nodeIterator.next();
 				final String nodeCountry = node.getProperty(COUNTRY.toString()).toString();
-				if (country.equals(nodeCountry)) {
+				if (safeCountry.equals(nodeCountry)) {
 					return Optional.of(node);
 				} else {
 					LOGGER.info("getNodeByPostalCode{}{}{}{} does not exist",
                             Constants.LOG_OBJECT_SEPARATOR,
-                            country,
+                            safeCountry,
                             Constants.LOG_ITEM_SEPARATOR,
-                            postalCode);
+                            safePostalCode);
 					return Optional.empty();
 				}
 			} else {
 				LOGGER.error("getNodeByPostalCode{}{}{}{} node missing",
                         Constants.LOG_OBJECT_SEPARATOR,
-                        country,
+                        safeCountry,
 						Constants.LOG_ITEM_SEPARATOR,
-                        postalCode);
+                        safePostalCode);
 				return Optional.empty();
 			}
 		}
@@ -272,7 +267,8 @@ public class DatabaseImpl implements DatabaseApi {
 	private synchronized void insertPerson(final Person person, final Node homeNode, final Node workNode) {
 
 		try (final Transaction tx = graphDb.beginTx()) {
-			final Node personNode = graphDb.createNode();
+            String safePersonId = UserDataSantizer.returnAsSafe(person.getId());
+            final Node personNode = graphDb.createNode();
 			personNode.setProperty(PERSON_DATA.toString(), PersonJsonParser.fromPerson(person).toString());
 			personNode.setProperty(PERSON_ID.toString(), person.getId());
 			try {
@@ -280,7 +276,7 @@ public class DatabaseImpl implements DatabaseApi {
 			} catch (ConstraintViolationException ex) {
 				final String errorMessage = ex.getMessage();
 				tx.failure();
-				LOGGER.error("{}{}{}", person.getId(), Constants.LOG_ITEM_SEPARATOR, errorMessage);
+				LOGGER.error("{}{}{}", safePersonId, Constants.LOG_ITEM_SEPARATOR, errorMessage);
 				throw new ConstraintViolationException(errorMessage);
 			}
 			indexPersonId.add(personNode, PERSON_ID.toString(), person.getId());
@@ -291,7 +287,7 @@ public class DatabaseImpl implements DatabaseApi {
 			// Add WORKS_IN edge
 			final Relationship worksIn = personNode.createRelationshipTo(workNode, worksInRelation);
 			indexWorksIn.add(worksIn, WORKS_IN.toString(), workNode.getProperty(POSTAL_CODE.toString()));
-			LOGGER.info("addedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, person.getId());
+			LOGGER.info("addedPerson{}{}", Constants.LOG_OBJECT_SEPARATOR, safePersonId);
 			tx.success();
 		}
 	}
@@ -306,13 +302,13 @@ public class DatabaseImpl implements DatabaseApi {
 	 */
 	private Persons getPersons(final String country, final String postalCode, final RelationshipType relationshipType) {
 
-		LOGGER.info("getPersonsByPostalCodeRelation{}{}{}{}{}{}",
+        String safeCountry = UserDataSantizer.returnAsSafe(country);
+        String safePostalCode = UserDataSantizer.returnAsSafe(postalCode);
+        LOGGER.info("getPersonsByPostalCodeRelation{}{}{}{}{}{}",
                 Constants.LOG_OBJECT_SEPARATOR,
-                relationshipType,
-				Constants.LOG_ITEM_SEPARATOR,
-                country,
+                safeCountry,
                 Constants.LOG_ITEM_SEPARATOR,
-                postalCode);
+                safePostalCode);
 		final HashSet<Node> foundNodes = new HashSet<>();
 		final Persons foundPersons = new Persons();
 

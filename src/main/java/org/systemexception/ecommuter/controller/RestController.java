@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,6 @@ import org.systemexception.ecommuter.services.DatabaseApi;
 import org.systemexception.ecommuter.services.LocationApi;
 import org.systemexception.ecommuter.services.StorageApi;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_ADD, method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> addPerson(@RequestBody @Valid final Person person) throws TerritoriesException {
+	public ResponseEntity<Person> addPerson(@RequestBody @Validated final Person person) throws TerritoriesException {
 
 		final Person personSaved = databaseService.addPerson(person);
 		return new ResponseEntity<>(personSaved, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_DELETE, method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> deletePerson(@RequestBody @Valid final Person person) {
+	public ResponseEntity<Person> deletePerson(@RequestBody @Validated final Person person) {
 
 		databaseService.deletePerson(person);
 		return new ResponseEntity<>(person, HttpStatus.OK);
@@ -82,7 +82,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_UPDATE, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Person> updatePerson(@RequestBody @Valid final Person person) {
+	public ResponseEntity<Person> updatePerson(@RequestBody @Validated final Person person) {
 
 		final Person personUpdated = databaseService.updatePerson(person);
 		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
@@ -100,7 +100,7 @@ public class RestController {
 
 	@RequestMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, method = RequestMethod.PUT,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> addressToGeo(@RequestBody @Valid final Address address) throws Exception {
+	public ResponseEntity<Address> addressToGeo(@RequestBody @Validated final Address address) throws Exception {
 
 		final Address responseAddress = locationService.addressToGeo(address.getFormattedAddress());
 		return new ResponseEntity<>(responseAddress, HttpStatus.OK);
@@ -109,7 +109,7 @@ public class RestController {
 	@RequestMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, method = RequestMethod.PUT,
 			params = {Endpoints.DISTANCE}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Persons> nearbyPersons(
-			@RequestBody @Valid final Person person,
+			@RequestBody @Validated final Person person,
 			@RequestParam(value = Endpoints.DISTANCE) final double distance) {
 
 		final Persons personsLivesIn = databaseService.findPersonsLivesIn(

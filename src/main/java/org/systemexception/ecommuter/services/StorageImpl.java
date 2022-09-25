@@ -56,27 +56,6 @@ public class StorageImpl implements StorageApi {
         }
 	}
 
-	public void removeFolder(final String folderPath) throws IOException {
-		final File toRemove = new File(folderPath);
-		if (toRemove.exists()) {
-			final String[] files = toRemove.list();
-			for (final String file : files != null ? files : new String[0]) {
-                String fileNameToDelete = folderPath + File.separator + file;
-                boolean deleted = new File(fileNameToDelete).delete();
-                if (deleted) {
-                    LOGGER.info("deletedFile {}", fileNameToDelete);
-                }
-            }
-		}
-		LOGGER.info("deleteFile {}", toRemove.getName());
-		final boolean deleted = toRemove.delete();
-		if (deleted) {
-			LOGGER.info("removeFolderOk {}", folderPath);
-		} else {
-			LOGGER.error("removeFolderKo {}", folderPath);
-		}
-	}
-
 	private void createStorageFolder() throws IOException {
 		final File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {

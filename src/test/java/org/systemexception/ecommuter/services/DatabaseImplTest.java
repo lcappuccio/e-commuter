@@ -48,8 +48,7 @@ public class DatabaseImplTest {
 
 	@BeforeAll
 	public static void setSut() throws IOException {
-		final StorageApi storageApi = new StorageImpl(DATABASE_FOLDER);
-		storageApi.removeFolder(DATABASE_FOLDER);
+		End2EndTest.removeFolder(DATABASE_FOLDER);
 	}
 
 	@BeforeEach

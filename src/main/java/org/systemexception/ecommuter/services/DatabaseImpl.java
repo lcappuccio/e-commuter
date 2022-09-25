@@ -304,7 +304,7 @@ public class DatabaseImpl implements DatabaseApi {
 
         String safeCountry = UserDataSantizer.returnAsSafe(country);
         String safePostalCode = UserDataSantizer.returnAsSafe(postalCode);
-        LOGGER.info("getPersonsByPostalCodeRelation{}{}{}{}{}{}",
+        LOGGER.info("getPersonsByPostalCodeRelation{}{}{}{}",
                 Constants.LOG_OBJECT_SEPARATOR,
                 safeCountry,
                 Constants.LOG_ITEM_SEPARATOR,

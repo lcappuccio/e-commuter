@@ -31,23 +31,18 @@ public class StorageImplTest {
 	private final static String STORAGE_FOLDER = End2EndTest.TARGET_FOLDER + File.separator + "test_storage";
 	private StorageApi sut;
 	private MultipartFile multipartFile;
-	private static StorageApi storageApi;
 
 	@BeforeAll
 	public static void setSut() throws IOException {
-		storageApi = new StorageImpl(STORAGE_FOLDER);
-
-		storageApi.removeFolder(STORAGE_FOLDER);
+		End2EndTest.removeFolder(STORAGE_FOLDER);
 
 		assertFalse(new File(STORAGE_FOLDER).exists());
 	}
 
 	@AfterAll
 	public static void tearDownSut() throws IOException {
-		storageApi.removeFolder(STORAGE_FOLDER);
-
-		assertFalse(new File(STORAGE_FOLDER).exists());
-	}
+        End2EndTest.removeFolder(STORAGE_FOLDER);
+    }
 
 	@BeforeEach
 	public void setUp() throws IOException {

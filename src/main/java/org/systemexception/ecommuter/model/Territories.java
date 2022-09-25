@@ -12,6 +12,7 @@ import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author leo
@@ -31,7 +32,7 @@ public class Territories {
 
 		territories = new HashSet<>();
 
-		LOGGER.info("readCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+		LOGGER.info("readCsvTerritories{}{}", Constants.LOG_OBJECT_SEPARATOR, territoriesFile.getName());
 		final CsvParser csvParser = new CsvParser(territoriesFile);
 		final List<CSVRecord> csvRecords = csvParser.readCsvContents();
 		for (final CSVRecord csvRecord : csvRecords) {
@@ -41,10 +42,10 @@ public class Territories {
 			final Territory territory = new Territory(country, postalCode, placeName);
 			territories.add(territory);
 		}
-		LOGGER.info("finishCsvTerritories" + Constants.LOG_OBJECT_SEPARATOR + territoriesFile.getName());
+		LOGGER.info("finishCsvTerritories{}{}", Constants.LOG_OBJECT_SEPARATOR, territoriesFile.getName());
 	}
 
-	public HashSet<Territory> getTerritories() {
+	public Set<Territory> getTerritories() {
 		return territories;
 	}
 

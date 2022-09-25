@@ -35,13 +35,12 @@ class TerritoriesTest {
 	@Test
 	void add_duplicate_territory() {
 
+        sut = new Territories();
+        sut.addTerritory(territoryA);
+        final Territory badTerritory = new Territory("IT", "123", "TEST");
         assertThrows(InvalidParameterException.class, () -> {
-            sut = new Territories();
-            sut.addTerritory(territoryA);
-            final Territory badTerritory = new Territory("IT", "123", "TEST");
             sut.addTerritory(badTerritory);
-
-            assertEquals(1, sut.getTerritories().size());
         });
+        assertEquals(1, sut.getTerritories().size());
 	}
 }

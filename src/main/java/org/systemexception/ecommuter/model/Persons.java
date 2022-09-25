@@ -1,6 +1,7 @@
 package org.systemexception.ecommuter.model;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author leo
@@ -18,7 +19,7 @@ public class Persons {
 		persons.add(person);
 	}
 
-	public HashSet<Person> getPersons() {
+	public Set<Person> getPersons() {
 		return persons;
 	}
 }

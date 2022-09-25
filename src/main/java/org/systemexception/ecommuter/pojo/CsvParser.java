@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -34,15 +33,15 @@ public class CsvParser {
 				CsvHeaders.ADMIN_NAME3.name(), CsvHeaders.ADMIN_CODE3.name(),
 				CsvHeaders.LATITUDE.name(), CsvHeaders.LONGITUDE.name(), CsvHeaders.ACCURACY.name()};
 		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
-		try {
-			URL csvUrl = csvFile.toURI().toURL();
-			Reader csvReader = new InputStreamReader(csvUrl.openStream(), StandardCharsets.UTF_8);
-			CSVParser csvParser = new CSVParser(csvReader, csvFormat);
+		try (
+                 Reader csvReader = new InputStreamReader(csvFile.toURI().toURL().openStream(), StandardCharsets.UTF_8);
+                 CSVParser csvParser = new CSVParser(csvReader, csvFormat);
+                 ) {
 			records = csvParser.getRecords();
-			LOGGER.info("loadedCsv" + Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
+			LOGGER.info("loadedCsv {}", Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {
 			String errorMessage = ex.getMessage();
-			LOGGER.error(csvFile.getName() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
+			LOGGER.error("{}", csvFile.getName() + Constants.LOG_ITEM_SEPARATOR + errorMessage);
 			throw new CsvParserException(errorMessage);
 		}
 	}

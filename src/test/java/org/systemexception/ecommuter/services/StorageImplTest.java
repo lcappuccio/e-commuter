@@ -43,7 +43,7 @@ public class StorageImplTest {
 	}
 
 	@AfterAll
-	public static void tearDownSut() {
+	public static void tearDownSut() throws IOException {
 		storageApi.removeFolder(STORAGE_FOLDER);
 
 		assertFalse(new File(STORAGE_FOLDER).exists());

@@ -36,28 +36,37 @@ public class StorageImpl implements StorageApi {
 		final File dataFile = new File(storageFolder + File.separator + convertTime(System.currentTimeMillis()) + "_" +
 				receivedFile.getOriginalFilename());
 		historifyFile(dataFile);
-		dataFile.createNewFile();
-		FileOutputStream fos = new FileOutputStream(dataFile);
-		fos.write(receivedFile.getBytes());
-		fos.close();
-		LOGGER.info("saveFile" + Constants.LOG_OBJECT_SEPARATOR + receivedFile.getName());
-		return dataFile;
+        boolean isFileCreated = dataFile.createNewFile();
+        if (isFileCreated) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(dataFile)) {
+                fileOutputStream.write(receivedFile.getBytes());
+                LOGGER.info("saveFile {}{}", Constants.LOG_OBJECT_SEPARATOR, receivedFile.getName());
+                return dataFile;
+            }
+        } else {
+            LOGGER.error("error creating file {}", dataFile.getAbsolutePath());
+            throw new IOException();
+        }
 	}
 
-	public void removeFolder(final String folderPath) {
+	public void removeFolder(final String folderPath) throws IOException {
 		final File toRemove = new File(folderPath);
 		if (toRemove.exists()) {
 			final String[] files = toRemove.list();
 			for (final String file : files != null ? files : new String[0]) {
-				new File(folderPath + File.separator + file).delete();
-			}
+                String fileNameToDelete = folderPath + File.separator + file;
+                boolean deleted = new File(fileNameToDelete).delete();
+                if (deleted) {
+                    LOGGER.info("deletedFile {}", fileNameToDelete);
+                }
+            }
 		}
-		LOGGER.info("deleteFile" + Constants.LOG_OBJECT_SEPARATOR + toRemove.getName());
+		LOGGER.info("deleteFile {}", toRemove.getName());
 		final boolean deleted = toRemove.delete();
 		if (deleted) {
-			LOGGER.info("removeFolderOk" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
+			LOGGER.info("removeFolderOk {}", folderPath);
 		} else {
-			LOGGER.error("removeFolderKo" + Constants.LOG_OBJECT_SEPARATOR + folderPath);
+			LOGGER.error("removeFolderKo {}", folderPath);
 		}
 	}
 
@@ -65,7 +74,7 @@ public class StorageImpl implements StorageApi {
 		final File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {
 			Files.createDirectory(storageFolderFile.toPath());
-			LOGGER.info("createStorageFolder" + Constants.LOG_OBJECT_SEPARATOR + storageFolderFile.getName());
+			LOGGER.info("createStorageFolder {}{}", Constants.LOG_OBJECT_SEPARATOR, storageFolderFile.getName());
 		}
 	}
 
@@ -75,9 +84,12 @@ public class StorageImpl implements StorageApi {
 					BasicFileAttributes.class);
 			final long fileTime = attrs.creationTime().toMillis();
 			final String historifiedFilename = convertTime(fileTime) + "_" + file.getName();
-			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
-			LOGGER.info("historiFyFile" + Constants.LOG_OBJECT_SEPARATOR + file.getName() +
-					Constants.LOG_ITEM_SEPARATOR + historifiedFilename);
+            final File historifiedFilePath = new File(storageFolder + File.separator + historifiedFilename);
+            boolean isFileRenamed = file.renameTo(historifiedFilePath);
+            if (!isFileRenamed) {
+                LOGGER.error("error renaming file {} to {}", file.getAbsolutePath(), historifiedFilePath.getAbsolutePath());
+            }
+            LOGGER.info("historiFyFile {} as {}", file.getName(), historifiedFilename);
 		}
 	}
 

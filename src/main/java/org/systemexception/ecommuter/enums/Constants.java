@@ -7,7 +7,7 @@ package org.systemexception.ecommuter.enums;
 public enum Constants {
 
 	LOG_OBJECT_SEPARATOR("|"),
-	LOG_ITEM_SEPARATOR(",");
+	LOG_ITEM_SEPARATOR(" ");
 
 	private final String aString;
 

@@ -24,5 +24,5 @@ public interface StorageApi {
 	 *
 	 * @param folderPath
 	 */
-	void removeFolder(String folderPath);
+	void removeFolder(String folderPath) throws IOException;
 }

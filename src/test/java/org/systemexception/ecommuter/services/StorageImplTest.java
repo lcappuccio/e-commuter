@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -35,9 +34,7 @@ public class StorageImplTest {
 	@BeforeAll
 	public static void setSut() throws IOException {
 		End2EndTest.removeFolder(STORAGE_FOLDER);
-
-		assertFalse(new File(STORAGE_FOLDER).exists());
-	}
+    }
 
 	@AfterAll
 	public static void tearDownSut() throws IOException {

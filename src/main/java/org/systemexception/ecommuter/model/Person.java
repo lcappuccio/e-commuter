@@ -8,8 +8,11 @@ import java.util.Objects;
  */
 public class Person {
 
-	private String id, name, lastname;
-	private Address homeAddress, workAddress;
+	private String id;
+    private String name;
+    private String lastname;
+	private Address homeAddress;
+    private Address workAddress;
 
 	public Person() {}
 

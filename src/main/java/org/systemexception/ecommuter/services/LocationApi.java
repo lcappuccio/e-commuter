@@ -1,9 +1,12 @@
 package org.systemexception.ecommuter.services;
 
+import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
 import org.systemexception.ecommuter.model.Address;
 import org.systemexception.ecommuter.model.Person;
 import org.systemexception.ecommuter.model.Persons;
+
+import java.io.IOException;
 
 /**
  * @author leo
@@ -19,7 +22,7 @@ public interface LocationApi {
 	 * @param longitude
 	 * @return
 	 */
-	Address geoToAddress(double latitude, double longitude) throws Exception;
+	Address geoToAddress(double latitude, double longitude) throws IOException, InterruptedException, ApiException;
 
 	/**
 	 * Return a formatted address from a generic string
@@ -27,7 +30,7 @@ public interface LocationApi {
 	 * @param address the generic string with an address
 	 * @return
 	 */
-	Address addressToGeo(String address) throws Exception;
+	Address addressToGeo(String address) throws IOException, InterruptedException, ApiException;
 
 	/**
 	 * Calculates distance between two addresses

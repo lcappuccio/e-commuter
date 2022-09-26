@@ -115,7 +115,7 @@ public class RestControllerTest {
 	void geo_to_address() throws Exception {
 		final String latitude = "123.4";
 		final String longitude = "456.7";
-		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS)
 				.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
@@ -126,7 +126,7 @@ public class RestControllerTest {
 	void address_to_geo() throws Exception {
 		final Gson gson = new Gson();
 		final Address address = gson.fromJson(JsonParser.parseString(getAddress()).getAsJsonObject(), Address.class);
-		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
 				.contentType(MediaType.APPLICATION_JSON).content(getAddress().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
@@ -161,7 +161,7 @@ public class RestControllerTest {
 		when(databaseApi.findPersonsWorksIn(territoryWorking.getCountry(), territoryWorking.getPostalCode()))
 				.thenReturn(personsWorking);
 
-		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
+		sut.perform(MockMvcRequestBuilders.get(Endpoints.CONTEXT + Endpoints.PERSON + Endpoints.PERSON_NEARBY)
 				.param(Endpoints.DISTANCE, String.valueOf(distance))
 				.contentType(MediaType.APPLICATION_JSON).content(getPerson().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));

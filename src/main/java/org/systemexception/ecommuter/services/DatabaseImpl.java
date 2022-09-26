@@ -61,7 +61,7 @@ public class DatabaseImpl implements DatabaseApi {
 
 		// Create all nodes
 		try (final Transaction tx = graphDb.beginTx()) {
-			for (Territory territory : territories.getTerritories()) {
+			for (Territory territory : territories.getTerritoryList()) {
 				final Node territoryNode = graphDb.createNode();
 				territoryNode.setProperty(COUNTRY.toString(), territory.getCountry());
 				territoryNode.setProperty(POSTAL_CODE.toString(), territory.getPostalCode());
@@ -321,7 +321,7 @@ public class DatabaseImpl implements DatabaseApi {
 				for (final Node node : foundNodes) {
 					final String personJsonString = node.getProperty(PERSON_DATA.toString()).toString();
 					final Person person = PersonJsonParser.fromString(personJsonString);
-					if (!foundPersons.getPersons().contains(person)) {
+					if (!foundPersons.getPersonList().contains(person)) {
 						foundPersons.addPerson(person);
 					}
 				}

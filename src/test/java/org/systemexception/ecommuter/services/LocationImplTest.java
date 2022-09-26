@@ -137,7 +137,7 @@ class LocationImplTest {
 
 		Persons nearbyPersons = sut.findNearbyPersons(personA, persons, 0.5);
 
-		assertEquals(1, nearbyPersons.getPersons().size());
+		assertEquals(1, nearbyPersons.getPersonList().size());
 
 	}
 

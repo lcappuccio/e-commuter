@@ -22,15 +22,15 @@ public class Territories {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Territories.class);
 
-	private final HashSet<Territory> territories;
+	private final HashSet<Territory> territoryList;
 
 	public Territories() {
-		this.territories = new HashSet<>();
+		this.territoryList = new HashSet<>();
 	}
 
 	public Territories(final File territoriesFile) throws CsvParserException {
 
-		territories = new HashSet<>();
+		territoryList = new HashSet<>();
 
 		LOGGER.info("readCsvTerritories{}{}", Constants.LOG_OBJECT_SEPARATOR, territoriesFile.getName());
 		final CsvParser csvParser = new CsvParser(territoriesFile);
@@ -40,22 +40,22 @@ public class Territories {
 			final String postalCode = csvRecord.get(CsvHeaders.POSTAL_CODE);
 			final String placeName = csvRecord.get(CsvHeaders.PLACE_NAME);
 			final Territory territory = new Territory(country, postalCode, placeName);
-			territories.add(territory);
+			territoryList.add(territory);
 		}
 		LOGGER.info("finishCsvTerritories{}{}", Constants.LOG_OBJECT_SEPARATOR, territoriesFile.getName());
 	}
 
-	public Set<Territory> getTerritories() {
-		return territories;
+	public Set<Territory> getTerritoryList() {
+		return territoryList;
 	}
 
 	void addTerritory(final Territory territory) {
 		isValidTerritory(territory);
-		territories.add(territory);
+		territoryList.add(territory);
 	}
 
 	private void isValidTerritory(final Territory territory) {
-		if (territories.contains(territory)) {
+		if (territoryList.contains(territory)) {
 			final String errorMessage = "isValidTerritory"  + Constants.LOG_OBJECT_SEPARATOR + territory.getCountry() +
 					Constants.LOG_ITEM_SEPARATOR + territory.getPostalCode();
 			LOGGER.error(errorMessage);

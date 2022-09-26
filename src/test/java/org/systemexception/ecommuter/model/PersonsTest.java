@@ -37,7 +37,7 @@ class PersonsTest {
 
 	@Test
 	void add_persons() {
-		assertEquals(2, sut.getPersons().size());
+		assertEquals(2, sut.getPersonList().size());
 	}
 
 }

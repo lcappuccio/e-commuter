@@ -9,17 +9,17 @@ import java.util.Set;
  */
 public class Persons {
 
-	private final HashSet<Person> persons;
+	private final HashSet<Person> personList;
 
 	public Persons() {
-		persons = new HashSet<>();
+		personList = new HashSet<>();
 	}
 
 	public void addPerson(final Person person) {
-		persons.add(person);
+		personList.add(person);
 	}
 
-	public Set<Person> getPersons() {
-		return persons;
+	public Set<Person> getPersonList() {
+		return personList;
 	}
 }

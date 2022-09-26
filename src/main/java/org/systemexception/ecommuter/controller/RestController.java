@@ -114,10 +114,10 @@ public class RestController {
 				person.getWorkAddress().getTerritory().getPostalCode());
 		final Persons fullPersonList = new Persons();
 
-		for (Person personLiving : personsLivesIn.getPersons()) {
+		for (Person personLiving : personsLivesIn.getPersonList()) {
 			fullPersonList.addPerson(personLiving);
 		}
-		for (Person personWorking : personsWorksIn.getPersons()) {
+		for (Person personWorking : personsWorksIn.getPersonList()) {
 			fullPersonList.addPerson(personWorking);
 		}
 		final Persons nearbyPersons = locationService.findNearbyPersons(person, fullPersonList, distance);

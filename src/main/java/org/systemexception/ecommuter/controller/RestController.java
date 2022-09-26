@@ -1,5 +1,6 @@
 package org.systemexception.ecommuter.controller;
 
+import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -86,14 +87,16 @@ public class RestController {
             Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> geoToAddress(
 			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
-			@RequestParam(value = Endpoints.LONGITUDE) final double longitude) throws Exception {
+			@RequestParam(value = Endpoints.LONGITUDE) final double longitude)
+            throws IOException, InterruptedException, ApiException {
 
 		final Address address = locationService.geoToAddress(latitude, longitude);
 		return new ResponseEntity<>(address, HttpStatus.OK);
 	}
 
 	@PutMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Address> addressToGeo(@RequestBody @Validated final Address address) throws Exception {
+	public ResponseEntity<Address> addressToGeo(@RequestBody @Validated final Address address)
+            throws IOException, InterruptedException, ApiException {
 
         final String safeFormattedAddress = UserDataSantizer.returnAsSafe(address.getFormattedAddress());
         final Address responseAddress = locationService.addressToGeo(safeFormattedAddress);

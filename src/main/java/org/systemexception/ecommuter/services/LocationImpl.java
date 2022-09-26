@@ -101,9 +101,9 @@ public class LocationImpl implements LocationApi {
 
 	private Address geoCodingResultToAddress(final GeocodingResult geocodingResult) {
 
-		String country = EMPTY_STRING;
-		String postalCode = EMPTY_STRING;
-		String locality = EMPTY_STRING;
+		String country;
+		String postalCode;
+		String locality;
 		Address address = new Address();
 
 		address.setFormattedAddress(geocodingResult.formattedAddress);

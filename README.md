@@ -85,6 +85,7 @@ In sparse order:
 - Pending `spring-boot-starter-data-neo4j` release for refactor
 - Add export functionality
 - Add endpoints to query database data
+- Upgrade Neo4J 4.x
 
 ## Credits
 

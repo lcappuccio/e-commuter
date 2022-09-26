@@ -6,6 +6,8 @@ package org.systemexception.ecommuter.enums;
  */
 public class Endpoints {
 
+    private Endpoints() {}
+
 	public static final String CONTEXT = "/ecommuter";
 	public static final String ADD_TERRITORIES = "/addterritories";
 	// PERSON

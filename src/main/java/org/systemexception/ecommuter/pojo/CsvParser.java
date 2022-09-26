@@ -35,8 +35,8 @@ public class CsvParser {
 		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
 		try (
                  Reader csvReader = new InputStreamReader(csvFile.toURI().toURL().openStream(), StandardCharsets.UTF_8);
-                 CSVParser csvParser = new CSVParser(csvReader, csvFormat);
-                 ) {
+                 CSVParser csvParser = new CSVParser(csvReader, csvFormat)
+        ) {
 			records = csvParser.getRecords();
 			LOGGER.info("loadedCsv {}", Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {

@@ -1,110 +1,163 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "7b3656c1-5f1e-4498-95a8-f29cc0ce3934",
 		"name": "e-commuter",
-		"_postman_id": "f0c6d096-833a-9b84-ac46-f5a713920fab",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23533457"
 	},
 	"item": [
 		{
 			"name": "Person - Add",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/add",
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"id\": \"ID_A\",\n  \"name\": \"TEST_NAME_A\",\n  \"lastname\": \"TEST_LASTNAME_A\",\n  \"homeAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n},\n  \"workAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n}\n}"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/person/add",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"person",
+						"add"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Person - Find by name",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/lastname?lastname=",
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/person/lastname?lastname=",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"person",
+						"lastname"
+					],
+					"query": [
+						{
+							"key": "lastname",
+							"value": ""
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Person - Update",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/update",
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"id\": \"ID_A\",\n  \"name\": \"TEST_NAME_A_NEW\",\n  \"lastname\": \"TEST_LASTNAME_A\",\n  \"homeAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n},\n  \"workAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n}\n}"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/person/update",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"person",
+						"update"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Person - Delete",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/delete",
 				"method": "DELETE",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"id\": \"ID_A\",\n  \"name\": \"TEST_NAME_A\",\n  \"lastname\": \"TEST_LASTNAME_A\",\n  \"homeAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n},\n  \"workAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n}\n}"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/person/delete",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"person",
+						"delete"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Persons - Nearby",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/person/nearby?distance=0.1",
-				"method": "PUT",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"id\": \"ID_A\",\n  \"name\": \"TEST_NAME_A\",\n  \"lastname\": \"TEST_LASTNAME_A\",\n  \"homeAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n},\n  \"workAddress\": {\n  \"streetNumber\": \"20\",\n  \"route\": \"Piazza Libertà\",\n  \"formattedAddress\": \"Piazza Libertà, 20, 21016 Luino VA, Italy\",\n  \"latitude\": 46.0031267,\n  \"longitude\": 8.7428806,\n  \"territory\": {\n    \"country\": \"IT\",\n    \"postalCode\": \"21016\",\n    \"placeName\": \"Luino\"\n  }\n}\n}"
-				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/person/nearby?distance=0.1",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"person",
+						"nearby"
+					],
+					"query": [
+						{
+							"key": "distance",
+							"value": "0.1"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Add territories",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/addterritories",
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -113,52 +166,91 @@
 						{
 							"key": "fileToUpload",
 							"type": "file",
-							"enabled": true,
-							"src": "it_data.csv"
+							"src": "/C:/Users/leona/Documents/Projects/e-commuter/src/main/resources/geo_data.csv"
 						}
 					]
 				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/addterritories",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"addterritories"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Address to geo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/address/togeo",
-				"method": "PUT",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"streetNumber\": \"\",\n  \"route\": \"\",\n  \"formattedAddress\": \"Piazza Risorgimento, Luino, VA, Italia\",\n  \"latitude\": \"\",\n  \"longitude\": \"\",\n  \"territory\": {\n    \"country\": \"\",\n    \"postalCode\": \"\",\n    \"placeName\": \"\"\n  }\n}"
+					"raw": " {\r\n                \"streetNumber\": \"6\",\r\n                \"route\": \"Piazzale Tripoli\",\r\n                \"formattedAddress\": \"Piazzale Tripoli, 6, 20146 Milano, Italy\",\r\n                \"latitude\": 45.4595056,\r\n                \"longitude\": 9.1504233,\r\n                \"territory\": {\r\n                    \"country\": \"IT\",\r\n                    \"postalCode\": \"20146\",\r\n                    \"placeName\": \"Milano\"\r\n                }\r\n            }"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/address/togeo",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"address",
+						"togeo"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Geo to address",
 			"request": {
-				"url": "http://{{ip}}:{{port}}/ecommuter/address/fromgeo?latitude=46.0032143&longitude=8.742675799999999",
-				"method": "PUT",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/ecommuter/address/fromgeo?latitude=46.0032143&longitude=8.742675799999999",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ecommuter",
+						"address",
+						"fromgeo"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "46.0032143"
+						},
+						{
+							"key": "longitude",
+							"value": "8.742675799999999"
+						}
+					]
+				}
 			},
 			"response": []
 		}

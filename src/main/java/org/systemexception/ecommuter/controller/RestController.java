@@ -83,7 +83,7 @@ public class RestController {
 		return new ResponseEntity<>(personUpdated, HttpStatus.OK);
 	}
 
-	@PutMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, params = {Endpoints.LATITUDE,
+	@GetMapping(value = Endpoints.ADDRESS + Endpoints.GEO_TO_ADDRESS, params = {Endpoints.LATITUDE,
             Endpoints.LONGITUDE}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> geoToAddress(
 			@RequestParam(value = Endpoints.LATITUDE) final double latitude,
@@ -94,7 +94,7 @@ public class RestController {
 		return new ResponseEntity<>(address, HttpStatus.OK);
 	}
 
-	@PutMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Address> addressToGeo(@RequestBody @Validated final Address address)
             throws IOException, InterruptedException, ApiException {
 
@@ -103,7 +103,7 @@ public class RestController {
 		return new ResponseEntity<>(responseAddress, HttpStatus.OK);
 	}
 
-	@PutMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, params = {Endpoints.DISTANCE},
+	@GetMapping(value = Endpoints.PERSON + Endpoints.PERSON_NEARBY, params = {Endpoints.DISTANCE},
             produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Persons> nearbyPersons(
 			@RequestBody @Validated final Person person,

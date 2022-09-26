@@ -8,8 +8,11 @@ import java.util.Objects;
  */
 public class Address {
 
-	private String streetNumber, route, formattedAddress;
-	private double latitude, longitude;
+	private String streetNumber;
+    private String route;
+    private String formattedAddress;
+	private double latitude;
+    private double longitude;
 	private Territory territory;
 
 	public String getFormattedAddress() {

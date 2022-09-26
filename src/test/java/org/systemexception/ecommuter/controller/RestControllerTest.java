@@ -119,14 +119,13 @@ public class RestControllerTest {
 				.param(Endpoints.LATITUDE, latitude).param(Endpoints.LONGITUDE, longitude))
 				.andExpect(status().is(HttpStatus.OK.value()));
 
-		verify(locationApi).geoToAddress(Double.valueOf(latitude), Double.valueOf(longitude));
+		verify(locationApi).geoToAddress(Double.parseDouble(latitude), Double.parseDouble(longitude));
 	}
 
 	@Test
 	void address_to_geo() throws Exception {
 		final Gson gson = new Gson();
-		final JsonParser jsonParser = new JsonParser();
-		final Address address = gson.fromJson(jsonParser.parse(getAddress()).getAsJsonObject(), Address.class);
+		final Address address = gson.fromJson(JsonParser.parseString(getAddress()).getAsJsonObject(), Address.class);
 		sut.perform(MockMvcRequestBuilders.put(Endpoints.CONTEXT + Endpoints.ADDRESS + Endpoints.ADDRESS_TO_GEO)
 				.contentType(MediaType.APPLICATION_JSON).content(getAddress().getBytes()))
 				.andExpect(status().is(HttpStatus.OK.value()));

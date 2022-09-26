@@ -29,7 +29,7 @@ class TerritoriesTest {
 		sut = new Territories();
 		sut.addTerritory(territoryA);
 		sut.addTerritory(territoryB);
-		assertEquals(2, sut.getTerritories().size());
+		assertEquals(2, sut.getTerritoryList().size());
 	}
 
 	@Test
@@ -38,9 +38,7 @@ class TerritoriesTest {
         sut = new Territories();
         sut.addTerritory(territoryA);
         final Territory badTerritory = new Territory("IT", "123", "TEST");
-        assertThrows(InvalidParameterException.class, () -> {
-            sut.addTerritory(badTerritory);
-        });
-        assertEquals(1, sut.getTerritories().size());
+        assertThrows(InvalidParameterException.class, () -> sut.addTerritory(badTerritory));
+        assertEquals(1, sut.getTerritoryList().size());
 	}
 }

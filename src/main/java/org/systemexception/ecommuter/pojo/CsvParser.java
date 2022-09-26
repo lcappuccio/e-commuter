@@ -32,11 +32,11 @@ public class CsvParser {
 				CsvHeaders.ADMIN_NAME2.name(), CsvHeaders.ADMIN_CODE2.name(),
 				CsvHeaders.ADMIN_NAME3.name(), CsvHeaders.ADMIN_CODE3.name(),
 				CsvHeaders.LATITUDE.name(), CsvHeaders.LONGITUDE.name(), CsvHeaders.ACCURACY.name()};
-		CSVFormat csvFormat = CSVFormat.RFC4180.withHeader(headerMapping).withSkipHeaderRecord(true);
+		CSVFormat csvFormat = CSVFormat.RFC4180.builder().setHeader(headerMapping).setSkipHeaderRecord(true).build();
 		try (
                  Reader csvReader = new InputStreamReader(csvFile.toURI().toURL().openStream(), StandardCharsets.UTF_8);
-                 CSVParser csvParser = new CSVParser(csvReader, csvFormat);
-                 ) {
+                 CSVParser csvParser = new CSVParser(csvReader, csvFormat)
+        ) {
 			records = csvParser.getRecords();
 			LOGGER.info("loadedCsv {}", Constants.LOG_OBJECT_SEPARATOR + csvFile.getName());
 		} catch (IOException ex) {

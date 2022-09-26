@@ -97,11 +97,11 @@ public class End2EndTest {
 
 		final Persons nearbyPersons = locationService.findNearbyPersons(personA, databaseApi.findPersonsLivesIn(
 				LOCATION_ITALY, LOCATION_LUINO_POSTCODE), 0.5);
-		assertEquals(1, nearbyPersons.getPersons().size());
-		assertEquals(nearbyPersons.getPersons().iterator().next(), personB);
+		assertEquals(1, nearbyPersons.getPersonList().size());
+		assertEquals(nearbyPersons.getPersonList().iterator().next(), personB);
 	}
 
-    public static void removeFolder(final String folderPath) throws IOException {
+    public static void removeFolder(final String folderPath) {
         final File toRemove = new File(folderPath);
         if (toRemove.exists()) {
             final String[] files = toRemove.list();

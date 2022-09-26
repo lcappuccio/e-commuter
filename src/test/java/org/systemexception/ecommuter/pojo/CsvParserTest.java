@@ -39,12 +39,10 @@ public class CsvParserTest {
 	@Test
 	void throw_exception_for_nonexisting_file(){
         assertThrows(CsvParserException.class,
-                () -> {
-                    new CsvParser(new File("nonexistingfile.txt"));
-                });
-    };
+                () -> new CsvParser(new File("nonexistingfile.txt")));
+    }
 
-	@Test
+    @Test
 	void reads_territories_test_file() throws CsvParserException {
 		sut = new CsvParser(new File(resourceFile.getAbsolutePath()));
 		assertTrue(sut.readCsvContents().size() > 0);

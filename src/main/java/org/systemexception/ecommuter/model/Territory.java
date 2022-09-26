@@ -8,7 +8,9 @@ import java.util.Objects;
  */
 public class Territory {
 
-	private String country, postalCode, placeName;
+	private String country;
+    private String postalCode;
+    private String placeName;
 
 	public Territory() {}
 

@@ -71,17 +71,18 @@ class PersonJsonParserTest {
 	private String getPersonJson() {
         return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
 				"\"lastname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"route\":\"P.za del Duomo\"," +
+                "\"streetNumber\":\"\"," +
 				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
 				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
 				"\"placeName\":\"Milano\"}},\"workAddress\":{\"route\":\"P.za del Duomo\"," +
+                "\"streetNumber\":\"\"," +
 				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
 				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
 				"\"placeName\":\"Milano\"}}}";
 	}
 
 	private JsonObject getPersonJsonObject() {
-		final JsonParser jsonParser = new JsonParser();
-		final JsonElement jsonElement = jsonParser.parse(getPersonJson());
+		final JsonElement jsonElement = JsonParser.parseString(getPersonJson());
 		return jsonElement.getAsJsonObject();
 	}
 

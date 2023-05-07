@@ -32,12 +32,12 @@ public class StorageImplTest {
 	private MultipartFile multipartFile;
 
 	@BeforeAll
-	public static void setSut() throws IOException {
+	public static void setSut() {
 		End2EndTest.removeFolder(STORAGE_FOLDER);
     }
 
 	@AfterAll
-	public static void tearDownSut() throws IOException {
+	public static void tearDownSut() {
         End2EndTest.removeFolder(STORAGE_FOLDER);
     }
 

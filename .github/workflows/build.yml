@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,6 +41,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   sonar:
+    name: Sonar
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

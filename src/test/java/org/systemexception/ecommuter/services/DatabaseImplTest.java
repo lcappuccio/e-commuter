@@ -19,7 +19,6 @@ import org.systemexception.ecommuter.model.Persons;
 import org.systemexception.ecommuter.pojo.CsvParserTest;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 
@@ -47,7 +46,7 @@ public class DatabaseImplTest {
 	private final String updatedName = "UpdatedName", updatedSurname = "UpdatedSurname";
 
 	@BeforeAll
-	public static void setSut() throws IOException {
+	public static void setSut() {
 		End2EndTest.removeFolder(DATABASE_FOLDER);
 	}
 

@@ -39,6 +39,19 @@ jobs:
           publish_only_summary: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
       - name: SonarCloud Scan
         env:
           API_KEY: ${{ secrets.API_KEY }}

@@ -62,14 +62,14 @@ class LocationImplTest {
 		Address addressFromGeo = sut.geoToAddress(45.4641776, 9.1899885);
 
 		assertNotNull(addressFromGeo);
-		assertEquals("P.za del Duomo, 110, 20122 Milano MI, Italy", addressFromGeo.getFormattedAddress());
+		assertEquals("P.za del Duomo, 1, 20121 Milano MI, Italy", addressFromGeo.getFormattedAddress());
 		assertEquals(45.46, roundDoubleToTwoDecimal(addressFromGeo.getLatitude()), 0);
 		assertEquals(9.19, roundDoubleToTwoDecimal(addressFromGeo.getLongitude()), 0);
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationMilano, addressFromGeo.getTerritory().getPlaceName());
 		assertEquals(locationItaly, addressFromGeo.getTerritory().getCountry());
 		assertEquals(locationPiazzaDuomo, addressFromGeo.getRoute());
-		assertEquals("20122", addressFromGeo.getTerritory().getPostalCode());
+		assertEquals("20121", addressFromGeo.getTerritory().getPostalCode());
 	}
 
 	@Test

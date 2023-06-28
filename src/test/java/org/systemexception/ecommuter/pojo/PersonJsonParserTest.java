@@ -71,13 +71,13 @@ class PersonJsonParserTest {
 	private String getPersonJson() {
         return "{\"id\":\"" + personId + "\",\"name\":\"TEST_NAME_A\",\"lastname\":\"TEST_SURNAME_A\"," +
 				"\"lastname\":\"TEST_SURNAME_A\",\"homeAddress\":{\"route\":\"P.za del Duomo\"," +
-                "\"streetNumber\":\"\"," +
-				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
-				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
+                "\"streetNumber\":\"2\"," +
+				"\"formattedAddress\":\"P.za del Duomo, 2, 20123 Milano MI, Italy\",\"latitude\":45.4642918," +
+				"\"longitude\":9.189398599999999,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20123\"," +
 				"\"placeName\":\"Milano\"}},\"workAddress\":{\"route\":\"P.za del Duomo\"," +
-                "\"streetNumber\":\"\"," +
-				"\"formattedAddress\":\"Duomo, P.za del Duomo, 20122 Milano MI, Italy\",\"latitude\":45.4644327," +
-				"\"longitude\":9.1892719,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20122\"," +
+                "\"streetNumber\":\"2\"," +
+				"\"formattedAddress\":\"P.za del Duomo, 2, 20123 Milano MI, Italy\",\"latitude\":45.4642918," +
+				"\"longitude\":9.189398599999999,\"territory\":{\"country\":\"IT\",\"postalCode\":\"20123\"," +
 				"\"placeName\":\"Milano\"}}}";
 	}
 
